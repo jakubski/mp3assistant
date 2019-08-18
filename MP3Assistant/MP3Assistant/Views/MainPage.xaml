@@ -1,0 +1,112 @@
+﻿<Page x:Class="MP3Assistant.MainPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MP3Assistant"
+      mc:Ignorable="d" 
+      d:DesignHeight="768" d:DesignWidth="1024"
+      Title="MainPage">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <Style TargetType="{x:Type ListViewItem}">
+                <EventSetter Event="MouseDoubleClick"
+                             Handler="FilePresenterDirectoryItem_DoubleClick" />
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="22" />
+            <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- File management -->
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="64" />
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="200" />
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column ="0"
+                        Orientation="Horizontal">
+                <!-- Back button -->
+                <Button Margin="1,0,1,0"
+                        Width="30"
+                        Content="back"
+                        Command="{Binding BackButtonClickCommand}"/>
+                <!-- Next button -->
+                <Button Margin="1,0,1,0"
+                        Width="30"
+                        Content="next"
+                        Command="{Binding NextButtonClickCommand}" />
+            </StackPanel>
+            
+            <!-- Directory browser -->
+            <ComboBox Grid.Column="1" 
+                      ItemsSource="{Binding SuggestedPaths}" 
+                      SelectedIndex="0" />
+            
+            <!-- Some buttons, I guess -->
+            <StackPanel Grid.Column="2" 
+                        Orientation="Horizontal">
+                <Button Content="Katalogy" />
+                <Button Content="Zapisz!" />
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="280" />
+            </Grid.ColumnDefinitions>
+            
+            <!-- File presenter -->
+            <ListView Grid.Column="0"
+                      ItemsSource="{Binding Contents}">
+                <!-- GridView -->
+                <ListView.View>
+                    <GridView AllowsColumnReorder="true">
+                        <!-- Folder/file name -->
+                        <GridViewColumn DisplayMemberBinding="{Binding Name}"
+                                        Header="Nazwa"
+                                        Width="250" />
+                        <!-- Performer -->
+                        <GridViewColumn DisplayMemberBinding="{Binding Performers}"
+                                        Header="Wykonawca"
+                                        Width="120" />
+                        <!-- Title -->
+                        <GridViewColumn DisplayMemberBinding="{Binding Title}"
+                                        Header="Tytuł"
+                                        Width="160" />
+                        <!-- Album -->
+                        <GridViewColumn DisplayMemberBinding="{Binding Album}"
+                                        Header="Album"
+                                        Width="160" />
+                    </GridView>
+                </ListView.View>
+            </ListView>
+            
+            <!-- CheckBoxes -->
+            <StackPanel Grid.Column="1">
+                <Border Margin="8,8,8,4"
+                        Padding="6">
+                    <StackPanel>
+                        <CheckBox Margin="2,1,2,1" Content="Czekboks 1.1" />
+                        <CheckBox Margin="2,1,2,1" Content="Czekboks 1.2" />
+                    </StackPanel>
+                </Border>
+                <Border Margin="8,4,8,4"
+                        Padding="6">
+                    <StackPanel>
+                        <CheckBox Margin="2,1,2,1" Content="Czekboks 2.1" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

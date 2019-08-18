@@ -1,0 +1,17 @@
+﻿<Window x:Class="MP3Assistant.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MP3Assistant"
+        mc:Ignorable="d"
+        Title="MP3 Assistant" Height="768" Width="1024">
+    
+    <Window.Resources>
+        <local:ApplicationPageToPageConverter x:Key="ApplicationPageToPageConverter" />
+    </Window.Resources>
+    
+    <Grid>
+        <Frame Content="{Binding WindowContent, Converter={StaticResource PageConverter}}"/>
+    </Grid>
+</Window>

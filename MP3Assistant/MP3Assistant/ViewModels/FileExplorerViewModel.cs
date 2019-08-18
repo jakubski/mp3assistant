@@ -10,35 +10,32 @@ namespace MP3Assistant
 {
     public class FileExplorerViewModel : INotifyPropertyChanged
     {
+        private List<DirectoryItemViewModel> _contents;
         private Stack<string> _backwardPathHistory;
         private Stack<string> _forwardPathHistory;
 
         public string CurrentPath { get; set; }
 
-        public string Back
-        {
-            get
-            {
-                var previous = _backwardPathHistory.Pop();
-                _forwardPathHistory.Push(previous);
-
-                return previous;
-            }
-        }
-
-        public string Forward
-        {
-            get
-            {
-                var next = _forwardPathHistory.Pop();
-                _backwardPathHistory.Push(next);
-
-                return next;
-            }
-        }
+        public bool HideHiddenContents { get; set; }
 
         public ObservableCollection<string> SuggestedPaths { get; private set; }
-        public ObservableCollection<DirectoryItemViewModel> Contents { get; private set; }
+        public ObservableCollection<DirectoryItemViewModel> Contents
+        {
+            get
+            {
+                var contents = _contents;
+
+                if (HideHiddenContents)
+                    contents = contents.Where(file => !file.Hidden).ToList();
+
+                return new ObservableCollection<DirectoryItemViewModel>(contents);
+            }
+
+            set
+            {
+                _contents = value.ToList();
+            }
+        }
 
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
@@ -52,13 +49,15 @@ namespace MP3Assistant
             _backwardPathHistory = new Stack<string>();
             _forwardPathHistory = new Stack<string>();
 
+            HideHiddenContents = true;
+
             SuggestedPaths = new ObservableCollection<string>(new string[] { "" });          
 
             BackButtonClickCommand = new VoidRelayCommand(GoToPreviousLocation);
             NextButtonClickCommand = new VoidRelayCommand(GoToNextLocation);
             ItemDoubleClickCommand = new RelayCommand<DirectoryItemViewModel>(Item_DoubleClick);
 
-            // Set the root path
+            // Set the initial path
             SetLocation("\\");
         }
 
@@ -77,7 +76,7 @@ namespace MP3Assistant
         }
 
         /// <summary>
-        /// Moves to a directory specified by the user
+        /// Moves to a specified directory
         /// </summary>
         /// <param name="newPath"></param>
         private void GoToNewLocation(string newPath)
@@ -123,7 +122,7 @@ namespace MP3Assistant
 
             switch (type)
             {
-                // If double clicked on an directory that can be entered...
+                // If double clicked on a folder or a drive..
                 case DirectoryType.Drive:
                 case DirectoryType.Folder:
                     // ...Enter the directory

@@ -34,6 +34,11 @@ namespace MP3Assistant
             get { return _directoryItem.Name; }
         }
 
+        public bool Hidden
+        {
+            get { return _directoryItem.Hidden; }
+        }
+
         public string Title
         {
             get { return _directoryItem.Title; }
@@ -94,27 +99,6 @@ namespace MP3Assistant
             set { _directoryItem.Bitrate = value; }
         }
 
-        public ObservableCollection<DirectoryItemViewModel> Children { get; set; }
-
-        public bool CanExpand
-        {
-            get { return (Children != null) && (_directoryItem.SubdirectoriesCount > 0); }
-        }
-
-        public bool IsExpanded
-        {
-            get
-            { return Children?.Count(c => c != null) > 0; }
-
-            set
-            {
-                if (value == true)
-                    SetChildren();
-                else
-                    ClearChildren();
-            }
-        }
-
         #endregion
 
         #region Public Events
@@ -128,27 +112,8 @@ namespace MP3Assistant
         public DirectoryItemViewModel(string fullPath)
         {
             _directoryItem = new DirectoryItem(fullPath);
-
-            if (_directoryItem.SubdirectoriesCount > 0)
-                // If it contains anything, initiate the children collection with a placeholder item so it can be expandable
-                Children = new ObservableCollection<DirectoryItemViewModel>(new List<DirectoryItemViewModel> { null });
         }        
 
         #endregion
-
-        private void SetChildren()
-        {
-            var subdirectories = DirectoryHelpers.GetContents(FullPath);
-
-            Children = new ObservableCollection<DirectoryItemViewModel>(subdirectories.Select(path => new DirectoryItemViewModel(path)));
-        }
-
-        private void ClearChildren()
-        {
-            Children = new ObservableCollection<DirectoryItemViewModel>();
-
-            if (_directoryItem.SubdirectoriesCount > 0)
-                Children.Add(null);
-        }
     }
 }

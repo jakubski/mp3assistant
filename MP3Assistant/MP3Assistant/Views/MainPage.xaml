@@ -93,17 +93,22 @@
             
             <!-- CheckBoxes -->
             <StackPanel Grid.Column="1">
+                <TextBlock Text="Filtruj:" 
+                           Margin="4,1,2,1"/>
                 <Border Margin="8,8,8,4"
                         Padding="6">
                     <StackPanel>
-                        <CheckBox Margin="2,1,2,1" Content="Czekboks 1.1" />
-                        <CheckBox Margin="2,1,2,1" Content="Czekboks 1.2" />
+                        <!-- Hiding hidden directories -->
+                        <CheckBox Margin="2,1,2,1" Content="ukryte" 
+                                  IsChecked="{Binding HideHiddenContents, Mode=TwoWay}"/>
+                        <!-- Hiding non-MP3 files -->
+                        <CheckBox Margin="2,1,2,1" Content="inne niż MP3" />
                     </StackPanel>
                 </Border>
                 <Border Margin="8,4,8,4"
                         Padding="6">
                     <StackPanel>
-                        <CheckBox Margin="2,1,2,1" Content="Czekboks 2.1" />
+                        <CheckBox Margin="2,1,2,1" Content="???" />
                     </StackPanel>
                 </Border>
             </StackPanel>

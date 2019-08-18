@@ -18,13 +18,14 @@ namespace MP3Assistant
         #region Public Properties
 
         public DirectoryType Type { get; set; }
-
         public string FullPath { get; set; }
 
         public string Name
         {
             get { return DirectoryHelpers.GetDirectoryName(FullPath); }
         }
+
+        public bool Hidden { get; private set; }
 
         public string Title { get; set; }
         public string[] Performers { get; set; }
@@ -36,10 +37,6 @@ namespace MP3Assistant
         public string[] Genres { get; set; }
         public long Length { get; set; }
         public ushort Bitrate { get; set; }
-
-        public int SubdirectoriesCount { get; set; }
-
-        public List<DirectoryItem> Children { get; set; }
 
         #endregion
 
@@ -57,36 +54,14 @@ namespace MP3Assistant
             Type = DirectoryHelpers.GetDirectoryType(fullPath);
             // Store the full path
             FullPath = fullPath;
+            // Determine if is a hidden directory (drives seem to be marked as hidden)
+            Hidden = DirectoryHelpers.IsHidden(FullPath) && Type != DirectoryType.Drive;
 
-            if (Type == DirectoryType.File || Type == DirectoryType.MP3File)
-            {
-                // If the item is a file, it will not contain a collection of children...
-                Children = null;
-
-                if (Type == DirectoryType.MP3File)
-                {
-                    SetMP3Info();
-                }
-            }
-            else
-            {
-                // Check if directory contains anything
-                SubdirectoriesCount = DirectoryHelpers.GetContents(FullPath).Count();
-            }
+            if (Type == DirectoryType.MP3File)
+                SetMP3Info();
         }
 
         #endregion
-
-        public void SetChildren()
-        {
-            if (Type == DirectoryType.File &
-                SubdirectoriesCount > 0)
-            {
-                var subdirectories = DirectoryHelpers.GetContents(FullPath);
-
-                Children = new List<DirectoryItem>(subdirectories.Select(path => new DirectoryItem(path)));
-            }
-        }
 
         private void SetMP3Info()
         {

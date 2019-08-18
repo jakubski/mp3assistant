@@ -92,5 +92,12 @@ namespace MP3Assistant
         {
             return Path.GetExtension(path).ToLower();
         }
+
+        public static bool IsHidden(string path)
+        {
+            FileAttributes a = File.GetAttributes(path);
+
+            return a.HasFlag(FileAttributes.Hidden);
+        }
     }
 }

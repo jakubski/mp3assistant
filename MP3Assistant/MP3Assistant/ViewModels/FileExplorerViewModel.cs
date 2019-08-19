@@ -17,6 +17,7 @@ namespace MP3Assistant
         public string CurrentPath { get; set; }
 
         public bool HideHiddenContents { get; set; }
+        public bool HideExtensions { get; set; }
 
         public ObservableCollection<string> SuggestedPaths { get; private set; }
         public ObservableCollection<DirectoryItemViewModel> Contents
@@ -25,8 +26,12 @@ namespace MP3Assistant
             {
                 var contents = _contents;
 
+                // Remove hidden contents if necessary
                 if (HideHiddenContents)
-                    contents = contents.Where(file => !file.Hidden).ToList();
+                    contents = contents.Where(item => !item.Hidden).ToList();
+
+                // Remove file extensions if necessary
+                contents.ForEach(item => { item.Trimmed = HideExtensions; });
 
                 return new ObservableCollection<DirectoryItemViewModel>(contents);
             }
@@ -50,6 +55,7 @@ namespace MP3Assistant
             _forwardPathHistory = new Stack<string>();
 
             HideHiddenContents = true;
+            HideExtensions = true;
 
             SuggestedPaths = new ObservableCollection<string>(new string[] { "" });          
 
@@ -87,7 +93,7 @@ namespace MP3Assistant
         }
 
         /// <summary>
-        /// Back out to a previously visited directory
+        /// Backs out to a previously visited directory
         /// </summary>
         private void GoToPreviousLocation()
         {

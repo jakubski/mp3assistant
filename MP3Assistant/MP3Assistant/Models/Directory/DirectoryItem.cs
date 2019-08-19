@@ -25,6 +25,17 @@ namespace MP3Assistant
             get { return DirectoryHelpers.GetDirectoryName(FullPath); }
         }
 
+        public string ShortName
+        {
+            get
+            {
+                if (Type == DirectoryType.File || Type == DirectoryType.MP3File)
+                    return DirectoryHelpers.GetTrimmedName(Name);
+                else
+                    return Name;
+            }
+        }
+
         public bool Hidden { get; private set; }
 
         public string Title { get; set; }

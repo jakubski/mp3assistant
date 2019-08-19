@@ -93,6 +93,16 @@ namespace MP3Assistant
             return Path.GetExtension(path).ToLower();
         }
 
+        public static string GetTrimmedName(string path)
+        {
+            var lastDotIndex = path.LastIndexOf('.');
+
+            if (lastDotIndex < 1)
+                return path;
+            else
+                return path.Substring(0, lastDotIndex);
+        }
+
         public static bool IsHidden(string path)
         {
             FileAttributes a = File.GetAttributes(path);

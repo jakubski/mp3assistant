@@ -31,8 +31,16 @@ namespace MP3Assistant
 
         public string Name
         {
-            get { return _directoryItem.Name; }
+            get
+            {
+                if (Trimmed)
+                    return _directoryItem.ShortName;
+                else
+                    return _directoryItem.Name;
+            }
         }
+
+        public bool Trimmed { get; set; }
 
         public bool Hidden
         {

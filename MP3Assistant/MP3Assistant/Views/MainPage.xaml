@@ -5,7 +5,7 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MP3Assistant"
       mc:Ignorable="d" 
-      d:DesignHeight="768" d:DesignWidth="1024"
+      d:DesignHeight="720" d:DesignWidth="1280"
       Title="MainPage">
 
     <Page.Resources>
@@ -24,7 +24,6 @@
         </Grid.RowDefinitions>
 
         <!-- File management -->
-
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="64" />
@@ -32,17 +31,17 @@
                 <ColumnDefinition Width="200" />
             </Grid.ColumnDefinitions>
 
-            <StackPanel Grid.Column ="0"
+            <StackPanel Grid.Column="0"
                         Orientation="Horizontal">
                 <!-- Back button -->
                 <Button Margin="1,0,1,0"
                         Width="30"
-                        Content="back"
+                        Content="wstecz"
                         Command="{Binding BackButtonClickCommand}"/>
                 <!-- Next button -->
                 <Button Margin="1,0,1,0"
                         Width="30"
-                        Content="next"
+                        Content="dalej"
                         Command="{Binding NextButtonClickCommand}" />
             </StackPanel>
             
@@ -54,8 +53,8 @@
             <!-- Some buttons, I guess -->
             <StackPanel Grid.Column="2" 
                         Orientation="Horizontal">
-                <Button Content="Katalogy" />
-                <Button Content="Zapisz!" />
+                <Button Content="???" />
+                <Button Content="???" />
             </StackPanel>
         </Grid>
 
@@ -67,26 +66,25 @@
             
             <!-- File presenter -->
             <ListView Grid.Column="0"
+                      Name="FileExplorerListView"
                       ItemsSource="{Binding Contents}">
                 <!-- GridView -->
                 <ListView.View>
-                    <GridView AllowsColumnReorder="true">
-                        <!-- Folder/file name -->
-                        <GridViewColumn DisplayMemberBinding="{Binding Name}"
-                                        Header="Nazwa"
-                                        Width="250" />
-                        <!-- Performer -->
-                        <GridViewColumn DisplayMemberBinding="{Binding Performers}"
-                                        Header="Wykonawca"
-                                        Width="120" />
-                        <!-- Title -->
-                        <GridViewColumn DisplayMemberBinding="{Binding Title}"
-                                        Header="Tytuł"
-                                        Width="160" />
-                        <!-- Album -->
-                        <GridViewColumn DisplayMemberBinding="{Binding Album}"
-                                        Header="Album"
-                                        Width="160" />
+                    <GridView  AllowsColumnReorder="true">
+                        <!-- Column context menu -->
+                        <GridView.ColumnHeaderContextMenu>
+                            <ContextMenu  ItemsSource="{Binding FileExplorerHeaderContextMenu}">
+                                <ContextMenu.ItemContainerStyle>
+                                    <Style TargetType="MenuItem">
+                                        <Setter Property="Header" Value="{Binding Name}"/>
+                                        <Setter Property="Icon" Value="{Binding ActionParameter.IsVisible, Converter={StaticResource VisibilityToIconConverter}}"/>
+                                        <Setter Property="ItemsSource" Value="{Binding SubActions}"/>
+                                        <Setter Property="Command" Value="{Binding Action}"/>
+                                        <Setter Property="CommandParameter" Value="{Binding ActionParameter}"/>
+                                    </Style>
+                                </ContextMenu.ItemContainerStyle>
+                            </ContextMenu>
+                        </GridView.ColumnHeaderContextMenu>
                     </GridView>
                 </ListView.View>
             </ListView>

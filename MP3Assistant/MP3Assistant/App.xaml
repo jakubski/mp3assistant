@@ -5,5 +5,7 @@
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
         <local:ApplicationPageToPageConverter x:Key="PageConverter" />
+        <local:StringArrayToStringConverter x:Key="MultipleArtistsConverter" />
+        <local:BoolToCharConverter x:Key="VisibilityToIconConverter"/>
     </Application.Resources>
 </Application>

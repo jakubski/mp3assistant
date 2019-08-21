@@ -13,7 +13,6 @@ namespace MP3Assistant
         #region Private Members
 
         private DirectoryItem _directoryItem;
-        private readonly RelayCommand<object> _itemExpandedCommand;
 
         #endregion
 

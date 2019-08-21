@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,12 +26,58 @@ namespace MP3Assistant
         {
             InitializeComponent();
 
-            DataContext = new FileExplorerViewModel();
+            FileExplorerViewModel viewModel = new FileExplorerViewModel();
+
+            DataContext = viewModel;
+
+            // Set up columns
+            GridView gridView = FileExplorerListView.View as GridView;
+
+            foreach (var columnViewModel in viewModel.Columns)
+            {
+                gridView.Columns.Add(new GridViewColumn()
+                {
+                    Header = columnViewModel.Header,
+                    Width = columnViewModel.Width,
+                    DisplayMemberBinding = new Binding()
+                    {
+                        Converter = columnViewModel.Converter,
+                        Path = new PropertyPath(columnViewModel.BoundProperty)
+                    }
+                });
+            }
+
+            viewModel.ColumnAdded += AddColumn;
+            viewModel.ColumnRemoved += RemoveColumn;
         }
 
         private void FilePresenterDirectoryItem_DoubleClick(object sender, MouseButtonEventArgs e)
         {
             ((FileExplorerViewModel)DataContext).ItemDoubleClickCommand.Execute(((ListViewItem)sender).DataContext);
+        }
+
+        private void AddColumn(object sender, ColumnChangedEventArgs e)
+        {
+            GridView gridView = FileExplorerListView.View as GridView;
+
+            gridView.Columns.Add(new GridViewColumn()
+            {
+                Header = e.Column.Header,
+                Width = e.Column.Width,
+                DisplayMemberBinding = new Binding()
+                {
+                    Converter = e.Column.Converter,
+                    Path = new PropertyPath(e.Column.BoundProperty)
+                }
+            });
+        }
+
+        private void RemoveColumn(object sender, ColumnChangedEventArgs e)
+        {
+            GridView gridView = FileExplorerListView.View as GridView;
+            GridViewColumn columnToBeDeleted = gridView.Columns.Single(col => ((Binding)col.DisplayMemberBinding).Path.Path == e.Column.BoundProperty);
+
+            gridView.Columns.Remove(columnToBeDeleted);
         }
     }
 }

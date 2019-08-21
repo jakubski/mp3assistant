@@ -5,7 +5,8 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:MP3Assistant"
         mc:Ignorable="d"
-        Title="MP3 Assistant" Height="768" Width="1024">
+        Title="MP3 Assistant"
+        Height="720" Width="1280">
     
     <Window.Resources>
         <local:ApplicationPageToPageConverter x:Key="ApplicationPageToPageConverter" />

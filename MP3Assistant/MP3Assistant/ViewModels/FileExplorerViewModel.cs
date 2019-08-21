@@ -5,12 +5,14 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
 
 namespace MP3Assistant
 {
     public class FileExplorerViewModel : INotifyPropertyChanged
     {
         private List<DirectoryItemViewModel> _contents;
+        private List<FileExplorerColumnViewModel> _columns;
         private Stack<string> _backwardPathHistory;
         private Stack<string> _forwardPathHistory;
 
@@ -42,11 +44,26 @@ namespace MP3Assistant
             }
         }
 
+        public ObservableCollection<FileExplorerColumnViewModel> Columns
+        {
+            get
+            {
+                return new ObservableCollection<FileExplorerColumnViewModel>(_columns.Where(column => column.IsVisible));
+            }
+        }
+
+        public ObservableCollection<ContextAction> FileExplorerHeaderContextMenu { get; private set; }
+
+        public delegate void ColumnChangedEventHandler(object sender, ColumnChangedEventArgs e);
+
         public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
+        public event ColumnChangedEventHandler ColumnAdded = (sender, e) => { };
+        public event ColumnChangedEventHandler ColumnRemoved = (sender, e) => { };
 
         public VoidRelayCommand BackButtonClickCommand { get; private set; }
         public VoidRelayCommand NextButtonClickCommand { get; private set; }
         public RelayCommand<DirectoryItemViewModel> ItemDoubleClickCommand { get; private set; }
+        public RelayCommand<FileExplorerColumnViewModel> AddRemoveColumnCommand { get; private set; }
 
         public FileExplorerViewModel()
         {
@@ -54,14 +71,68 @@ namespace MP3Assistant
             _backwardPathHistory = new Stack<string>();
             _forwardPathHistory = new Stack<string>();
 
+            var multipleArtistsConverter = new StringArrayToStringConverter();
+            _columns = new List<FileExplorerColumnViewModel>(new[]
+            {
+                new FileExplorerColumnViewModel()
+                {
+                    Header = "Nazwa",
+                    Width = 240,
+                    BoundProperty = nameof(DirectoryItemViewModel.Name),
+                    IsVisible = true
+                },
+                new FileExplorerColumnViewModel()
+                {
+                    Header = "Tytuł",
+                    Width = 180,
+                    BoundProperty = nameof(DirectoryItemViewModel.Title),
+                    IsVisible = true
+                },
+                new FileExplorerColumnViewModel()
+                {
+                    Header = "Wykonawca",
+                    Width = 160,
+                    BoundProperty = nameof(DirectoryItemViewModel.Performers),
+                    Converter = multipleArtistsConverter,
+                    IsVisible = true
+                },
+                new FileExplorerColumnViewModel()
+                {
+                    Header = "Album",
+                    Width = 180,
+                    BoundProperty = nameof(DirectoryItemViewModel.Album),
+                    IsVisible = true
+                },
+                new FileExplorerColumnViewModel()
+                {
+                    Header = "Wykonawca albumu",
+                    Width = 160,
+                    BoundProperty = nameof(DirectoryItemViewModel.AlbumPerformers),
+                    Converter = multipleArtistsConverter,
+                    IsVisible = true
+                },
+                new FileExplorerColumnViewModel()
+                {
+                    Header = "Rok",
+                    Width = 50,
+                    BoundProperty = nameof(DirectoryItemViewModel.Year),
+                    IsVisible = true
+                }
+            });
+
             HideHiddenContents = true;
             HideExtensions = true;
-
-            SuggestedPaths = new ObservableCollection<string>(new string[] { "" });          
 
             BackButtonClickCommand = new VoidRelayCommand(GoToPreviousLocation);
             NextButtonClickCommand = new VoidRelayCommand(GoToNextLocation);
             ItemDoubleClickCommand = new RelayCommand<DirectoryItemViewModel>(Item_DoubleClick);
+            AddRemoveColumnCommand = new RelayCommand<FileExplorerColumnViewModel>(AddRemoveColumn);
+
+            SuggestedPaths = new ObservableCollection<string>(new string[] { "" });
+            FileExplorerHeaderContextMenu = new ObservableCollection<ContextAction>(new[]
+            {
+                new ContextAction("Kolumny", null, null, _columns.Select(column => new ContextAction(column.Header, AddRemoveColumnCommand, column)))
+            });
 
             // Set the initial path
             SetLocation("\\");
@@ -120,6 +191,20 @@ namespace MP3Assistant
                 _backwardPathHistory.Push(currentPath);
                 SetLocation(newPath);
             }
+        }
+
+        private void AddRemoveColumn(FileExplorerColumnViewModel column)
+        {
+            var newVisibility = !column.IsVisible;
+
+            column.IsVisible = newVisibility;
+
+            // Raise event
+            var e = new ColumnChangedEventArgs() { Column = column };
+            if (newVisibility)
+                ColumnAdded?.Invoke(this, e);
+            else
+                ColumnRemoved?.Invoke(this, e);
         }
         
         private void Item_DoubleClick(DirectoryItemViewModel item)

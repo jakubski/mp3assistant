@@ -92,6 +92,9 @@
     <Compile Include="ViewModels\BaseDirectoryViewPageViewModel.cs" />
     <Compile Include="ViewModels\DirectoryTreeViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Views\SongEditorPage.xaml.cs">
+      <DependentUpon>SongEditorPage.xaml</DependentUpon>
+    </Compile>
     <Page Include="Views\MainPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -116,6 +119,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\DirectoryTreePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SongEditorPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

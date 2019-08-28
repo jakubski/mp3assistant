@@ -6,13 +6,16 @@
         xmlns:local="clr-namespace:MP3Assistant"
         mc:Ignorable="d"
         Title="MP3 Assistant"
-        Height="720" Width="1280">
-    
+        Height="720" Width="1280"
+        DataContext="{StaticResource MainWindowViewModel}">
+
     <Window.Resources>
         <local:ApplicationPageToPageConverter x:Key="ApplicationPageToPageConverter" />
     </Window.Resources>
-    
+
     <Grid>
-        <Frame Content="{Binding WindowContent, Converter={StaticResource PageConverter}}"/>
+        <Frame Content="{Binding WindowContent, 
+                                 Converter={StaticResource PageConverter}}"/>
     </Grid>
+
 </Window>

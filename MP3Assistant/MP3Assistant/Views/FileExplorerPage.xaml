@@ -1,0 +1,83 @@
+﻿<Page x:Class="MP3Assistant.FileExplorerPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MP3Assistant"
+      mc:Ignorable="d" 
+      d:DesignHeight="688" d:DesignWidth="1280"
+      Title="FileExplorerPage">
+
+    <Page.Resources>
+        <ResourceDictionary>
+            <Style TargetType="{x:Type ListViewItem}">
+                <EventSetter Event="MouseDoubleClick"
+                             Handler="FileExplorerDirectoryItem_DoubleClick" />
+            </Style>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="280" />
+            </Grid.ColumnDefinitions>
+
+            <!-- File explorer -->
+            <ListView Grid.Column="0"
+                      Name="FileExplorerListView"
+                      ItemsSource="{Binding Contents}"
+                      SelectedItem="{Binding SelectedDirectoryItem, Mode=OneWayToSource}"
+                      Background="Transparent">
+                <ListView.View>
+                    <GridView AllowsColumnReorder="true">
+                        <!-- Column context menu -->
+                        <GridView.ColumnHeaderContextMenu>
+                            <ContextMenu  ItemsSource="{Binding FileExplorerHeaderContextMenu}">
+                                <ContextMenu.ItemContainerStyle>
+                                    <Style TargetType="MenuItem">
+                                        <Setter Property="Header" Value="{Binding Name}"/>
+                                        <Setter Property="Icon" Value="{Binding ActionParameter.IsVisible, Converter={StaticResource VisibilityToIconConverter}}"/>
+                                        <Setter Property="ItemsSource" Value="{Binding SubActions}"/>
+                                        <Setter Property="Command" Value="{Binding Action}"/>
+                                        <Setter Property="CommandParameter" Value="{Binding ActionParameter}"/>
+                                    </Style>
+                                </ContextMenu.ItemContainerStyle>
+                            </ContextMenu>
+                        </GridView.ColumnHeaderContextMenu>
+                    </GridView>
+                </ListView.View>
+            </ListView>
+
+            <!-- CheckBoxes -->
+            <StackPanel Grid.Column="1">
+                <TextBlock Text="Ukrywaj:" 
+                           Margin="4,1,2,1"/>
+                <Border Margin="8,8,8,4"
+                        Padding="6">
+                    <StackPanel>
+                        <!-- Hiding hidden directories -->
+                        <CheckBox Margin="2,1,2,1" Content="ukryte elementy" 
+                                  IsChecked="{Binding HideHiddenContents, Mode=TwoWay}" />
+                        <!-- Hiding file extensions -->
+                        <CheckBox Margin="2,1,2,1" Content="rozszerzenia plików"
+                                  IsChecked="{Binding HideExtensions, Mode=TwoWay}" />
+                        <!-- Hiding non-MP3 files -->
+                        <CheckBox Margin="2,1,2,1" Content="inne niż MP3" />
+                    </StackPanel>
+                </Border>
+                <Border Margin="8,4,8,4"
+                        Padding="6">
+                    <StackPanel>
+                        <CheckBox Margin="2,1,2,1" Content="???" />
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Page>

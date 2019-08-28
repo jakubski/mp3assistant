@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +8,7 @@ using System.Windows.Data;
 
 namespace MP3Assistant
 {
-    public class FileExplorerViewModel : INotifyPropertyChanged
+    public class MainPageViewModel : ViewModel
     {
         private List<DirectoryItemViewModel> _contents;
         private List<FileExplorerColumnViewModel> _columns;
@@ -17,11 +16,27 @@ namespace MP3Assistant
         private Stack<string> _forwardPathHistory;
 
         public string CurrentPath { get; set; }
+        public string NavigationLabelText
+        {
+            get
+            {
+                switch (FileExplorerPage.Type)
+                {
+                    case ApplicationPageType.FileExplorerPage:
+                        return CurrentPath;
+                    default:
+                        return "...";
+                }
+            }
+        }
+
+        public ApplicationPage NavigationBarPage { get; set; }
+        public ApplicationPage FileExplorerPage { get; set; }
 
         public bool HideHiddenContents { get; set; }
         public bool HideExtensions { get; set; }
 
-        public ObservableCollection<string> SuggestedPaths { get; private set; }
+        //public ObservableCollection<string> SuggestedPaths { get; private set; }
         public ObservableCollection<DirectoryItemViewModel> Contents
         {
             get
@@ -52,11 +67,12 @@ namespace MP3Assistant
             }
         }
 
+        public DirectoryItemViewModel SelectedDirectoryItem { get; set; }
+
         public ObservableCollection<ContextAction> FileExplorerHeaderContextMenu { get; private set; }
 
         public delegate void ColumnChangedEventHandler(object sender, ColumnChangedEventArgs e);
 
-        public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
         public event ColumnChangedEventHandler ColumnAdded = (sender, e) => { };
         public event ColumnChangedEventHandler ColumnRemoved = (sender, e) => { };
 
@@ -65,11 +81,22 @@ namespace MP3Assistant
         public RelayCommand<DirectoryItemViewModel> ItemDoubleClickCommand { get; private set; }
         public RelayCommand<FileExplorerColumnViewModel> AddRemoveColumnCommand { get; private set; }
 
-        public FileExplorerViewModel()
+        public MainPageViewModel()
         {
             // Initialize fields
             _backwardPathHistory = new Stack<string>();
             _forwardPathHistory = new Stack<string>();
+
+            NavigationBarPage = new ApplicationPage()
+            {
+                Type = ApplicationPageType.MainPageNavigationBar,
+                ViewModel = this
+            };
+            FileExplorerPage = new ApplicationPage()
+            {
+                Type = ApplicationPageType.FileExplorerPage,
+                ViewModel = this
+            };
 
             var multipleArtistsConverter = new StringArrayToStringConverter();
             _columns = new List<FileExplorerColumnViewModel>(new[]
@@ -128,7 +155,7 @@ namespace MP3Assistant
             ItemDoubleClickCommand = new RelayCommand<DirectoryItemViewModel>(Item_DoubleClick);
             AddRemoveColumnCommand = new RelayCommand<FileExplorerColumnViewModel>(AddRemoveColumn);
 
-            SuggestedPaths = new ObservableCollection<string>(new string[] { "" });
+            //SuggestedPaths = new ObservableCollection<string>(new string[] { "" });
             FileExplorerHeaderContextMenu = new ObservableCollection<ContextAction>(new[]
             {
                 new ContextAction("Kolumny", null, null, _columns.Select(column => new ContextAction(column.Header, AddRemoveColumnCommand, column)))
@@ -149,7 +176,7 @@ namespace MP3Assistant
 
             CurrentPath = newPath;
             Contents = new ObservableCollection<DirectoryItemViewModel>(contents.Select(path => new DirectoryItemViewModel(path)));
-            SuggestedPaths[0] = CurrentPath;
+            //SuggestedPaths[0] = CurrentPath;
         }
 
         /// <summary>
@@ -168,14 +195,22 @@ namespace MP3Assistant
         /// </summary>
         private void GoToPreviousLocation()
         {
-            if (_backwardPathHistory.Count > 0)
+            if (FileExplorerPage.Type == ApplicationPageType.FileExplorerPage)
             {
-                var currentPath = CurrentPath;
-                var newPath = _backwardPathHistory.Pop();
+                if (_backwardPathHistory.Count > 0)
+                {
+                    var currentPath = CurrentPath;
+                    var newPath = _backwardPathHistory.Pop();
 
-                _forwardPathHistory.Push(currentPath);
-                SetLocation(newPath);
+                    _forwardPathHistory.Push(currentPath);
+                    SetLocation(newPath);
+                }
             }
+            else if (FileExplorerPage.Type == ApplicationPageType.SongEditorPage)
+            {
+                CloseSongEditor();
+            }
+                
         }
 
         /// <summary>
@@ -183,14 +218,35 @@ namespace MP3Assistant
         /// </summary>
         private void GoToNextLocation()
         {
-            if (_forwardPathHistory.Count > 0)
+            if (FileExplorerPage.Type == ApplicationPageType.FileExplorerPage)
             {
-                var currentPath = CurrentPath;
-                var newPath = _forwardPathHistory.Pop();
+                if (_forwardPathHistory.Count > 0)
+                {
+                    var currentPath = CurrentPath;
+                    var newPath = _forwardPathHistory.Pop();
 
-                _backwardPathHistory.Push(currentPath);
-                SetLocation(newPath);
+                    _backwardPathHistory.Push(currentPath);
+                    SetLocation(newPath);
+                }
             }
+        }
+
+        private void OpenSongEditor()
+        {
+            FileExplorerPage = new ApplicationPage()
+            {
+                Type = ApplicationPageType.SongEditorPage,
+                ViewModel = this
+            };
+        }
+
+        private void CloseSongEditor()
+        {
+            FileExplorerPage = new ApplicationPage()
+            {
+                Type = ApplicationPageType.FileExplorerPage,
+                ViewModel = this
+            };
         }
 
         private void AddRemoveColumn(FileExplorerColumnViewModel column)
@@ -221,8 +277,10 @@ namespace MP3Assistant
                     break;
                 // If double clicked on a file
                 case DirectoryType.File:
-                case DirectoryType.MP3File:
                     return;
+                case DirectoryType.MP3File:
+                    OpenSongEditor();
+                    break;
             }
         }
     }

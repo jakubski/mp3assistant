@@ -6,11 +6,9 @@ using System.Threading.Tasks;
 
 namespace MP3Assistant
 {
-    public enum ApplicationPage
+    public struct ApplicationPage
     {
-        Blank,
-        BaseDirectoryViewPage,
-        DirectoryTree,
-        MainPage,
+        public ApplicationPageType Type { get; set; }
+        public ViewModel ViewModel { get; set; }
     }
 }

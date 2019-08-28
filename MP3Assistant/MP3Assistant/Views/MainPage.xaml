@@ -8,111 +8,20 @@
       d:DesignHeight="720" d:DesignWidth="1280"
       Title="MainPage">
 
-    <Page.Resources>
-        <ResourceDictionary>
-            <Style TargetType="{x:Type ListViewItem}">
-                <EventSetter Event="MouseDoubleClick"
-                             Handler="FilePresenterDirectoryItem_DoubleClick" />
-            </Style>
-        </ResourceDictionary>
-    </Page.Resources>
-
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="22" />
+            <RowDefinition Height="80" />
             <RowDefinition Height="*" />
         </Grid.RowDefinitions>
 
-        <!-- File management -->
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="64" />
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="200" />
-            </Grid.ColumnDefinitions>
+        <Frame Grid.Row="0"
+               Name="NavigationBarFrame" 
+               Content="{Binding NavigationBarPage, 
+                                 Converter={StaticResource PageConverter}}"/>
 
-            <StackPanel Grid.Column="0"
-                        Orientation="Horizontal">
-                <!-- Back button -->
-                <Button Margin="1,0,1,0"
-                        Width="30"
-                        Content="wstecz"
-                        Command="{Binding BackButtonClickCommand}"/>
-                <!-- Next button -->
-                <Button Margin="1,0,1,0"
-                        Width="30"
-                        Content="dalej"
-                        Command="{Binding NextButtonClickCommand}" />
-            </StackPanel>
-            
-            <!-- Directory browser -->
-            <ComboBox Grid.Column="1" 
-                      ItemsSource="{Binding SuggestedPaths}" 
-                      SelectedIndex="0" />
-            
-            <!-- Some buttons, I guess -->
-            <StackPanel Grid.Column="2" 
-                        Orientation="Horizontal">
-                <Button Content="???" />
-                <Button Content="???" />
-            </StackPanel>
-        </Grid>
-
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="280" />
-            </Grid.ColumnDefinitions>
-            
-            <!-- File presenter -->
-            <ListView Grid.Column="0"
-                      Name="FileExplorerListView"
-                      ItemsSource="{Binding Contents}">
-                <!-- GridView -->
-                <ListView.View>
-                    <GridView  AllowsColumnReorder="true">
-                        <!-- Column context menu -->
-                        <GridView.ColumnHeaderContextMenu>
-                            <ContextMenu  ItemsSource="{Binding FileExplorerHeaderContextMenu}">
-                                <ContextMenu.ItemContainerStyle>
-                                    <Style TargetType="MenuItem">
-                                        <Setter Property="Header" Value="{Binding Name}"/>
-                                        <Setter Property="Icon" Value="{Binding ActionParameter.IsVisible, Converter={StaticResource VisibilityToIconConverter}}"/>
-                                        <Setter Property="ItemsSource" Value="{Binding SubActions}"/>
-                                        <Setter Property="Command" Value="{Binding Action}"/>
-                                        <Setter Property="CommandParameter" Value="{Binding ActionParameter}"/>
-                                    </Style>
-                                </ContextMenu.ItemContainerStyle>
-                            </ContextMenu>
-                        </GridView.ColumnHeaderContextMenu>
-                    </GridView>
-                </ListView.View>
-            </ListView>
-            
-            <!-- CheckBoxes -->
-            <StackPanel Grid.Column="1">
-                <TextBlock Text="Ukrywaj:" 
-                           Margin="4,1,2,1"/>
-                <Border Margin="8,8,8,4"
-                        Padding="6">
-                    <StackPanel>
-                        <!-- Hiding hidden directories -->
-                        <CheckBox Margin="2,1,2,1" Content="ukryte elementy" 
-                                  IsChecked="{Binding HideHiddenContents, Mode=TwoWay}" />
-                        <!-- Hiding file extensions -->
-                        <CheckBox Margin="2,1,2,1" Content="rozszerzenia plików"
-                                  IsChecked="{Binding HideExtensions, Mode=TwoWay}" />
-                        <!-- Hiding non-MP3 files -->
-                        <CheckBox Margin="2,1,2,1" Content="inne niż MP3" />
-                    </StackPanel>
-                </Border>
-                <Border Margin="8,4,8,4"
-                        Padding="6">
-                    <StackPanel>
-                        <CheckBox Margin="2,1,2,1" Content="???" />
-                    </StackPanel>
-                </Border>
-            </StackPanel>
-        </Grid>
+        <Frame Grid.Row="1"
+               Name="FileExplorerFrame" 
+               Content="{Binding FileExplorerPage, 
+                                 Converter={StaticResource PageConverter}}"/>
     </Grid>
 </Page>

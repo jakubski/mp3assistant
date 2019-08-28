@@ -1,0 +1,50 @@
+﻿<Page x:Class="MP3Assistant.MainPageNavigationPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MP3Assistant"
+      mc:Ignorable="d" 
+      d:DesignHeight="80" d:DesignWidth="1280"
+      Title="MainPageNavigationBarPage">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="120"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="60"/>
+            <ColumnDefinition Width="240"/>
+        </Grid.ColumnDefinitions>
+
+        <!-- Back button -->
+        <Button Grid.Column="0"
+                Name="BackButton"
+                Content="Wstecz"
+                Command="{Binding BackButtonClickCommand}"
+                Background="Transparent"/>
+
+        <!-- Next button -->
+        <Button Grid.Column="1"
+                Name="NextButton"
+                Content="Dalej"
+                Command="{Binding NextButtonClickCommand}"
+                Background="Transparent"/>
+
+        <!-- Label -->
+        <TextBlock Grid.Column="2"
+                   Name="NavigationLabel"
+                   Text="{Binding NavigationLabelText}"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"
+                   FontSize="32"
+                   Background="Transparent"/>
+
+        <!-- Arrow -->
+        <Button Grid.Column="3"
+                Name="NavigationOptionsButton"
+                Background="Transparent"/>
+
+        <!-- More buttons!! -->
+    </Grid>
+</Page>

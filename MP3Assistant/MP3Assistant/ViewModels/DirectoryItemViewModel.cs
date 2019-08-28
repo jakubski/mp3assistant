@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MP3Assistant
 {
-    public class DirectoryItemViewModel : INotifyPropertyChanged
+    public class DirectoryItemViewModel : ViewModel
     {
         #region Private Members
 
@@ -105,12 +105,6 @@ namespace MP3Assistant
             get { return _directoryItem.Bitrate; }
             set { _directoryItem.Bitrate = value; }
         }
-
-        #endregion
-
-        #region Public Events
-
-        public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
 
         #endregion
 

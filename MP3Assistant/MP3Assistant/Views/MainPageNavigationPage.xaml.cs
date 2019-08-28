@@ -16,15 +16,19 @@ using System.Windows.Shapes;
 namespace MP3Assistant
 {
     /// <summary>
-    /// Interaction logic for MainPage.xaml
+    /// Interaction logic for MainPageNavigationPage.xaml
     /// </summary>
-    public partial class BaseDirectoryViewPage : Page
+    public partial class MainPageNavigationPage : Page
     {
-        public BaseDirectoryViewPage()
+        public MainPageNavigationPage()
         {
             InitializeComponent();
+        }
 
-            this.DataContext = new BaseDirectoryViewPageViewModel();
+        public MainPageNavigationPage(ViewModel dataContext)
+            : this()
+        {
+            DataContext = dataContext;
         }
     }
 }

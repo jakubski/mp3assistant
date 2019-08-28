@@ -1,9 +1,9 @@
-﻿<Page x:Class="MP3Assistant.Views.SongEditorPage"
+﻿<Page x:Class="MP3Assistant.SongEditorPage"
       xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
       xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
       xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-      xmlns:local="clr-namespace:MP3Assistant.Views"
+      xmlns:local="clr-namespace:MP3Assistant"
       mc:Ignorable="d" 
       d:DesignHeight="768" d:DesignWidth="1024"
       Title="SongEditorPage">
@@ -26,10 +26,11 @@
             </Grid.ColumnDefinitions>
 
             <TextBlock Grid.Column="0"
-                       HorizontalAlignment="Right" 
-                       Text="Tytuł"/>
+                       Text="Tytuł"
+                       HorizontalAlignment="Right"/>
 
             <TextBox Grid.Column="1"
+                     Text="{Binding SelectedDirectoryItem.Title}"
                      Margin="6,1,0,1"
                      HorizontalAlignment="Stretch"/>
         </Grid>
@@ -46,6 +47,7 @@
                        Text="Wykonawca"/>
 
             <TextBox Grid.Column="1"
+                     Text="{Binding SelectedDirectoryItem.Performers, Converter={StaticResource MultipleArtistsConverter}}"
                      Margin="6,1,0,1"
                      HorizontalAlignment="Stretch"/>
 
@@ -63,6 +65,7 @@
                        Text="Wykonawca albumu"/>
 
             <TextBox Grid.Column="1"
+                     Text="{Binding SelectedDirectoryItem.AlbumPerformers, Converter={StaticResource MultipleArtistsConverter}}"
                      Margin="6,1,0,1"
                      HorizontalAlignment="Stretch"/>
         </Grid>
@@ -79,6 +82,7 @@
                        Text="Album"/>
 
             <TextBox Grid.Column="1"
+                     Text="{Binding SelectedDirectoryItem.Album}"
                      Margin="6,1,0,1"
                      HorizontalAlignment="Stretch"/>
         </Grid>
@@ -103,6 +107,7 @@
                            Text="Rok"/>
 
                 <TextBox Grid.Column="1"
+                         Text="{Binding SelectedDirectoryItem.Year}"
                          Margin="6,1,0,1"
                          HorizontalAlignment="Stretch"/>
             </Grid>
@@ -122,6 +127,7 @@
                            Text="Nr ścieżki"/>
 
                 <TextBox Grid.Column="1"
+                         Text="{Binding SelectedDirectoryItem.TrackIndex}"
                          Margin="0,1,0,1"
                          HorizontalAlignment="Stretch"/>
 
@@ -131,6 +137,7 @@
                            Text="/"/>
 
                 <TextBox Grid.Column="3"
+                         Text="{Binding SelectedDirectoryItem.TrackCount}"
                          Margin="0,1,0,1"
                          HorizontalAlignment="Stretch"/>
             </Grid>
@@ -148,6 +155,7 @@
                        Text="Gatunek"/>
 
             <TextBox Grid.Column="1"
+                     Text="{Binding SelectedDirectoryItem.Genres, Converter={StaticResource MultipleArtistsConverter}}"
                      Margin="6,1,0,1"
                      HorizontalAlignment="Stretch"/>
         </Grid>

@@ -76,26 +76,37 @@
     <Compile Include="ValueConverters\BoolToCharConverter.cs" />
     <Compile Include="ValueConverters\StringArrayToStringConverter.cs" />
     <Compile Include="ViewModels\ApplicationPage.cs" />
+    <Compile Include="ViewModels\ApplicationPageType.cs" />
+    <Compile Include="ViewModels\Base\ViewModel.cs" />
     <Compile Include="ViewModels\ColumnChangedEventArgs.cs" />
     <Compile Include="ViewModels\ContextAction.cs" />
     <Compile Include="ViewModels\FileExplorerColumnViewModel.cs" />
-    <Compile Include="ViewModels\FileExplorerViewModel.cs" />
+    <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
     <Compile Include="Models\Directory\DirectoryHelpers.cs" />
     <Compile Include="ViewModels\DirectoryItemViewModel.cs" />
     <Compile Include="Models\Directory\DirectoryType.cs" />
     <Compile Include="ViewModels\VoidRelayCommand.cs" />
-    <Compile Include="Views\DirectoryTreePage.xaml.cs">
-      <DependentUpon>DirectoryTreePage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="ValueConverters\ApplicationPageToPageConverter.cs" />
-    <Compile Include="ViewModels\BaseDirectoryViewPageViewModel.cs" />
-    <Compile Include="ViewModels\DirectoryTreeViewModel.cs" />
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
+    <Compile Include="Views\FileExplorerPage.xaml.cs">
+      <DependentUpon>FileExplorerPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\MainPageNavigationPage.xaml.cs">
+      <DependentUpon>MainPageNavigationPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\SongEditorPage.xaml.cs">
       <DependentUpon>SongEditorPage.xaml</DependentUpon>
     </Compile>
+    <Page Include="Views\FileExplorerPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Views\MainPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\MainPageNavigationPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -114,23 +125,12 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
-    <Page Include="Views\BaseDirectoryViewPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\DirectoryTreePage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
     <Page Include="Views\SongEditorPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Views\BaseDirectoryViewPage.xaml.cs">
-      <DependentUpon>BaseDirectoryViewPage.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>

@@ -4,6 +4,9 @@
              xmlns:local="clr-namespace:MP3Assistant"
              StartupUri="Views/MainWindow.xaml">
     <Application.Resources>
+        <!-- View models -->
+        <local:MainWindowViewModel x:Key="MainWindowViewModel" />
+        <!-- Value converters -->
         <local:ApplicationPageToPageConverter x:Key="PageConverter" />
         <local:StringArrayToStringConverter x:Key="MultipleArtistsConverter" />
         <local:BoolToCharConverter x:Key="VisibilityToIconConverter"/>

@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace MP3Assistant
 {
-    public class MainWindowViewModel : INotifyPropertyChanged
+    public class MainWindowViewModel : ViewModel
     {
         public ApplicationPage WindowContent { get; set; }
 
-        public event PropertyChangedEventHandler PropertyChanged = (sender, e) => { };
-
         public MainWindowViewModel()
         {
-            this.WindowContent = ApplicationPage.MainPage;
+            this.WindowContent = new ApplicationPage()
+            {
+                Type = ApplicationPageType.MainPage,
+                ViewModel = new MainPageViewModel()
+            };
         }
     }
 }

@@ -11,16 +11,26 @@ namespace MP3Assistant
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            switch ((ApplicationPage)value)
+            ApplicationPage page = (ApplicationPage)value;
+            ApplicationPageType type = page.Type;
+            ViewModel dataContext = page.ViewModel;
+
+            switch (type)
             {
-                case ApplicationPage.Blank:
+                case ApplicationPageType.Blank:
                     return new Page();
-                case ApplicationPage.BaseDirectoryViewPage:
-                    return new BaseDirectoryViewPage();
-                case ApplicationPage.DirectoryTree:
-                    return new DirectoryTreePage();
-                case ApplicationPage.MainPage:
-                    return new MainPage();
+                //case ApplicationPageType.BaseDirectoryViewPage:
+                //    return new BaseDirectoryViewPage(dataContext);
+                //case ApplicationPageType.DirectoryTree:
+                //    return new DirectoryTreePage(dataContext);
+                case ApplicationPageType.MainPage:
+                    return new MainPage(dataContext);
+                case ApplicationPageType.MainPageNavigationBar:
+                    return new MainPageNavigationPage(dataContext);
+                case ApplicationPageType.FileExplorerPage:
+                    return new FileExplorerPage(dataContext);
+                case ApplicationPageType.SongEditorPage:
+                    return new SongEditorPage(dataContext);
                 default:
                     return null;
             }

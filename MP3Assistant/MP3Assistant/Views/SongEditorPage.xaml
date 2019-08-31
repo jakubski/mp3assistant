@@ -10,12 +10,11 @@
 
     <Grid Margin="10,10">
         <Grid.RowDefinitions>
-            <RowDefinition Height="24"/>
-            <RowDefinition Height="24"/>
-            <RowDefinition Height="24"/>
-            <RowDefinition Height="24"/>
-            <RowDefinition Height="24"/>
-            <RowDefinition Height="24"/>
+            <RowDefinition Height="24"/>  <!-- Title -->
+            <RowDefinition Height="24"/>  <!-- Performer -->
+            <RowDefinition Height="24"/>  <!-- Album performer -->
+            <RowDefinition Height="24"/>  <!-- Album -->
+            <RowDefinition Height="*"/>   <!-- Year, track number, track count, genre | Cover art -->
         </Grid.RowDefinitions>
 
         <!-- Title -->
@@ -87,77 +86,84 @@
                      HorizontalAlignment="Stretch"/>
         </Grid>
 
-        <!-- Year, track number, track count -->
+        <!-- Year, track number, track count  ___________
+             genre                           | Cover     |
+                                             |_______art_| -->
         <Grid Grid.Row="4">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="160"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="160"/>
+                <ColumnDefinition Width="*"/>   <!-- Year, track number, track count, genre -->
+                <ColumnDefinition Width="320"/> <!-- Cover art -->
             </Grid.ColumnDefinitions>
 
-            <!-- Year -->
+            <!-- Year, track number, track count
+                 genre -->
             <Grid Grid.Column="0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="110"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="24"/>  <!-- Year, track number, track count -->
+                    <RowDefinition Height="24"/>  <!-- Genre -->
+                </Grid.RowDefinitions>
 
-                <TextBlock Grid.Column="0"
-                           HorizontalAlignment="Right"
-                           Text="Rok"/>
+                <!-- Year, track number, track count -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="110"/> <!-- Year label -->
+                        <ColumnDefinition Width="80"/>  <!-- Year textbox -->
+                        <ColumnDefinition Width="*"/>   <!-- Space -->
+                        <ColumnDefinition Width="90"/>  <!-- Track number label -->
+                        <ColumnDefinition Width="40"/>  <!-- Track number textbox -->
+                        <ColumnDefinition Width="10"/>  <!-- Slash -->
+                        <ColumnDefinition Width="40"/>  <!-- Track count textbox -->
+                    </Grid.ColumnDefinitions>
 
-                <TextBox Grid.Column="1"
-                         Text="{Binding SelectedDirectoryItem.Year}"
-                         Margin="6,1,0,1"
-                         HorizontalAlignment="Stretch"/>
+                    <!-- Year -->
+                    <TextBlock Grid.Column="0"
+                               HorizontalAlignment="Right"
+                               Text="Rok"/>
+
+                    <TextBox Grid.Column="1"
+                             Text="{Binding SelectedDirectoryItem.Year}"
+                             Margin="6,1,0,1"
+                             HorizontalAlignment="Stretch"/>
+
+                    <!-- Track number -->
+                    <TextBlock Grid.Column="3"
+                               Margin="0,0,6,0"
+                               HorizontalAlignment="Right"
+                               Text="Nr ścieżki"/>
+
+                    <TextBox Grid.Column="4"
+                             Text="{Binding SelectedDirectoryItem.TrackIndex}"
+                             Margin="0,1,0,1"
+                             HorizontalAlignment="Stretch"/>
+
+                    <!-- Track count -->
+                    <TextBlock Grid.Column="5"
+                               HorizontalAlignment="Stretch"
+                               Text="/"/>
+
+                    <TextBox Grid.Column="6"
+                             Text="{Binding SelectedDirectoryItem.TrackCount}"
+                             Margin="0,1,0,1"
+                             HorizontalAlignment="Stretch"/>
+                </Grid>
+
+                <!-- Genre -->
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="110"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0"
+                               HorizontalAlignment="Right"
+                               Text="Gatunek"/>
+
+                    <TextBox Grid.Column="1"
+                             Text="{Binding SelectedDirectoryItem.Genres, Converter={StaticResource MultipleArtistsConverter}}"
+                             Margin="6,1,0,1"
+                             HorizontalAlignment="Stretch"/>
+                </Grid>
             </Grid>
-
-            <Grid Grid.Column="2">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="30"/>
-                    <ColumnDefinition Width="8"/>
-                    <ColumnDefinition Width="30"/>
-                </Grid.ColumnDefinitions>
-
-                <!-- Track number -->
-                <TextBlock Grid.Column="0"
-                           Margin="0,0,6,0"
-                           HorizontalAlignment="Right"
-                           Text="Nr ścieżki"/>
-
-                <TextBox Grid.Column="1"
-                         Text="{Binding SelectedDirectoryItem.TrackIndex}"
-                         Margin="0,1,0,1"
-                         HorizontalAlignment="Stretch"/>
-
-                <!-- Track count -->
-                <TextBlock Grid.Column="2"
-                           HorizontalAlignment="Stretch"
-                           Text="/"/>
-
-                <TextBox Grid.Column="3"
-                         Text="{Binding SelectedDirectoryItem.TrackCount}"
-                         Margin="0,1,0,1"
-                         HorizontalAlignment="Stretch"/>
-            </Grid>
-        </Grid>
-
-        <!-- Genre -->
-        <Grid Grid.Row="5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="110"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <TextBlock Grid.Column="0"
-                       HorizontalAlignment="Right"
-                       Text="Gatunek"/>
-
-            <TextBox Grid.Column="1"
-                     Text="{Binding SelectedDirectoryItem.Genres, Converter={StaticResource MultipleArtistsConverter}}"
-                     Margin="6,1,0,1"
-                     HorizontalAlignment="Stretch"/>
         </Grid>
     </Grid>
 </Page>

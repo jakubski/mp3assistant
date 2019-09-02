@@ -17,11 +17,13 @@
         <Frame Grid.Row="0"
                Name="NavigationBarFrame" 
                Content="{Binding NavigationBarPage, 
-                                 Converter={StaticResource PageConverter}}"/>
+                                 Converter={StaticResource PageConverter}}"
+               NavigationUIVisibility="Hidden"/>
 
         <Frame Grid.Row="1"
                Name="FileExplorerFrame" 
                Content="{Binding FileExplorerPage, 
-                                 Converter={StaticResource PageConverter}}"/>
+                                 Converter={StaticResource PageConverter}}"
+               NavigationUIVisibility="Hidden"/>
     </Grid>
 </Page>

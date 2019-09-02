@@ -13,5 +13,9 @@ namespace MP3Assistant
     /// </summary>
     public partial class App : Application
     {
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {
+            GlobalSettings.CommandLineParameters = e.Args;
+        }
     }
 }

@@ -46,6 +46,7 @@ namespace MP3Assistant
         public uint TrackIndex { get; set; }
         public uint TrackCount { get; set; }
         public string[] Genres { get; set; }
+        public byte[][] Images { get; set; }
         public long Length { get; set; }
         public ushort Bitrate { get; set; }
 
@@ -91,6 +92,7 @@ namespace MP3Assistant
             TrackIndex = tag.Track;
             TrackCount = tag.TrackCount;
             Genres = tag.Genres;
+            Images = tag.Pictures.Select(image => image.Data.Data).ToArray();
         }
     }
 }

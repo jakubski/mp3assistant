@@ -5,6 +5,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Media;
 
 namespace MP3Assistant
 {
@@ -92,6 +93,12 @@ namespace MP3Assistant
         {
             get { return _directoryItem.Genres; }
             set { _directoryItem.Genres = value; }
+        }
+
+        public List<byte[]> Images
+        {
+            get { return _directoryItem.Images?.ToList(); }
+            set { _directoryItem.Images = value.ToArray(); }
         }
 
         public long Length

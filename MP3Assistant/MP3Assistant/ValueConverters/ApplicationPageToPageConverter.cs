@@ -19,10 +19,6 @@ namespace MP3Assistant
             {
                 case ApplicationPageType.Blank:
                     return new Page();
-                //case ApplicationPageType.BaseDirectoryViewPage:
-                //    return new BaseDirectoryViewPage(dataContext);
-                //case ApplicationPageType.DirectoryTree:
-                //    return new DirectoryTreePage(dataContext);
                 case ApplicationPageType.MainPage:
                     return new MainPage(dataContext);
                 case ApplicationPageType.MainPageNavigationBar:

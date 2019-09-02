@@ -162,7 +162,11 @@ namespace MP3Assistant
             });
 
             // Set the initial path
-            SetLocation("\\");
+            var parameters = GlobalSettings.CommandLineParameters;
+            if (parameters.Length < 1)
+                SetLocation("\\");
+            else
+                SetLocation(parameters[0]);
         }
 
         private void SetLocation(string newPath)

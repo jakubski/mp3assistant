@@ -74,6 +74,7 @@
     </ApplicationDefinition>
     <Compile Include="Models\Directory\DirectoryItem.cs" />
     <Compile Include="ValueConverters\BoolToCharConverter.cs" />
+    <Compile Include="ValueConverters\ByteArrayToImageConverter.cs" />
     <Compile Include="ValueConverters\StringArrayToStringConverter.cs" />
     <Compile Include="ViewModels\ApplicationPage.cs" />
     <Compile Include="ViewModels\ApplicationPageType.cs" />
@@ -81,6 +82,7 @@
     <Compile Include="ViewModels\ColumnChangedEventArgs.cs" />
     <Compile Include="ViewModels\ContextAction.cs" />
     <Compile Include="ViewModels\FileExplorerColumnViewModel.cs" />
+    <Compile Include="ViewModels\GlobalSettings.cs" />
     <Compile Include="ViewModels\MainPageViewModel.cs" />
     <Compile Include="ViewModels\RelayCommand.cs" />
     <Compile Include="Models\Directory\DirectoryHelpers.cs" />

@@ -99,6 +99,7 @@ namespace MP3Assistant
             };
 
             var multipleArtistsConverter = new StringArrayToStringConverter();
+            var emptyIntConverter = new UintToStringConverter();
             _columns = new List<FileExplorerColumnViewModel>(new[]
             {
                 new FileExplorerColumnViewModel()
@@ -143,6 +144,7 @@ namespace MP3Assistant
                     Header = "Rok",
                     Width = 50,
                     BoundProperty = nameof(DirectoryItemViewModel.Year),
+                    Converter = emptyIntConverter,
                     IsVisible = true
                 }
             });

@@ -12,5 +12,6 @@
         <local:StringArrayToStringConverter x:Key="MultipleArtistsConverter" />
         <local:BoolToCharConverter x:Key="VisibilityToIconConverter"/>
         <local:ByteArrayToImageConverter x:Key="AlbumArtConverter"/>
+        <local:UintToStringConverter x:Key="EmptyIntegerConverter"/>
     </Application.Resources>
 </Application>

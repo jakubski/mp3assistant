@@ -122,7 +122,8 @@
                                Text="Rok"/>
 
                     <TextBox Grid.Column="1"
-                             Text="{Binding SelectedDirectoryItem.Year}"
+                             Text="{Binding SelectedDirectoryItem.Year,
+                                            Converter={StaticResource EmptyIntegerConverter}}"
                              Margin="6,1,0,1"
                              HorizontalAlignment="Stretch"/>
 
@@ -143,7 +144,8 @@
                                Text="/"/>
 
                     <TextBox Grid.Column="6"
-                             Text="{Binding SelectedDirectoryItem.TrackCount}"
+                             Text="{Binding SelectedDirectoryItem.TrackCount,
+                                            Converter={StaticResource EmptyIntegerConverter}}"
                              Margin="0,1,0,1"
                              HorizontalAlignment="Stretch"/>
                 </Grid>

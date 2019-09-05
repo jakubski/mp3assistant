@@ -22,11 +22,13 @@ namespace MP3Assistant
         /// </summary>
         /// <param name="path">Full directory path</param>
         /// <returns></returns>
-        public static string GetDirectoryName(string path)
+        public static string GetDirectoryName(string path, bool withExtension=true)
         {
             // Make sure there is anything to do
             if (path.Length < 1)
                 return string.Empty;
+
+            string name;
 
             // Get rid of potential forward slashes and trailing delimiters
             var normalizedPath = path.Replace('/', Delimiter).TrimEnd(new[] { Delimiter });
@@ -36,10 +38,17 @@ namespace MP3Assistant
 
             if (lastDelimiter < 0)
                 // If the path does not contain any delimiters, consider it a name...
-                return normalizedPath;
+                name = normalizedPath;
             else
-                // ...Otherwise return the last section of the path
-                return normalizedPath.Substring(lastDelimiter + 1);
+                // ...Otherwise take the last section of the path
+                name = normalizedPath.Substring(lastDelimiter + 1);
+
+            // If we don't need extension...
+            if (!withExtension)
+                // ...Get rid of it
+                name = GetTrimmedName(name);
+
+            return name;
         }
 
         /// <summary>
@@ -88,7 +97,7 @@ namespace MP3Assistant
             return DriveInfo.GetDrives().Where(drive => drive.DriveType == DriveType.Fixed).Select(drive => drive.Name).ToList();
         }
 
-        private static string GetExtension(string path)
+        public static string GetExtension(string path)
         {
             return Path.GetExtension(path).ToLower();
         }

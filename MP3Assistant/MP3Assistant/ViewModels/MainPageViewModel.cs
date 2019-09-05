@@ -48,7 +48,7 @@ namespace MP3Assistant
                     contents = contents.Where(item => !item.Hidden).ToList();
 
                 // Remove file extensions if necessary
-                contents.ForEach(item => { item.Trimmed = HideExtensions; });
+                contents.ForEach(item => { item.HideExtension = HideExtensions; });
 
                 return new ObservableCollection<DirectoryItemViewModel>(contents);
             }
@@ -98,7 +98,7 @@ namespace MP3Assistant
                 ViewModel = this
             };
 
-            var multipleArtistsConverter = new StringArrayToStringConverter();
+            var revPropToStringConverter = new ReversiblePropertyOfStringArrayToStringConverter();
             _columns = new List<FileExplorerColumnViewModel>(new[]
             {
                 new FileExplorerColumnViewModel()
@@ -120,7 +120,7 @@ namespace MP3Assistant
                     Header = "Wykonawca",
                     Width = 160,
                     BoundProperty = nameof(DirectoryItemViewModel.Performers),
-                    Converter = multipleArtistsConverter,
+                    Converter = revPropToStringConverter,
                     IsVisible = true
                 },
                 new FileExplorerColumnViewModel()
@@ -135,7 +135,7 @@ namespace MP3Assistant
                     Header = "Wykonawca albumu",
                     Width = 160,
                     BoundProperty = nameof(DirectoryItemViewModel.AlbumPerformers),
-                    Converter = multipleArtistsConverter,
+                    Converter = revPropToStringConverter,
                     IsVisible = true
                 },
                 new FileExplorerColumnViewModel()

@@ -5,11 +5,9 @@
              StartupUri="Views/MainWindow.xaml"
              Startup="Application_Startup">
     <Application.Resources>
-        <!-- View models -->
-        <local:MainWindowViewModel x:Key="MainWindowViewModel" />
         <!-- Value converters -->
         <local:ApplicationPageToPageConverter x:Key="PageConverter" />
-        <local:StringArrayToStringConverter x:Key="MultipleArtistsConverter" />
+        <local:StringArrayToStringConverter x:Key="StringArrayToStringConverter" />
         <local:BoolToCharConverter x:Key="VisibilityToIconConverter"/>
         <local:ByteArrayToImageConverter x:Key="AlbumArtConverter"/>
     </Application.Resources>

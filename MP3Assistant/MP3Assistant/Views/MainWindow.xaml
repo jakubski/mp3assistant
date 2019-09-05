@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="MP3 Assistant"
         Height="720" Width="1280"
-        DataContext="{StaticResource MainWindowViewModel}">
+        WindowStartupLocation="CenterScreen">
 
     <Window.Resources>
         <local:ApplicationPageToPageConverter x:Key="ApplicationPageToPageConverter" />

@@ -66,7 +66,7 @@
                                   IsChecked="{Binding HideHiddenContents, Mode=TwoWay}" />
                         <!-- Hiding file extensions -->
                         <CheckBox Margin="2,1,2,1" Content="rozszerzenia plików"
-                                  IsChecked="{Binding HideExtensions, Mode=TwoWay}" />
+                                  IsChecked="{Binding HideExtensions, Mode=TwoWay}"/>
                         <!-- Hiding non-MP3 files -->
                         <CheckBox Margin="2,1,2,1" Content="inne niż MP3" />
                     </StackPanel>

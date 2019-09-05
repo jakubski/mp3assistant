@@ -8,24 +8,22 @@ using System.Windows.Data;
 
 namespace MP3Assistant
 {
-    [ValueConversion(typeof(string[]), typeof(string))]
-    public class StringArrayToStringConverter : IValueConverter
+    [ValueConversion(typeof(ReversibleProperty<string[]>), typeof(string))]
+    public class ReversiblePropertyOfStringArrayToStringConverter : IValueConverter
     {
         public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
             if (value == null)
                 return "";
 
-            var array = (string[])value;
+            var array = (value as ReversibleProperty<string[]>).Value;
 
-            return (array.Count() == 1) ? array[0].Trim() : string.Join("; ", array.Select(s => s.Trim()));
+            return (array.Count() == 1) ? array[0] : string.Join("; ", array);
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            var text = ((string)value).Trim(new[] { ';' });
-
-            return text.Split(';');
+            throw new NotImplementedException();
         }
     }
 }

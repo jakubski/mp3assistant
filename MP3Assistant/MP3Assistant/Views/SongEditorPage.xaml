@@ -30,7 +30,8 @@
                        HorizontalAlignment="Right"/>
 
             <TextBox Grid.Column="1"
-                     Text="{Binding SelectedDirectoryItem.Title}"
+                     Text="{Binding SelectedDirectoryItem.Title.Value,
+                                    Mode=TwoWay}"
                      Margin="6,1,0,1"
                      HorizontalAlignment="Stretch"/>
         </Grid>
@@ -47,7 +48,9 @@
                        Text="Wykonawca"/>
 
             <TextBox Grid.Column="1"
-                     Text="{Binding SelectedDirectoryItem.Performers, Converter={StaticResource MultipleArtistsConverter}}"
+                     Text="{Binding SelectedDirectoryItem.Performers.Value,
+                                    Mode=TwoWay, 
+                                    Converter={StaticResource StringArrayToStringConverter}}"
                      Margin="6,1,0,1"
                      HorizontalAlignment="Stretch"/>
 
@@ -65,7 +68,9 @@
                        Text="Wykonawca albumu"/>
 
             <TextBox Grid.Column="1"
-                     Text="{Binding SelectedDirectoryItem.AlbumPerformers, Converter={StaticResource MultipleArtistsConverter}}"
+                     Text="{Binding SelectedDirectoryItem.AlbumPerformers.Value, 
+                                    Mode=TwoWay,
+                                    Converter={StaticResource StringArrayToStringConverter}}"
                      Margin="6,1,0,1"
                      HorizontalAlignment="Stretch"/>
         </Grid>
@@ -82,7 +87,8 @@
                        Text="Album"/>
 
             <TextBox Grid.Column="1"
-                     Text="{Binding SelectedDirectoryItem.Album}"
+                     Text="{Binding SelectedDirectoryItem.Album.Value,
+                                    Mode=TwoWay}"
                      Margin="6,1,0,1"
                      HorizontalAlignment="Stretch"/>
         </Grid>
@@ -122,7 +128,8 @@
                                Text="Rok"/>
 
                     <TextBox Grid.Column="1"
-                             Text="{Binding SelectedDirectoryItem.Year}"
+                             Text="{Binding SelectedDirectoryItem.Year.Value,
+                                            Mode=TwoWay}"
                              Margin="6,1,0,1"
                              HorizontalAlignment="Stretch"/>
 
@@ -133,7 +140,8 @@
                                Text="Nr ścieżki"/>
 
                     <TextBox Grid.Column="4"
-                             Text="{Binding SelectedDirectoryItem.TrackIndex}"
+                             Text="{Binding SelectedDirectoryItem.TrackIndex.Value,
+                                            Mode=TwoWay}"
                              Margin="0,1,0,1"
                              HorizontalAlignment="Stretch"/>
 
@@ -143,7 +151,8 @@
                                Text="/"/>
 
                     <TextBox Grid.Column="6"
-                             Text="{Binding SelectedDirectoryItem.TrackCount}"
+                             Text="{Binding SelectedDirectoryItem.TrackCount.Value,
+                                            Mode=TwoWay}"
                              Margin="0,1,0,1"
                              HorizontalAlignment="Stretch"/>
                 </Grid>
@@ -160,7 +169,9 @@
                                Text="Gatunek"/>
 
                     <TextBox Grid.Column="1"
-                             Text="{Binding SelectedDirectoryItem.Genres, Converter={StaticResource MultipleArtistsConverter}}"
+                             Text="{Binding SelectedDirectoryItem.Genres.Value, 
+                                            Mode=TwoWay,
+                                            Converter={StaticResource StringArrayToStringConverter}}"
                              Margin="6,1,0,1"
                              HorizontalAlignment="Stretch"/>
                 </Grid>

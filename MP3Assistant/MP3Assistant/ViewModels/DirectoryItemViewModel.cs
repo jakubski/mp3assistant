@@ -31,65 +31,65 @@ namespace MP3Assistant
 
         public string Name
         {
-            get
-            {
-                if (Trimmed)
-                    return _directoryItem.ShortName;
-                else
-                    return _directoryItem.Name;
-            }
+            get { return HideExtension ? ShortName.Value : _directoryItem.Name; }
         }
 
-        public bool Trimmed { get; set; }
+        public ReversibleProperty<string> ShortName
+        {
+            get { return _directoryItem.ShortName; }
+            set { _directoryItem.ShortName = value; }
+        }
+
+        public bool HideExtension { get; set; }
 
         public bool Hidden
         {
             get { return _directoryItem.Hidden; }
         }
 
-        public string Title
+        public ReversibleProperty<string> Title
         {
             get { return _directoryItem.Title; }
             set { _directoryItem.Title = value; }
         }
 
-        public string[] Performers
+        public ReversibleProperty<string[]> Performers
         {
             get { return _directoryItem.Performers; }
             set { _directoryItem.Performers = value; }
         }
 
-        public string[] AlbumPerformers
+        public ReversibleProperty<string[]> AlbumPerformers
         {
             get { return _directoryItem.AlbumPerformers; }
             set { _directoryItem.AlbumPerformers = value; }
         }
 
-        public string Album
+        public ReversibleProperty<string> Album
         {
             get { return _directoryItem.Album; }
             set { _directoryItem.Album = value; }
         }
 
-        public uint Year
+        public ReversibleProperty<uint> Year
         {
             get { return _directoryItem.Year; }
             set { _directoryItem.Year = value; }
         }
 
-        public uint TrackIndex
+        public ReversibleProperty<uint> TrackIndex
         {
             get { return _directoryItem.TrackIndex; }
             set { _directoryItem.TrackIndex = value; }
         }
 
-        public uint TrackCount
+        public ReversibleProperty<uint> TrackCount
         {
             get { return _directoryItem.TrackCount; }
             set { _directoryItem.TrackCount = value; }
         }
 
-        public string[] Genres
+        public ReversibleProperty<string[]> Genres
         {
             get { return _directoryItem.Genres; }
             set { _directoryItem.Genres = value; }

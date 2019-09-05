@@ -119,8 +119,8 @@ namespace MP3Assistant
 
         public DirectoryItemViewModel(string fullPath)
         {
-            _directoryItem = new DirectoryItem(fullPath);
-        }        
+            _directoryItem = DirectoryItemFactory.GetOrCreate(fullPath);
+        }
 
         #endregion
     }

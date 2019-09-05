@@ -129,7 +129,7 @@
 
                     <TextBox Grid.Column="1"
                              Text="{Binding SelectedDirectoryItem.Year.Value,
-                                            Mode=TwoWay}"
+                                            Converter={StaticResource EmptyIntegerConverter}}"
                              Margin="6,1,0,1"
                              HorizontalAlignment="Stretch"/>
 
@@ -152,7 +152,7 @@
 
                     <TextBox Grid.Column="6"
                              Text="{Binding SelectedDirectoryItem.TrackCount.Value,
-                                            Mode=TwoWay}"
+                                            Converter={StaticResource EmptyIntegerConverter}}"
                              Margin="0,1,0,1"
                              HorizontalAlignment="Stretch"/>
                 </Grid>

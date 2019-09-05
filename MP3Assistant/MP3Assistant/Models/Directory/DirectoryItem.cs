@@ -82,6 +82,11 @@ namespace MP3Assistant
 
         #endregion
 
+        ~DirectoryItem()
+        {
+
+        }
+
         private void SetMP3Info()
         {
             _tagFile = File.Create(FullPath);

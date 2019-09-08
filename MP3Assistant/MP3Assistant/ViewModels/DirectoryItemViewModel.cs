@@ -119,7 +119,7 @@ namespace MP3Assistant
 
         public DirectoryItemViewModel(string fullPath)
         {
-            _directoryItem = DirectoryItemFactory.GetOrCreate(fullPath);
+            _directoryItem = DirectoryItem.GetOrCreate(fullPath);
         }
 
         #endregion

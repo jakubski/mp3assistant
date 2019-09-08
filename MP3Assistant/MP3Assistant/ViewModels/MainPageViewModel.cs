@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,6 +25,8 @@ namespace MP3Assistant
                 {
                     case ApplicationPageType.FileExplorerPage:
                         return CurrentPath;
+                    case ApplicationPageType.SongEditorPage:
+                        return SelectedDirectoryItem.FullPath;
                     default:
                         return "...";
                 }
@@ -69,6 +72,11 @@ namespace MP3Assistant
 
         public DirectoryItemViewModel SelectedDirectoryItem { get; set; }
 
+        public ObservableCollection<DirectoryItemModification> Modifications
+        {
+            get { return new ObservableCollection<DirectoryItemModification>(DirectoryItem.Modifications); }
+        }
+
         public ObservableCollection<ContextAction> FileExplorerHeaderContextMenu { get; private set; }
 
         public delegate void ColumnChangedEventHandler(object sender, ColumnChangedEventArgs e);
@@ -99,7 +107,7 @@ namespace MP3Assistant
             };
 
             var revPropToStringConverter = new ReversiblePropertyOfStringArrayToStringConverter();
-            var emptyIntConverter = new UintToStringConverter();
+            var emptyIntConverter = new ReversiblePropertyOfUintToStringConverter();
             _columns = new List<FileExplorerColumnViewModel>(new[]
             {
                 new FileExplorerColumnViewModel()
@@ -157,7 +165,6 @@ namespace MP3Assistant
             ItemDoubleClickCommand = new RelayCommand<DirectoryItemViewModel>(Item_DoubleClick);
             AddRemoveColumnCommand = new RelayCommand<FileExplorerColumnViewModel>(AddRemoveColumn);
 
-            //SuggestedPaths = new ObservableCollection<string>(new string[] { "" });
             FileExplorerHeaderContextMenu = new ObservableCollection<ContextAction>(new[]
             {
                 new ContextAction("Kolumny", null, null, _columns.Select(column => new ContextAction(column.Header, AddRemoveColumnCommand, column)))
@@ -182,7 +189,6 @@ namespace MP3Assistant
 
             CurrentPath = newPath;
             Contents = new ObservableCollection<DirectoryItemViewModel>(contents.Select(path => new DirectoryItemViewModel(path)));
-            //SuggestedPaths[0] = CurrentPath;
         }
 
         /// <summary>

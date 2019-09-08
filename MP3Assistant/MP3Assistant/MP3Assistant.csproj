@@ -74,13 +74,15 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\Directory\DirectoryItem.cs" />
-    <Compile Include="Models\ReversibleProperty.cs" />
+    <Compile Include="Models\Directory\DirectoryItemModification.cs" />
+    <Compile Include="Models\ReversibleProperty\ReversibleProperty.cs" />
+    <Compile Include="Models\ReversibleProperty\ReversiblePropertyChangedEventArgs.cs" />
     <Compile Include="ValueConverters\ByteArrayToImageConverter.cs" />
     <Compile Include="ValueConverters\ReversiblePropertyOfStringArrayToStringConverter.cs" />
-    <Compile Include="Models\Directory\DirectoryItemFactory.cs" />
     <Compile Include="ValueConverters\BoolToCharConverter.cs" />
-    <Compile Include="ValueConverters\UintToStringConverter.cs" />
+    <Compile Include="ValueConverters\ReversiblePropertyOfUintToStringConverter.cs" />
     <Compile Include="ValueConverters\StringArrayToStringConverter.cs" />
+    <Compile Include="ValueConverters\UintToStringConverter.cs" />
     <Compile Include="ViewModels\ApplicationPage.cs" />
     <Compile Include="ViewModels\ApplicationPageType.cs" />
     <Compile Include="ViewModels\Base\ViewModel.cs" />

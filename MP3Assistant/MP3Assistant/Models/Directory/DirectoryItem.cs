@@ -4,7 +4,10 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Runtime.Caching;
 using TagLib;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 
 namespace MP3Assistant
 {
@@ -13,10 +16,19 @@ namespace MP3Assistant
     /// </summary>
     public class DirectoryItem : INotifyPropertyChanged
     {
+        #region Private Members
+
         private string _extension;
         private File _tagFile;
+        private static readonly double _expirationSeconds = 50d;
+        private static readonly MemoryCache _cache = new MemoryCache("DirectoryItemFCache");
+        private static Dictionary<DirectoryItem, IList<object>> _registeredStorages = new Dictionary<DirectoryItem, IList<object>>();
+
+        #endregion
 
         #region Public Properties
+
+        public static ObservableCollection<DirectoryItemModification> Modifications { get; private set; }
 
         public DirectoryType Type { get; set; }
         public string FullPath { get; set; }
@@ -59,7 +71,7 @@ namespace MP3Assistant
 
         #region Constructors
 
-        public DirectoryItem(string fullPath)
+        private DirectoryItem(string fullPath)
         {
             // Get the directory type
             Type = DirectoryHelpers.GetDirectoryType(fullPath);
@@ -67,25 +79,54 @@ namespace MP3Assistant
             FullPath = fullPath;
             if (Type == DirectoryType.File || Type == DirectoryType.MP3File)
             {
-                ShortName = new ReversibleProperty<string>(DirectoryHelpers.GetDirectoryName(FullPath, false));
+                ShortName = new ReversibleProperty<string>("Nazwa", DirectoryHelpers.GetDirectoryName(FullPath, false));
                 _extension = DirectoryHelpers.GetExtension(FullPath);
             }
             else
-                ShortName = new ReversibleProperty<string>(DirectoryHelpers.GetDirectoryName(FullPath));
+                ShortName = new ReversibleProperty<string>("Nazwa", DirectoryHelpers.GetDirectoryName(FullPath));
 
-            // Determine if is a hidden directory (drives seem to be marked as hidden)
-            Hidden = DirectoryHelpers.IsHidden(FullPath) && Type != DirectoryType.Drive;
+            // Determine if is a hidden directory (drives seem to be marked as hidden, so let's prevent that)
+            Hidden = Type != DirectoryType.Drive && DirectoryHelpers.IsHidden(FullPath);
+
+            // Initialize static modifications list
+            Modifications = new ObservableCollection<DirectoryItemModification>();
+            Modifications.CollectionChanged += OnModificationsChanged;
 
             if (Type == DirectoryType.MP3File)
+            {
                 SetMP3Info();
+                SubscribeToPropertyChanges();
+            }
         }
 
         #endregion
 
-        ~DirectoryItem()
-        {
+        #region Public Static Methods
 
+        public static DirectoryItem GetOrCreate(string path)
+        {
+            DirectoryItem item = _cache[path] as DirectoryItem;
+
+            if (item == null)
+            {
+                item = new DirectoryItem(path);
+
+                if (item.Type == DirectoryType.File || item.Type == DirectoryType.MP3File)
+                {
+                    CacheItemPolicy policy = new CacheItemPolicy();
+                    policy.SlidingExpiration = TimeSpan.FromSeconds(_expirationSeconds);
+                    policy.ChangeMonitors.Add(new HostFileChangeMonitor(new[] { path }.ToList()));
+
+                    _cache.Set(path, item, policy);
+                }
+            }
+
+            return item;
         }
+
+        #endregion
+
+        #region Private Instance Methods
 
         private void SetMP3Info()
         {
@@ -96,28 +137,106 @@ namespace MP3Assistant
 
             Tag tag = _tagFile.Tag;
 
-            Title = new ReversibleProperty<string>(tag.Title);
-            Performers = new ReversibleProperty<string[]>(tag.Performers);
-            AlbumPerformers = new ReversibleProperty<string[]>(tag.AlbumArtists);
-            Album = new ReversibleProperty<string>(tag.Album);
-            Year = new ReversibleProperty<uint>(tag.Year);
-            TrackIndex = new ReversibleProperty<uint>(tag.Track);
-            TrackCount = new ReversibleProperty<uint>(tag.TrackCount);
-            Genres = new ReversibleProperty<string[]>(tag.Genres);
+            Title = new ReversibleProperty<string>("Tytuł", tag.Title);
+            Performers = new ReversibleProperty<string[]>("Wykonawca", tag.Performers);
+            AlbumPerformers = new ReversibleProperty<string[]>("Wykonawca albumu", tag.AlbumArtists);
+            Album = new ReversibleProperty<string>("Album", tag.Album);
+            Year = new ReversibleProperty<uint>("Rok", tag.Year);
+            TrackIndex = new ReversibleProperty<uint>("Nr ścieżki", tag.Track);
+            TrackCount = new ReversibleProperty<uint>("Liczba ścieżek", tag.TrackCount);
+            Genres = new ReversibleProperty<string[]>("Gatunek", tag.Genres);
             Images = tag.Pictures.Select(image => image.Data.Data).ToArray();
         }
 
-        public async Task SaveChanges()
+        private void SubscribeToPropertyChanges()
         {
-            if (ShortName.HasChanged)
+            ShortName.ValueChanged += OnPropertyChanged;
+            Title.ValueChanged += OnPropertyChanged;
+            Performers.ValueChanged += OnPropertyChanged;
+            AlbumPerformers.ValueChanged += OnPropertyChanged;
+            Album.ValueChanged += OnPropertyChanged;
+            Year.ValueChanged += OnPropertyChanged;
+            TrackIndex.ValueChanged += OnPropertyChanged;
+            TrackCount.ValueChanged += OnPropertyChanged;
+            Genres.ValueChanged += OnPropertyChanged;
+        }
+
+        private void OnPropertyChanged(object sender, ReversiblePropertyChangedEventArgs e)
+        {
+            var property = sender as ReversibleProperty<object>;
+            var modification = new DirectoryItemModification(this, property, e.OldValue, e.NewValue);
+
+            Modifications.Add(modification);
+        }
+
+        #endregion
+
+        #region Private Static Methods
+
+        private static void OnModificationsChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            var action = e.Action;
+
+            // If an item has been added to modifications list...
+            if (action == NotifyCollectionChangedAction.Add)
             {
-                Rename();
+                var addedItems = e.NewItems.Cast<DirectoryItemModification>();
+
+                // Notify the cache it is a part of the list
+                foreach (var modification in addedItems)
+                    RegisterExternalStorage(modification.DirectoryItem, Modifications);
+            }
+
+            // If an item has been removed from modifications list...
+            if (action == NotifyCollectionChangedAction.Remove)
+            {
+                var removedItems = e.OldItems.Cast<DirectoryItemModification>();
+
+                // Notify the cache it is not a part of this list anymore
+                foreach (var modification in removedItems)
+                    UpdateExternalStorage(modification.DirectoryItem, Modifications);
             }
         }
 
-        private void Rename()
+        private static void RegisterExternalStorage(DirectoryItem item, object storage)
         {
+            bool storagesRegistered = _registeredStorages.ContainsKey(item) && _registeredStorages[item].Count > 0;
+            bool itemCached = (_cache[item.FullPath] as DirectoryItem) != null;
 
+            if (!storagesRegistered || !itemCached)
+            {
+                _registeredStorages.Add(item, new List<object>());
+
+                var policy = new CacheItemPolicy();
+                policy.ChangeMonitors.Add(new HostFileChangeMonitor(new[] { item.FullPath }.ToList()));
+                policy.Priority = CacheItemPriority.NotRemovable;
+
+                if (itemCached)
+                    _cache.Remove(item.FullPath);
+
+                _cache.Set(item.FullPath, item, policy);
+            }
+
+            _registeredStorages[item].Add(storage);
         }
+
+        private static void UpdateExternalStorage(DirectoryItem item, object storage)
+        {
+            _registeredStorages[item].Remove(storage);
+
+            if (_registeredStorages[item].Count == 0)
+            {
+                _registeredStorages.Remove(item);
+
+                var policy = new CacheItemPolicy();
+                policy.ChangeMonitors.Add(new HostFileChangeMonitor(new[] { item.FullPath }.ToList()));
+                policy.SlidingExpiration = TimeSpan.FromSeconds(_expirationSeconds);
+
+                _cache.Remove(item.FullPath);
+                _cache.Set(item.FullPath, item, policy);
+            }
+        }
+
+        #endregion
     }
 }

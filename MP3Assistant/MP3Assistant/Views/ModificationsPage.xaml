@@ -1,0 +1,69 @@
+﻿<Page x:Class="MP3Assistant.ModificationsPage"
+      xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+      xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+      xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+      xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+      xmlns:local="clr-namespace:MP3Assistant"
+      mc:Ignorable="d" 
+      d:DesignHeight="768" d:DesignWidth="1024"
+      Title="ModificationsPage"
+      KeepAlive="False">
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="50"/> <!-- Buttons -->
+            <RowDefinition Height="*"/>  <!-- Tree view -->
+        </Grid.RowDefinitions>
+
+        <StackPanel Grid.Row="0"
+                    Orientation="Horizontal">
+            <Button Margin="0,0,2,2" 
+                    Width="100"
+                    Content="Zatwierdź"/>
+            <Button Margin="2,0,0,2"
+                    Width="100"
+                    Content="Wyczyść"/>
+        </StackPanel>
+
+        <TreeView Grid.Row="1"
+                  ItemsSource="{Binding ModifiedItems}"
+                  BorderThickness="0">
+            <TreeView.Resources>
+                <HierarchicalDataTemplate DataType="{x:Type local:ModifiedDirectoryItemViewModel}"
+                                          ItemsSource="{Binding Modifications}">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock FontWeight="Bold"
+                                   Text="{Binding Item.Name}"/>
+                        <TextBlock FontWeight="DemiBold" 
+                                   Text=" ("/>
+                        <TextBlock FontWeight="Heavy"
+                                   Text="{Binding Modifications.Count}"/>
+                        <TextBlock FontWeight="DemiBold"
+                                   Text=")"/>
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+                <DataTemplate DataType="{x:Type local:DirectoryItemModification}">
+                    <StackPanel Orientation="Horizontal">
+                        <Button Content="X"
+                                Width="12"
+                                FontWeight="ExtraBold"
+                                Foreground="Red"
+                                Background="Transparent"
+                                BorderThickness="0"/>
+                        <TextBlock Text="{Binding Property}"
+                                   Margin="4,1,2,1"/>
+                        <TextBlock Text="—&gt;"
+                                   Margin="2,1,2,1"/>
+                        <TextBlock Text="{Binding NewValue,
+                                                  Converter={StaticResource ReversiblePropertyConverter}}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </TreeView.Resources>
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="IsExpanded" Value="True"/>
+                </Style>
+            </TreeView.ItemContainerStyle>
+        </TreeView>
+    </Grid>
+</Page>

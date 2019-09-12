@@ -9,7 +9,7 @@ namespace MP3Assistant
     public class DirectoryItemModification
     {
         private readonly DirectoryItem _directoryItem;
-        private readonly ReversibleProperty<object> _property;
+        private readonly string _propertyName;
         private readonly object _oldValue;
         private readonly object _newValue;
 
@@ -20,24 +20,24 @@ namespace MP3Assistant
 
         public string Property
         {
-            get { return _property.Name; }
+            get { return _propertyName; }
         }
 
-        public string OldValue
+        public object OldValue
         {
-            get { return _oldValue.ToString(); }
+            get { return _oldValue; }
         }
 
-        public string NewValue
+        public object NewValue
         {
-            get { return _newValue.ToString(); }
+            get { return _newValue; }
         }
 
-        public DirectoryItemModification(DirectoryItem directoryItem, ReversibleProperty<object> property,
+        public DirectoryItemModification(DirectoryItem directoryItem, string propertyName,
                                          object oldValue, object newValue)
         {
             _directoryItem = directoryItem;
-            _property = property;
+            _propertyName = propertyName;
             _oldValue = oldValue;
             _newValue = newValue;
         }

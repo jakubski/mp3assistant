@@ -10,11 +10,12 @@
 
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="120"/>
-            <ColumnDefinition Width="120"/>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="60"/>
-            <ColumnDefinition Width="240"/>
+            <ColumnDefinition Width="120"/> <!-- Back button -->
+            <ColumnDefinition Width="120"/> <!-- Next button -->
+            <ColumnDefinition Width="*"/>   <!-- Label -->
+            <ColumnDefinition Width="40"/>  <!-- Some kind of nonsense -->
+            <ColumnDefinition Width="160"/> <!-- Modifications button -->
+            <ColumnDefinition Width="100"/>
         </Grid.ColumnDefinitions>
 
         <!-- Back button -->
@@ -46,5 +47,11 @@
                 Background="Transparent"/>
 
         <!-- More buttons!! -->
+        <Button Grid.Column="4"
+                Name="ModificationsButton"
+                Content="ZMIANY"
+                Command="{Binding ModificationsButtonClickCommand}"
+                Width="120"
+                HorizontalAlignment="Center"/>
     </Grid>
 </Page>

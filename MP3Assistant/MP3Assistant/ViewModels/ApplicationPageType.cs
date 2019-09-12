@@ -14,6 +14,7 @@ namespace MP3Assistant
         MainPage,
         MainPageNavigationBar,
         FileExplorerPage,
-        SongEditorPage
+        SongEditorPage,
+        ModificationsPage
     }
 }

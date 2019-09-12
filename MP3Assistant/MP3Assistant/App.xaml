@@ -11,5 +11,6 @@
         <local:BoolToCharConverter x:Key="VisibilityToIconConverter"/>
         <local:ByteArrayToImageConverter x:Key="AlbumArtConverter"/>
         <local:UintToStringConverter x:Key="EmptyIntegerConverter"/>
+        <local:ReversiblePropertyConverter x:Key="ReversiblePropertyConverter"/>
     </Application.Resources>
 </Application>

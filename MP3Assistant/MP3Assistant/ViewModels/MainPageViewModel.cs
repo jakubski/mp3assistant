@@ -17,6 +17,7 @@ namespace MP3Assistant
         private Stack<string> _forwardPathHistory;
 
         public string CurrentPath { get; set; }
+
         public string NavigationLabelText
         {
             get
@@ -27,6 +28,8 @@ namespace MP3Assistant
                         return CurrentPath;
                     case ApplicationPageType.SongEditorPage:
                         return SelectedDirectoryItem.FullPath;
+                    case ApplicationPageType.ModificationsPage:
+                        return "zmian: " + ModifiedItems.Sum(item => item.Modifications.Count).ToString();
                     default:
                         return "...";
                 }
@@ -56,25 +59,32 @@ namespace MP3Assistant
                 return new ObservableCollection<DirectoryItemViewModel>(contents);
             }
 
-            set
-            {
-                _contents = value.ToList();
-            }
+            set { _contents = value.ToList(); }
         }
 
         public ObservableCollection<FileExplorerColumnViewModel> Columns
         {
-            get
-            {
-                return new ObservableCollection<FileExplorerColumnViewModel>(_columns.Where(column => column.IsVisible));
-            }
+            get { return new ObservableCollection<FileExplorerColumnViewModel>(_columns.Where(column => column.IsVisible)); }
         }
 
         public DirectoryItemViewModel SelectedDirectoryItem { get; set; }
 
-        public ObservableCollection<DirectoryItemModification> Modifications
+        public ObservableCollection<ModifiedDirectoryItemViewModel> ModifiedItems
         {
-            get { return new ObservableCollection<DirectoryItemModification>(DirectoryItem.Modifications); }
+            get
+            {
+                var collection = new ObservableCollection<ModifiedDirectoryItemViewModel>();
+                var modifiedItems = DirectoryItem.Modifications.Select(m => m.DirectoryItem).Distinct();
+
+                foreach (var item in modifiedItems)
+                {
+                    var itemModifications = DirectoryItem.Modifications.Where(m => m.DirectoryItem == item);
+
+                    collection.Add(new ModifiedDirectoryItemViewModel(item, itemModifications));
+                }
+
+                return collection;
+            }
         }
 
         public ObservableCollection<ContextAction> FileExplorerHeaderContextMenu { get; private set; }
@@ -86,6 +96,7 @@ namespace MP3Assistant
 
         public VoidRelayCommand BackButtonClickCommand { get; private set; }
         public VoidRelayCommand NextButtonClickCommand { get; private set; }
+        public VoidRelayCommand ModificationsButtonClickCommand { get; private set; }
         public RelayCommand<DirectoryItemViewModel> ItemDoubleClickCommand { get; private set; }
         public RelayCommand<FileExplorerColumnViewModel> AddRemoveColumnCommand { get; private set; }
 
@@ -162,6 +173,7 @@ namespace MP3Assistant
 
             BackButtonClickCommand = new VoidRelayCommand(GoToPreviousLocation);
             NextButtonClickCommand = new VoidRelayCommand(GoToNextLocation);
+            ModificationsButtonClickCommand = new VoidRelayCommand(OpenModificationsPage);
             ItemDoubleClickCommand = new RelayCommand<DirectoryItemViewModel>(Item_DoubleClick);
             AddRemoveColumnCommand = new RelayCommand<FileExplorerColumnViewModel>(AddRemoveColumn);
 
@@ -218,11 +230,11 @@ namespace MP3Assistant
                     SetLocation(newPath);
                 }
             }
-            else if (FileExplorerPage.Type == ApplicationPageType.SongEditorPage)
+            else if (FileExplorerPage.Type == ApplicationPageType.SongEditorPage
+                  || FileExplorerPage.Type == ApplicationPageType.ModificationsPage)
             {
-                CloseSongEditor();
+                OpenFileExplorer();
             }
-                
         }
 
         /// <summary>
@@ -252,11 +264,20 @@ namespace MP3Assistant
             };
         }
 
-        private void CloseSongEditor()
+        private void OpenFileExplorer()
         {
             FileExplorerPage = new ApplicationPage()
             {
                 Type = ApplicationPageType.FileExplorerPage,
+                ViewModel = this
+            };
+        }
+
+        private void OpenModificationsPage()
+        {
+            FileExplorerPage = new ApplicationPage()
+            {
+                Type = ApplicationPageType.ModificationsPage,
                 ViewModel = this
             };
         }

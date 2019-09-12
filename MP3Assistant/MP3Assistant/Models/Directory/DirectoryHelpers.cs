@@ -86,7 +86,7 @@ namespace MP3Assistant
                 return di.GetDirectories().Select(d => d.FullName).Concat(di.GetFiles().Select(d => d.FullName)).ToList();
             }
             
-            catch (UnauthorizedAccessException e)
+            catch (UnauthorizedAccessException)
             {
                 return new List<string>();
             }

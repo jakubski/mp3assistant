@@ -71,6 +71,12 @@ namespace MP3Assistant
 
         #region Constructors
 
+        static DirectoryItem()
+        {
+            Modifications = new ObservableCollection<DirectoryItemModification>();
+            Modifications.CollectionChanged += OnModificationsChanged;
+        }
+
         private DirectoryItem(string fullPath)
         {
             // Get the directory type
@@ -87,10 +93,6 @@ namespace MP3Assistant
 
             // Determine if is a hidden directory (drives seem to be marked as hidden, so let's prevent that)
             Hidden = Type != DirectoryType.Drive && DirectoryHelpers.IsHidden(FullPath);
-
-            // Initialize static modifications list
-            Modifications = new ObservableCollection<DirectoryItemModification>();
-            Modifications.CollectionChanged += OnModificationsChanged;
 
             if (Type == DirectoryType.MP3File)
             {
@@ -163,8 +165,7 @@ namespace MP3Assistant
 
         private void OnPropertyChanged(object sender, ReversiblePropertyChangedEventArgs e)
         {
-            var property = sender as ReversibleProperty<object>;
-            var modification = new DirectoryItemModification(this, property, e.OldValue, e.NewValue);
+            var modification = new DirectoryItemModification(this, e.PropertyName, e.OldValue, e.NewValue);
 
             Modifications.Add(modification);
         }

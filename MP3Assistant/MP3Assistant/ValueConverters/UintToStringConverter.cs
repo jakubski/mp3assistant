@@ -22,7 +22,9 @@ namespace MP3Assistant
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            string text = (string)value;
+
+            return text == "" ? 0 : UInt32.Parse(text);
         }
     }
 }

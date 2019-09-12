@@ -27,6 +27,8 @@ namespace MP3Assistant
                     return new FileExplorerPage(dataContext);
                 case ApplicationPageType.SongEditorPage:
                     return new SongEditorPage(dataContext);
+                case ApplicationPageType.ModificationsPage:
+                    return new ModificationsPage(dataContext);
                 default:
                     return null;
             }

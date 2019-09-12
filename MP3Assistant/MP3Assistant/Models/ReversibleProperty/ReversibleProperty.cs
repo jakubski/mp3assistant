@@ -25,6 +25,7 @@ namespace MP3Assistant
 
                 ValueChanged?.Invoke(this, new ReversiblePropertyChangedEventArgs()
                 {
+                    PropertyName = Name,
                     OldValue = oldValue,
                     NewValue = value
                 });

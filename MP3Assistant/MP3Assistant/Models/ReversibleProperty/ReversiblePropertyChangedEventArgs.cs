@@ -8,6 +8,7 @@ namespace MP3Assistant
 {
     public class ReversiblePropertyChangedEventArgs : EventArgs
     {
+        public string PropertyName { get; set; }
         public object OldValue { get; set; }
         public object NewValue { get; set; }
     }

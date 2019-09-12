@@ -50,7 +50,7 @@
             <TextBox Grid.Column="1"
                      Text="{Binding SelectedDirectoryItem.Performers.Value,
                                     Mode=TwoWay, 
-                                    Converter={StaticResource StringArrayToStringConverter}}"
+                                    Converter={StaticResource ReversiblePropertyConverter}}"
                      Margin="6,1,0,1"
                      HorizontalAlignment="Stretch"/>
 
@@ -70,7 +70,7 @@
             <TextBox Grid.Column="1"
                      Text="{Binding SelectedDirectoryItem.AlbumPerformers.Value, 
                                     Mode=TwoWay,
-                                    Converter={StaticResource StringArrayToStringConverter}}"
+                                    Converter={StaticResource ReversiblePropertyConverter}}"
                      Margin="6,1,0,1"
                      HorizontalAlignment="Stretch"/>
         </Grid>
@@ -129,7 +129,8 @@
 
                     <TextBox Grid.Column="1"
                              Text="{Binding SelectedDirectoryItem.Year.Value,
-                                            Converter={StaticResource EmptyIntegerConverter}}"
+                                            Mode=TwoWay,
+                                            Converter={StaticResource ReversiblePropertyConverter}}"
                              Margin="6,1,0,1"
                              HorizontalAlignment="Stretch"/>
 
@@ -141,7 +142,8 @@
 
                     <TextBox Grid.Column="4"
                              Text="{Binding SelectedDirectoryItem.TrackIndex.Value,
-                                            Mode=TwoWay}"
+                                            Mode=TwoWay,
+                                            Converter={StaticResource ReversiblePropertyConverter}}"
                              Margin="0,1,0,1"
                              HorizontalAlignment="Stretch"/>
 
@@ -152,7 +154,8 @@
 
                     <TextBox Grid.Column="6"
                              Text="{Binding SelectedDirectoryItem.TrackCount.Value,
-                                            Converter={StaticResource EmptyIntegerConverter}}"
+                                            Mode=TwoWay,
+                                            Converter={StaticResource ReversiblePropertyConverter}}"
                              Margin="0,1,0,1"
                              HorizontalAlignment="Stretch"/>
                 </Grid>
@@ -171,7 +174,7 @@
                     <TextBox Grid.Column="1"
                              Text="{Binding SelectedDirectoryItem.Genres.Value, 
                                             Mode=TwoWay,
-                                            Converter={StaticResource StringArrayToStringConverter}}"
+                                            Converter={StaticResource ReversiblePropertyConverter}}"
                              Margin="6,1,0,1"
                              HorizontalAlignment="Stretch"/>
                 </Grid>

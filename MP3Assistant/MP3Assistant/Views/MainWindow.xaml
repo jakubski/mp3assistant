@@ -15,7 +15,8 @@
 
     <Grid>
         <Frame Content="{Binding WindowContent, 
-                                 Converter={StaticResource PageConverter}}"/>
+                                 Converter={StaticResource PageConverter}}"
+               NavigationUIVisibility="Hidden"/>
     </Grid>
 
 </Window>

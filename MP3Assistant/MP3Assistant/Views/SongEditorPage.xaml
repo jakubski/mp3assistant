@@ -9,224 +9,246 @@
       Title="SongEditorPage"
       KeepAlive="False">
 
+        <!-- File name                       ___________
+             song title                     | Cover     |
+             performer                      |     art   |
+             album performer                |___________|
+             album title                     <   + x    >
+             year, track number, track count
+             genre -->
     <Grid Margin="10,10">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="24"/>  <!-- Title -->
-            <RowDefinition Height="24"/>  <!-- Performer -->
-            <RowDefinition Height="24"/>  <!-- Album performer -->
-            <RowDefinition Height="24"/>  <!-- Album -->
-            <RowDefinition Height="*"/>   <!-- Year, track number, track count, genre | Cover art -->
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>    <!-- Tags -->
+            <ColumnDefinition Width="320"/>  <!-- Cover art -->
+        </Grid.ColumnDefinitions>
 
-        <!-- Title -->
-        <Grid Grid.Row="0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="110"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+        <!-- File name
+             song title
+             performer
+             album performer
+             album title
+             year, track number, track count
+             genre -->
+        <Grid Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="24"/>   <!-- File name -->
+                <RowDefinition Height="24"/>   <!-- Title -->
+                <RowDefinition Height="24"/>   <!-- Performer -->
+                <RowDefinition Height="24"/>   <!-- Album performer -->
+                <RowDefinition Height="24"/>   <!-- Album -->
+                <RowDefinition Height="24"/>   <!-- Year, track number, track count -->
+                <RowDefinition Height="24"/>   <!-- Genre -->
+            </Grid.RowDefinitions>
 
-            <TextBlock Grid.Column="0"
-                       Text="Tytuł"
-                       HorizontalAlignment="Right"/>
+            <!-- File name -->
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <TextBox Grid.Column="1"
-                     Text="{Binding SelectedDirectoryItem.Title.Value,
-                                    Mode=TwoWay}"
-                     Margin="6,1,0,1"
-                     HorizontalAlignment="Stretch"/>
-        </Grid>
+                <TextBlock Grid.Column="0"
+                           Text="Nazwa pliku"
+                           HorizontalAlignment="Right"/>
 
-        <!-- Performer -->
-        <Grid Grid.Row="1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="110"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="1"
+                         Text="{Binding SelectedDirectoryItem.ShortName.Value,
+                                        Mode=TwoWay}"
+                         Margin="6,1,0,1"
+                         HorizontalAlignment="Stretch"/>
+            </Grid>
+            
+            <!-- Title -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-            <TextBlock Grid.Column="0"
-                       HorizontalAlignment="Right"
-                       Text="Wykonawca"/>
+                <TextBlock Grid.Column="0"
+                           Text="Tytuł"
+                           HorizontalAlignment="Right"/>
 
-            <TextBox Grid.Column="1"
-                     Text="{Binding SelectedDirectoryItem.Performers.Value,
-                                    Mode=TwoWay, 
-                                    Converter={StaticResource ReversiblePropertyConverter}}"
-                     Margin="6,1,0,1"
-                     HorizontalAlignment="Stretch"/>
-
-        </Grid>
-
-        <!-- Album performer -->
-        <Grid Grid.Row="2">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="110"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <TextBlock Grid.Column="0"
-                       HorizontalAlignment="Right"
-                       Text="Wykonawca albumu"/>
-
-            <TextBox Grid.Column="1"
-                     Text="{Binding SelectedDirectoryItem.AlbumPerformers.Value, 
-                                    Mode=TwoWay,
-                                    Converter={StaticResource ReversiblePropertyConverter}}"
-                     Margin="6,1,0,1"
-                     HorizontalAlignment="Stretch"/>
-        </Grid>
-
-        <!-- Album -->
-        <Grid Grid.Row="3">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="110"/>
-                <ColumnDefinition Width="*"/>
-            </Grid.ColumnDefinitions>
-
-            <TextBlock Grid.Column="0"
-                       HorizontalAlignment="Right"
-                       Text="Album"/>
-
-            <TextBox Grid.Column="1"
-                     Text="{Binding SelectedDirectoryItem.Album.Value,
-                                    Mode=TwoWay}"
-                     Margin="6,1,0,1"
-                     HorizontalAlignment="Stretch"/>
-        </Grid>
-
-        <!-- Year, track number, track count  ___________
-             genre                           | Cover     |
-                                             |_______art_| -->
-        <Grid Grid.Row="4">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*"/>   <!-- Year, track number, track count, genre -->
-                <ColumnDefinition Width="320"/> <!-- Cover art -->
-            </Grid.ColumnDefinitions>
-
-            <!-- Year, track number, track count
-                 genre -->
-            <Grid Grid.Column="0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="24"/>  <!-- Year, track number, track count -->
-                    <RowDefinition Height="24"/>  <!-- Genre -->
-                </Grid.RowDefinitions>
-
-                <!-- Year, track number, track count -->
-                <Grid Grid.Row="0">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="110"/> <!-- Year label -->
-                        <ColumnDefinition Width="80"/>  <!-- Year textbox -->
-                        <ColumnDefinition Width="*"/>   <!-- Space -->
-                        <ColumnDefinition Width="90"/>  <!-- Track number label -->
-                        <ColumnDefinition Width="40"/>  <!-- Track number textbox -->
-                        <ColumnDefinition Width="10"/>  <!-- Slash -->
-                        <ColumnDefinition Width="40"/>  <!-- Track count textbox -->
-                    </Grid.ColumnDefinitions>
-
-                    <!-- Year -->
-                    <TextBlock Grid.Column="0"
-                               HorizontalAlignment="Right"
-                               Text="Rok"/>
-
-                    <TextBox Grid.Column="1"
-                             Text="{Binding SelectedDirectoryItem.Year.Value,
-                                            Mode=TwoWay,
-                                            Converter={StaticResource ReversiblePropertyConverter}}"
-                             Margin="6,1,0,1"
-                             HorizontalAlignment="Stretch"/>
-
-                    <!-- Track number -->
-                    <TextBlock Grid.Column="3"
-                               Margin="0,0,6,0"
-                               HorizontalAlignment="Right"
-                               Text="Nr ścieżki"/>
-
-                    <TextBox Grid.Column="4"
-                             Text="{Binding SelectedDirectoryItem.TrackIndex.Value,
-                                            Mode=TwoWay,
-                                            Converter={StaticResource ReversiblePropertyConverter}}"
-                             Margin="0,1,0,1"
-                             HorizontalAlignment="Stretch"/>
-
-                    <!-- Track count -->
-                    <TextBlock Grid.Column="5"
-                               HorizontalAlignment="Stretch"
-                               Text="/"/>
-
-                    <TextBox Grid.Column="6"
-                             Text="{Binding SelectedDirectoryItem.TrackCount.Value,
-                                            Mode=TwoWay,
-                                            Converter={StaticResource ReversiblePropertyConverter}}"
-                             Margin="0,1,0,1"
-                             HorizontalAlignment="Stretch"/>
-                </Grid>
-
-                <!-- Genre -->
-                <Grid Grid.Row="1">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="110"/>
-                        <ColumnDefinition Width="*"/>
-                    </Grid.ColumnDefinitions>
-
-                    <TextBlock Grid.Column="0"
-                               HorizontalAlignment="Right"
-                               Text="Gatunek"/>
-
-                    <TextBox Grid.Column="1"
-                             Text="{Binding SelectedDirectoryItem.Genres.Value, 
-                                            Mode=TwoWay,
-                                            Converter={StaticResource ReversiblePropertyConverter}}"
-                             Margin="6,1,0,1"
-                             HorizontalAlignment="Stretch"/>
-                </Grid>
+                <TextBox Grid.Column="1"
+                         Text="{Binding SelectedDirectoryItem.Title.Value,
+                                        Mode=TwoWay}"
+                         Margin="6,1,0,1"
+                         HorizontalAlignment="Stretch"/>
             </Grid>
 
-            <!-- Cover art, buttons -->
-            <StackPanel Grid.Column="1"
-                        Orientation="Vertical">
-                <!-- Image -->
-                <Image Source="{Binding SelectedDirectoryItem.Images,
-                                        Converter={StaticResource AlbumArtConverter},
-                                        ConverterParameter=300}"
-                       Margin="10,8,10,2"
-                       Stretch="Fill"/>
-                <!-- Buttons -->
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="40"/> <!-- Previous image -->
-                        <ColumnDefinition Width="*"/>  <!-- Change image -->
-                        <ColumnDefinition Width="*"/>  <!-- Delete image -->
-                        <ColumnDefinition Width="40"/> <!-- Next image -->
-                    </Grid.ColumnDefinitions>
+            <!-- Performer -->
+            <Grid Grid.Row="2">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-                    <!-- Previous image button -->
-                    <Button Grid.Column="0"
-                            Width="30"
-                            Margin="10,0,0,0"
-                            Content="&lt;"
-                            HorizontalAlignment="Left"/>
-                    
-                    <!-- Change image button -->
-                    <Button Grid.Column="1"
-                            Width="60"
-                            Margin="0,0,4,0"
-                            Content="Nowy..."
-                            HorizontalAlignment="Right"/>
+                <TextBlock Grid.Column="0"
+                           HorizontalAlignment="Right"
+                           Text="Wykonawca"/>
 
-                    <!-- Delete image button -->
-                    <Button Grid.Column="2"
-                            Width="60"
-                            Margin="4,0,0,0"
-                            Content="Usuń"
-                            HorizontalAlignment="Left"/>
+                <TextBox Grid.Column="1"
+                         Text="{Binding SelectedDirectoryItem.Performers.Value,
+                                        Mode=TwoWay, 
+                                        Converter={StaticResource ReversiblePropertyConverter}}"
+                         Margin="6,1,0,1"
+                         HorizontalAlignment="Stretch"/>
 
-                    <!-- Next image button -->
-                    <Button Grid.Column="3"
-                            Width="30"
-                            Margin="0,0,10,0"
-                            Content="&gt;"
-                            HorizontalAlignment="Right"/>
-                </Grid>
-            </StackPanel>
+            </Grid>
+
+            <!-- Album performer -->
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           HorizontalAlignment="Right"
+                           Text="Wykonawca albumu"/>
+
+                <TextBox Grid.Column="1"
+                         Text="{Binding SelectedDirectoryItem.AlbumPerformers.Value, 
+                                        Mode=TwoWay,
+                                        Converter={StaticResource ReversiblePropertyConverter}}"
+                         Margin="6,1,0,1"
+                         HorizontalAlignment="Stretch"/>
+            </Grid>
+
+            <!-- Album -->
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           HorizontalAlignment="Right"
+                           Text="Album"/>
+
+                <TextBox Grid.Column="1"
+                         Text="{Binding SelectedDirectoryItem.Album.Value,
+                                        Mode=TwoWay}"
+                         Margin="6,1,0,1"
+                         HorizontalAlignment="Stretch"/>
+            </Grid>
+
+            <!-- Year, track number, track count -->
+            <Grid Grid.Row="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110"/>  <!-- Year label -->
+                    <ColumnDefinition Width="80"/>   <!-- Year textbox -->
+                    <ColumnDefinition Width="*"/>    <!-- Space -->
+                    <ColumnDefinition Width="90"/>   <!-- Track number label -->
+                    <ColumnDefinition Width="40"/>   <!-- Track number textbox -->
+                    <ColumnDefinition Width="10"/>   <!-- Slash -->
+                    <ColumnDefinition Width="40"/>   <!-- Track count textbox -->
+                </Grid.ColumnDefinitions>
+
+                <!-- Year -->
+                <TextBlock Grid.Column="0"
+                           HorizontalAlignment="Right"
+                           Text="Rok"/>
+
+                <TextBox Grid.Column="1"
+                         Text="{Binding SelectedDirectoryItem.Year.Value,
+                                        Mode=TwoWay,
+                                        Converter={StaticResource ReversiblePropertyConverter}}"
+                         Margin="6,1,0,1"
+                         HorizontalAlignment="Stretch"/>
+
+                <!-- Track number -->
+                <TextBlock Grid.Column="3"
+                           Margin="0,0,6,0"
+                           HorizontalAlignment="Right"
+                           Text="Nr ścieżki"/>
+
+                <TextBox Grid.Column="4"
+                         Text="{Binding SelectedDirectoryItem.TrackIndex.Value,
+                                        Mode=TwoWay,
+                                        Converter={StaticResource ReversiblePropertyConverter}}"
+                         Margin="0,1,0,1"
+                         HorizontalAlignment="Stretch"/>
+
+                <!-- Track count -->
+                <TextBlock Grid.Column="5"
+                           HorizontalAlignment="Stretch"
+                           Text="/"/>
+
+                <TextBox Grid.Column="6"
+                         Text="{Binding SelectedDirectoryItem.TrackCount.Value,
+                                        Mode=TwoWay,
+                                        Converter={StaticResource ReversiblePropertyConverter}}"
+                         Margin="0,1,0,1"
+                         HorizontalAlignment="Stretch"/>
+            </Grid>
+
+            <!-- Genre -->
+            <Grid Grid.Row="6">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="110"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Column="0"
+                           HorizontalAlignment="Right"
+                           Text="Gatunek"/>
+
+                <TextBox Grid.Column="1"
+                         Text="{Binding SelectedDirectoryItem.Genres.Value, 
+                                        Mode=TwoWay,
+                                        Converter={StaticResource ReversiblePropertyConverter}}"
+                         Margin="6,1,0,1"
+                         HorizontalAlignment="Stretch"/>
+            </Grid>
         </Grid>
+
+        <!-- Cover art, buttons -->
+        <StackPanel Grid.Column="1"
+                    Orientation="Vertical">
+            <!-- Image -->
+            <Image Source="{Binding SelectedDirectoryItem.Images,
+                                    Converter={StaticResource AlbumArtConverter},
+                                    ConverterParameter=300}"
+                   Margin="10,8,10,2"
+                   Stretch="Fill"/>
+            <!-- Buttons -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="40"/>   <!-- Previous image -->
+                    <ColumnDefinition Width="*"/>    <!-- Change image -->
+                    <ColumnDefinition Width="*"/>    <!-- Delete image -->
+                    <ColumnDefinition Width="40"/>   <!-- Next image -->
+                </Grid.ColumnDefinitions>
+
+                <!-- Previous image button -->
+                <Button Grid.Column="0"
+                        Width="30"
+                        Margin="10,0,0,0"
+                        Content="&lt;"
+                        HorizontalAlignment="Left"/>
+
+                <!-- Change image button -->
+                <Button Grid.Column="1"
+                        Width="60"
+                        Margin="0,0,4,0"
+                        Content="Nowy..."
+                        HorizontalAlignment="Right"/>
+
+                <!-- Delete image button -->
+                <Button Grid.Column="2"
+                        Width="60"
+                        Margin="4,0,0,0"
+                        Content="Usuń"
+                        HorizontalAlignment="Left"/>
+
+                <!-- Next image button -->
+                <Button Grid.Column="3"
+                        Width="30"
+                        Margin="0,0,10,0"
+                        Content="&gt;"
+                        HorizontalAlignment="Right"/>
+            </Grid>
+        </StackPanel>
     </Grid>
 </Page>

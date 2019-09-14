@@ -19,7 +19,8 @@
                     Orientation="Horizontal">
             <Button Margin="0,0,2,2" 
                     Width="100"
-                    Content="Zatwierdź"/>
+                    Content="Zatwierdź"
+                    Command="{Binding ConfirmModificationsButtonClickCommand}"/>
             <Button Margin="2,0,0,2"
                     Width="100"
                     Content="Wyczyść"/>

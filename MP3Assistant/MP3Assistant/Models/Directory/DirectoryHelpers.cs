@@ -118,5 +118,15 @@ namespace MP3Assistant
 
             return a.HasFlag(FileAttributes.Hidden);
         }
+
+        public static string SubstituteFilename(string path, string newName)
+        {
+            return path.Substring(0, path.LastIndexOf(Delimiter)) + Delimiter + newName;
+        }
+
+        public static void RenameFile(string oldPath, string newPath)
+        {
+            File.Move(oldPath, newPath);
+        }
     }
 }

@@ -29,7 +29,7 @@ namespace MP3Assistant
                     case ApplicationPageType.SongEditorPage:
                         return SelectedDirectoryItem.FullPath;
                     case ApplicationPageType.ModificationsPage:
-                        return "zmian: " + ModifiedItems.Sum(item => item.Modifications.Count).ToString();
+                        return "zmian: " + ModifiedItems.Sum(item => item.ModifiedAttributes.Count).ToString();
                     default:
                         return "...";
                 }
@@ -69,21 +69,12 @@ namespace MP3Assistant
 
         public DirectoryItemViewModel SelectedDirectoryItem { get; set; }
 
-        public ObservableCollection<ModifiedDirectoryItemViewModel> ModifiedItems
+        public ObservableCollection<DirectoryItemViewModel> ModifiedItems
         {
             get
             {
-                var collection = new ObservableCollection<ModifiedDirectoryItemViewModel>();
-                var modifiedItems = DirectoryItem.Modifications.Select(m => m.DirectoryItem).Distinct();
-
-                foreach (var item in modifiedItems)
-                {
-                    var itemModifications = DirectoryItem.Modifications.Where(m => m.DirectoryItem == item);
-
-                    collection.Add(new ModifiedDirectoryItemViewModel(item, itemModifications));
-                }
-
-                return collection;
+                var viewModels = DirectoryItem.ModifiedItems.Select(item => new DirectoryItemViewModel(item.FullPath));
+                return new ObservableCollection<DirectoryItemViewModel>(viewModels);
             }
         }
 
@@ -97,8 +88,10 @@ namespace MP3Assistant
         public VoidRelayCommand BackButtonClickCommand { get; private set; }
         public VoidRelayCommand NextButtonClickCommand { get; private set; }
         public VoidRelayCommand ModificationsButtonClickCommand { get; private set; }
+        public VoidRelayCommand ConfirmModificationsButtonClickCommand { get; private set; }
         public RelayCommand<DirectoryItemViewModel> ItemDoubleClickCommand { get; private set; }
         public RelayCommand<FileExplorerColumnViewModel> AddRemoveColumnCommand { get; private set; }
+        public RelayCommand<DirectoryItemAttribute> CancelModificationButtonClickCommand { get; private set; }
 
         public MainPageViewModel()
         {
@@ -140,7 +133,6 @@ namespace MP3Assistant
                     Header = "Wykonawca",
                     Width = 160,
                     BoundProperty = nameof(DirectoryItemViewModel.Performers),
-                    Converter = revPropToStringConverter,
                     IsVisible = true
                 },
                 new FileExplorerColumnViewModel()
@@ -155,7 +147,6 @@ namespace MP3Assistant
                     Header = "Wykonawca albumu",
                     Width = 160,
                     BoundProperty = nameof(DirectoryItemViewModel.AlbumPerformers),
-                    Converter = revPropToStringConverter,
                     IsVisible = true
                 },
                 new FileExplorerColumnViewModel()
@@ -163,7 +154,6 @@ namespace MP3Assistant
                     Header = "Rok",
                     Width = 50,
                     BoundProperty = nameof(DirectoryItemViewModel.Year),
-                    Converter = emptyIntConverter,
                     IsVisible = true
                 }
             });
@@ -174,8 +164,10 @@ namespace MP3Assistant
             BackButtonClickCommand = new VoidRelayCommand(GoToPreviousLocation);
             NextButtonClickCommand = new VoidRelayCommand(GoToNextLocation);
             ModificationsButtonClickCommand = new VoidRelayCommand(OpenModificationsPage);
+            ConfirmModificationsButtonClickCommand = new VoidRelayCommand(ConfirmModifications);
             ItemDoubleClickCommand = new RelayCommand<DirectoryItemViewModel>(Item_DoubleClick);
             AddRemoveColumnCommand = new RelayCommand<FileExplorerColumnViewModel>(AddRemoveColumn);
+            CancelModificationButtonClickCommand = new RelayCommand<DirectoryItemAttribute>(CancelModification);
 
             FileExplorerHeaderContextMenu = new ObservableCollection<ContextAction>(new[]
             {
@@ -315,6 +307,17 @@ namespace MP3Assistant
                     OpenSongEditor();
                     break;
             }
+        }
+
+        private void ConfirmModifications()
+        {
+            foreach (var item in ModifiedItems)
+                item.ConfirmModifications();
+        }
+
+        private void CancelModification(DirectoryItemAttribute attribute)
+        {
+            attribute.Revert();
         }
     }
 }

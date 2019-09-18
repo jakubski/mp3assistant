@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Caching;
 using TagLib;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
+
 
 namespace MP3Assistant
 {
@@ -18,22 +20,25 @@ namespace MP3Assistant
     {
         #region Private Members
 
+        private PropertyInfo[] _attributes;
         private string _extension;
         private File _tagFile;
+
         private static readonly double _expirationSeconds = 50d;
-        private static readonly MemoryCache _cache = new MemoryCache("DirectoryItemFCache");
+        private static readonly MemoryCache _cache = new MemoryCache("DirectoryItemCache");
         private static Dictionary<DirectoryItem, IList<object>> _registeredStorages = new Dictionary<DirectoryItem, IList<object>>();
 
         #endregion
 
         #region Public Properties
 
-        public static ObservableCollection<DirectoryItemModification> Modifications { get; private set; }
+        public static ObservableCollection<DirectoryItem> ModifiedItems { get; private set; }
+
+        public ObservableCollection<DirectoryItemAttribute> ModifiedAttributes { get; private set; }
 
         public DirectoryType Type { get; set; }
         public string FullPath { get; set; }
-        public ReversibleProperty<string> ShortName { get; set; }
-
+        public DirectoryItemAttribute ShortName { get; private set; }
         public string Name
         {
             get
@@ -46,20 +51,19 @@ namespace MP3Assistant
                 ShortName.Value = DirectoryHelpers.GetTrimmedName(value);
             }
         }
-
         public bool Hidden { get; private set; }
 
-        public ReversibleProperty<string> Title { get; set; }
-        public ReversibleProperty<string[]> Performers { get; set; }
-        public ReversibleProperty<string[]> AlbumPerformers { get; set; }
-        public ReversibleProperty<string> Album { get; set; }
-        public ReversibleProperty<uint> Year { get; set; }
-        public ReversibleProperty<uint> TrackIndex { get; set; }
-        public ReversibleProperty<uint> TrackCount { get; set; }
-        public ReversibleProperty<string[]> Genres { get; set; }
+        public DirectoryItemAttribute Title { get; private set; }
+        public DirectoryItemAttribute Performers { get; private set; }
+        public DirectoryItemAttribute AlbumPerformers { get; private set; }
+        public DirectoryItemAttribute Album { get; private set; }
+        public DirectoryItemAttribute Year { get; private set; }
+        public DirectoryItemAttribute TrackIndex { get; private set; }
+        public DirectoryItemAttribute TrackCount { get; private set; }
+        public DirectoryItemAttribute Genres { get; private set; }
         public byte[][] Images { get; set; }
-        public long Length { get; set; }
-        public ushort Bitrate { get; set; }
+        public long Length { get; private set; }
+        public ushort Bitrate { get; private set; }
 
         #endregion
 
@@ -73,8 +77,7 @@ namespace MP3Assistant
 
         static DirectoryItem()
         {
-            Modifications = new ObservableCollection<DirectoryItemModification>();
-            Modifications.CollectionChanged += OnModificationsChanged;
+            ModifiedItems = new ObservableCollection<DirectoryItem>();
         }
 
         private DirectoryItem(string fullPath)
@@ -85,17 +88,22 @@ namespace MP3Assistant
             FullPath = fullPath;
             if (Type == DirectoryType.File || Type == DirectoryType.MP3File)
             {
-                ShortName = new ReversibleProperty<string>("Nazwa", DirectoryHelpers.GetDirectoryName(FullPath, false));
+                ShortName = new DirectoryItemAttribute("Nazwa", DirectoryHelpers.GetDirectoryName(FullPath, false), new BasicStringAttributeConverter());
                 _extension = DirectoryHelpers.GetExtension(FullPath);
             }
             else
-                ShortName = new ReversibleProperty<string>("Nazwa", DirectoryHelpers.GetDirectoryName(FullPath));
+                ShortName = new DirectoryItemAttribute("Nazwa", DirectoryHelpers.GetDirectoryName(FullPath), new BasicStringAttributeConverter());
 
             // Determine if is a hidden directory (drives seem to be marked as hidden, so let's prevent that)
             Hidden = Type != DirectoryType.Drive && DirectoryHelpers.IsHidden(FullPath);
 
             if (Type == DirectoryType.MP3File)
             {
+                _attributes = GetType().GetProperties()
+                             .Where(p => p.PropertyType == typeof(DirectoryItemAttribute))
+                             .ToArray();
+                ModifiedAttributes = new ObservableCollection<DirectoryItemAttribute>();
+
                 SetMP3Info();
                 SubscribeToPropertyChanges();
             }
@@ -128,6 +136,43 @@ namespace MP3Assistant
 
         #endregion
 
+        #region Public Instance Methods
+
+        public void SaveChanges()
+        {
+            var attributesModified = ModifiedAttributes.Where(a => a != ShortName).Count();
+
+            if (attributesModified > 0)
+            {
+                _tagFile.Save();
+            }
+
+            if (ShortName.HasChanged)
+            {
+                // Change filename
+                var newPath = DirectoryHelpers.SubstituteFilename(FullPath, Name);
+                DirectoryHelpers.RenameFile(FullPath, newPath);
+                // Update members
+                FullPath = newPath;
+                _tagFile.Dispose();
+                _tagFile = File.Create(FullPath);
+                // Increment the counter
+                attributesModified += 1;
+            }
+
+            // Discard modifications history
+            // (iterating backwards as the list is expected to be shrinking accordingly)
+            if (attributesModified > 0)
+            {
+                for (int i = attributesModified - 1; i >= 0; --i)
+                {
+                    ModifiedAttributes[i].Reset();
+                }
+            }
+        }
+
+        #endregion
+
         #region Private Instance Methods
 
         private void SetMP3Info()
@@ -139,20 +184,29 @@ namespace MP3Assistant
 
             Tag tag = _tagFile.Tag;
 
-            Title = new ReversibleProperty<string>("Tytuł", tag.Title);
-            Performers = new ReversibleProperty<string[]>("Wykonawca", tag.Performers);
-            AlbumPerformers = new ReversibleProperty<string[]>("Wykonawca albumu", tag.AlbumArtists);
-            Album = new ReversibleProperty<string>("Album", tag.Album);
-            Year = new ReversibleProperty<uint>("Rok", tag.Year);
-            TrackIndex = new ReversibleProperty<uint>("Nr ścieżki", tag.Track);
-            TrackCount = new ReversibleProperty<uint>("Liczba ścieżek", tag.TrackCount);
-            Genres = new ReversibleProperty<string[]>("Gatunek", tag.Genres);
+            Title = new DirectoryItemAttribute("Tytuł", tag.Title, new BasicStringAttributeConverter());
+            Performers = new DirectoryItemAttribute("Wykonawca", tag.Performers, new BasicStringArrayAttributeConverter());
+            AlbumPerformers = new DirectoryItemAttribute("Wykonawca albumu", tag.AlbumArtists, new BasicStringArrayAttributeConverter());
+            Album = new DirectoryItemAttribute("Album", tag.Album, new BasicStringAttributeConverter());
+            Year = new DirectoryItemAttribute("Rok", tag.Year, new BasicUintAttributeConverter());
+            TrackIndex = new DirectoryItemAttribute("Nr ścieżki", tag.Track, new BasicUintAttributeConverter());
+            TrackCount = new DirectoryItemAttribute("Liczba ścieżek", tag.TrackCount, new BasicUintAttributeConverter());
+            Genres = new DirectoryItemAttribute("Gatunek", tag.Genres, new BasicStringArrayAttributeConverter());
             Images = tag.Pictures.Select(image => image.Data.Data).ToArray();
         }
 
         private void SubscribeToPropertyChanges()
         {
-            ShortName.ValueChanged += OnPropertyChanged;
+            foreach (var attr in _attributes.Select(a => a.GetValue(this) as DirectoryItemAttribute))
+            {
+                attr.ValueChanged += OnAttributeChanged;
+                attr.ValueReset += OnAttributeReset;
+            }
+                
+
+            ModifiedAttributes.CollectionChanged += OnModifiedAttributesChanged;
+
+            /*ShortName.ValueChanged += OnPropertyChanged;
             Title.ValueChanged += OnPropertyChanged;
             Performers.ValueChanged += OnPropertyChanged;
             AlbumPerformers.ValueChanged += OnPropertyChanged;
@@ -160,44 +214,102 @@ namespace MP3Assistant
             Year.ValueChanged += OnPropertyChanged;
             TrackIndex.ValueChanged += OnPropertyChanged;
             TrackCount.ValueChanged += OnPropertyChanged;
-            Genres.ValueChanged += OnPropertyChanged;
+            Genres.ValueChanged += OnPropertyChanged;*/
         }
 
-        private void OnPropertyChanged(object sender, ReversiblePropertyChangedEventArgs e)
+        private void OnAttributeChanged(object sender, DirectoryItemAttributeEventArgs e)
         {
-            var modification = new DirectoryItemModification(this, e.PropertyName, e.OldValue, e.NewValue);
+            var attr = sender as DirectoryItemAttribute;
 
-            Modifications.Add(modification);
+            if (attr.Name == "Tytuł")
+            {
+                _tagFile.Tag.Title = (string)e.NewValue;
+            }
+            else if (attr.Name == "Wykonawca")
+            {
+                _tagFile.Tag.Performers = null;
+                _tagFile.Tag.Performers = (string[])e.NewValue;
+            }
+            else if (attr.Name == "Album")
+            {
+                _tagFile.Tag.Album = (string)e.NewValue;
+            }
+            else if (attr.Name == "Wykonawca albumu")
+            {
+                _tagFile.Tag.AlbumArtists = null;
+                _tagFile.Tag.AlbumArtists = (string[])e.NewValue;
+            }
+            else if (attr.Name == "Rok")
+            {
+                _tagFile.Tag.Year = (uint)e.NewValue;
+            }
+            else if (attr.Name == "Nr ścieżki")
+            {
+                _tagFile.Tag.Track = (uint)e.NewValue;
+            }
+            else if (attr.Name == "Liczba ścieżek")
+            {
+                _tagFile.Tag.TrackCount = (uint)e.NewValue;
+            }
+            else if (attr.Name == "Gatunek")
+            {
+                _tagFile.Tag.Genres = null;
+                _tagFile.Tag.Genres = (string[])e.NewValue;
+            }
+
+            if (ModifiedAttributes.Contains(attr))
+            {
+                if (!attr.HasChanged)
+                    ModifiedAttributes.Remove(attr);
+            }
+            else
+            {
+                if (attr.HasChanged)
+                    ModifiedAttributes.Add(attr);
+            }
+        }
+
+        private void OnAttributeReset(object sender, DirectoryItemAttributeEventArgs e)
+        {
+            var attr = sender as DirectoryItemAttribute;
+
+            ModifiedAttributes.Remove(attr);
+        }
+
+        private void OnModifiedAttributesChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            var action = e.Action;
+
+            // If an attribute has been added to modifications list...
+            if (action == NotifyCollectionChangedAction.Add)
+            {
+                // If it is the first change made to the item...
+                if (!ModifiedItems.Contains(this))
+                {
+                    // Add it to the list of modified items
+                    ModifiedItems.Add(this);
+                    // Notify the cache it is now part of that list
+                    RegisterExternalStorage(this, ModifiedItems);
+                }
+            }
+
+            // If an attribute has been removed from modifications list...
+            if (action == NotifyCollectionChangedAction.Remove)
+            {
+                // If no changes in the item are left...
+                if (ModifiedAttributes.Count == 0)
+                {
+                    // Remove item from the list of modified items
+                    ModifiedItems.Remove(this);
+                    // Notify the cache that this list does not contain it anymore
+                    UnregisterExternalStorage(this, ModifiedItems);
+                }
+            }
         }
 
         #endregion
 
         #region Private Static Methods
-
-        private static void OnModificationsChanged(object sender, NotifyCollectionChangedEventArgs e)
-        {
-            var action = e.Action;
-
-            // If an item has been added to modifications list...
-            if (action == NotifyCollectionChangedAction.Add)
-            {
-                var addedItems = e.NewItems.Cast<DirectoryItemModification>();
-
-                // Notify the cache it is a part of the list
-                foreach (var modification in addedItems)
-                    RegisterExternalStorage(modification.DirectoryItem, Modifications);
-            }
-
-            // If an item has been removed from modifications list...
-            if (action == NotifyCollectionChangedAction.Remove)
-            {
-                var removedItems = e.OldItems.Cast<DirectoryItemModification>();
-
-                // Notify the cache it is not a part of this list anymore
-                foreach (var modification in removedItems)
-                    UpdateExternalStorage(modification.DirectoryItem, Modifications);
-            }
-        }
 
         private static void RegisterExternalStorage(DirectoryItem item, object storage)
         {
@@ -221,7 +333,7 @@ namespace MP3Assistant
             _registeredStorages[item].Add(storage);
         }
 
-        private static void UpdateExternalStorage(DirectoryItem item, object storage)
+        private static void UnregisterExternalStorage(DirectoryItem item, object storage)
         {
             _registeredStorages[item].Remove(storage);
 

@@ -30,33 +30,40 @@
                   ItemsSource="{Binding ModifiedItems}"
                   BorderThickness="0">
             <TreeView.Resources>
-                <HierarchicalDataTemplate DataType="{x:Type local:ModifiedDirectoryItemViewModel}"
-                                          ItemsSource="{Binding Modifications}">
+                <HierarchicalDataTemplate DataType="{x:Type local:DirectoryItemViewModel}"
+                                          ItemsSource="{Binding ModifiedAttributes}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock FontWeight="Bold"
-                                   Text="{Binding Item.Name}"/>
+                                   Text="{Binding ShortName.InitialValue}"/>
                         <TextBlock FontWeight="DemiBold" 
                                    Text=" ("/>
                         <TextBlock FontWeight="Heavy"
-                                   Text="{Binding Modifications.Count}"/>
+                                   Text="{Binding ModifiedAttributes.Count}"/>
                         <TextBlock FontWeight="DemiBold"
                                    Text=")"/>
                     </StackPanel>
                 </HierarchicalDataTemplate>
-                <DataTemplate DataType="{x:Type local:DirectoryItemModification}">
+                <DataTemplate DataType="{x:Type local:DirectoryItemAttribute}">
                     <StackPanel Orientation="Horizontal">
                         <Button Content="X"
+                                Command="{Binding Path=DataContext.CancelModificationButtonClickCommand,
+                                                  RelativeSource={RelativeSource Mode=FindAncestor,
+                                                                                 AncestorType={x:Type Page}}}"
+                                CommandParameter="{Binding .}"
                                 Width="12"
                                 FontWeight="ExtraBold"
                                 Foreground="Red"
                                 Background="Transparent"
                                 BorderThickness="0"/>
-                        <TextBlock Text="{Binding Property}"
-                                   Margin="4,1,2,1"/>
+                        <TextBlock Text="{Binding Name}"
+                                   Margin="4,1,1,1"/>
+                        <TextBlock Text=":"
+                                   Margin="0,1,1,1"/>
+                        <TextBlock Text="{Binding InitialValue}"
+                                   Margin="2,1,1,1"/>
                         <TextBlock Text="—&gt;"
-                                   Margin="2,1,2,1"/>
-                        <TextBlock Text="{Binding NewValue,
-                                                  Converter={StaticResource ReversiblePropertyConverter}}"/>
+                                   Margin="1,1,2,1"/>
+                        <TextBlock Text="{Binding Value}"/>
                     </StackPanel>
                 </DataTemplate>
             </TreeView.Resources>

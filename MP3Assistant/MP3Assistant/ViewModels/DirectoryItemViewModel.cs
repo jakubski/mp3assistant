@@ -34,10 +34,10 @@ namespace MP3Assistant
             get { return HideExtension ? ShortName.Value : _directoryItem.Name; }
         }
 
-        public ReversibleProperty<string> ShortName
+        public DirectoryItemAttribute ShortName
         {
             get { return _directoryItem.ShortName; }
-            set { _directoryItem.ShortName = value; }
+            //set { _directoryItem.ShortName = value; }
         }
 
         public bool HideExtension { get; set; }
@@ -47,52 +47,52 @@ namespace MP3Assistant
             get { return _directoryItem.Hidden; }
         }
 
-        public ReversibleProperty<string> Title
+        public DirectoryItemAttribute Title
         {
             get { return _directoryItem.Title; }
-            set { _directoryItem.Title = value; }
+            //set { _directoryItem.Title = value; }
         }
 
-        public ReversibleProperty<string[]> Performers
+        public DirectoryItemAttribute Performers
         {
             get { return _directoryItem.Performers; }
-            set { _directoryItem.Performers = value; }
+            //set { _directoryItem.Performers = value; }
         }
 
-        public ReversibleProperty<string[]> AlbumPerformers
+        public DirectoryItemAttribute AlbumPerformers
         {
             get { return _directoryItem.AlbumPerformers; }
-            set { _directoryItem.AlbumPerformers = value; }
+            //set { _directoryItem.AlbumPerformers = value; }
         }
 
-        public ReversibleProperty<string> Album
+        public DirectoryItemAttribute Album
         {
             get { return _directoryItem.Album; }
-            set { _directoryItem.Album = value; }
+            //set { _directoryItem.Album = value; }
         }
 
-        public ReversibleProperty<uint> Year
+        public DirectoryItemAttribute Year
         {
             get { return _directoryItem.Year; }
-            set { _directoryItem.Year = value; }
+            //set { _directoryItem.Year = value; }
         }
 
-        public ReversibleProperty<uint> TrackIndex
+        public DirectoryItemAttribute TrackIndex
         {
             get { return _directoryItem.TrackIndex; }
-            set { _directoryItem.TrackIndex = value; }
+            //set { _directoryItem.TrackIndex = value; }
         }
 
-        public ReversibleProperty<uint> TrackCount
+        public DirectoryItemAttribute TrackCount
         {
             get { return _directoryItem.TrackCount; }
-            set { _directoryItem.TrackCount = value; }
+            //set { _directoryItem.TrackCount = value; }
         }
 
-        public ReversibleProperty<string[]> Genres
+        public DirectoryItemAttribute Genres
         {
             get { return _directoryItem.Genres; }
-            set { _directoryItem.Genres = value; }
+            //set { _directoryItem.Genres = value; }
         }
 
         public List<byte[]> Images
@@ -104,13 +104,18 @@ namespace MP3Assistant
         public long Length
         {
             get { return _directoryItem.Length; }
-            set { _directoryItem.Length = value; }
+            //set { _directoryItem.Length = value; }
         }
 
         public ushort Bitrate
         {
             get { return _directoryItem.Bitrate; }
-            set { _directoryItem.Bitrate = value; }
+            //set { _directoryItem.Bitrate = value; }
+        }
+
+        public ObservableCollection<DirectoryItemAttribute> ModifiedAttributes
+        {
+            get { return _directoryItem.ModifiedAttributes; }
         }
 
         #endregion
@@ -123,5 +128,10 @@ namespace MP3Assistant
         }
 
         #endregion
+
+        public void ConfirmModifications()
+        {
+            _directoryItem.SaveChanges();
+        }
     }
 }

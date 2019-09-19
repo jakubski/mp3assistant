@@ -9,11 +9,11 @@
       Title="SongEditorPage"
       KeepAlive="False">
 
-        <!-- File name                       ___________
+    <!-- File name                       ___________
              song title                     | Cover     |
              performer                      |     art   |
              album performer                |___________|
-             album title                     <   + x    >
+             album title                     <  + / x   >
              year, track number, track count
              genre -->
     <Grid Margin="10,10">
@@ -201,7 +201,7 @@
         <StackPanel Grid.Column="1"
                     Orientation="Vertical">
             <!-- Image -->
-            <Image Source="{Binding SelectedDirectoryItem.Images,
+            <Image Source="{Binding SelectedDirectoryItem.CurrentImage,
                                     Converter={StaticResource AlbumArtConverter},
                                     ConverterParameter=300}"
                    Margin="10,8,10,2"
@@ -210,7 +210,8 @@
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="40"/>   <!-- Previous image -->
-                    <ColumnDefinition Width="*"/>    <!-- Change image -->
+                    <ColumnDefinition Width="*"/>    <!-- Add image -->
+                    <ColumnDefinition Width="*"/>    <!-- Replace image -->
                     <ColumnDefinition Width="*"/>    <!-- Delete image -->
                     <ColumnDefinition Width="40"/>   <!-- Next image -->
                 </Grid.ColumnDefinitions>
@@ -220,27 +221,39 @@
                         Width="30"
                         Margin="10,0,0,0"
                         Content="&lt;"
+                        Command="{Binding PreviousImageButtonClickCommand}"
                         HorizontalAlignment="Left"/>
 
-                <!-- Change image button -->
+                <!-- Add image button -->
                 <Button Grid.Column="1"
-                        Width="60"
-                        Margin="0,0,4,0"
-                        Content="Nowy..."
+                        Width="56"
+                        Margin="0,0,1,0"
+                        Content="Dodaj"
+                        Command="{Binding AddImageButtonClickCommand}"
                         HorizontalAlignment="Right"/>
 
-                <!-- Delete image button -->
+                <!-- Replace image button -->
                 <Button Grid.Column="2"
-                        Width="60"
-                        Margin="4,0,0,0"
+                        Width="56"
+                        Margin="1,0,1,0"
+                        Content="Zamień"
+                        Command="{Binding ReplaceImageButtonClickCommand}"
+                        HorizontalAlignment="Center"/>
+
+                <!-- Delete image button -->
+                <Button Grid.Column="3"
+                        Width="56"
+                        Margin="1,0,0,0"
                         Content="Usuń"
+                        Command="{Binding DeleteImageButtonClickCommand}"
                         HorizontalAlignment="Left"/>
 
                 <!-- Next image button -->
-                <Button Grid.Column="3"
+                <Button Grid.Column="4"
                         Width="30"
                         Margin="0,0,10,0"
                         Content="&gt;"
+                        Command="{Binding NextImageButtonClickCommand}"
                         HorizontalAlignment="Right"/>
             </Grid>
         </StackPanel>

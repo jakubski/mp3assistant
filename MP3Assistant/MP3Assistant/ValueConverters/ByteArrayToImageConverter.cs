@@ -17,12 +17,7 @@ namespace MP3Assistant
             if (value == null)
                 return null;
 
-            var images = value as List<byte[]>;
-
-            if (images.Count == 0)
-                return null;
-
-            var imageData = images[0];
+            var imageData = value as byte[];
             var image = new BitmapImage();
 
             using (var memoryStream = new MemoryStream(imageData))

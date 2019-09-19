@@ -31,13 +31,12 @@ namespace MP3Assistant
 
         public string Name
         {
-            get { return HideExtension ? ShortName.Value : _directoryItem.Name; }
+            get { return HideExtension ? (string)ShortName.Value : _directoryItem.Name; }
         }
 
         public DirectoryItemAttribute ShortName
         {
             get { return _directoryItem.ShortName; }
-            //set { _directoryItem.ShortName = value; }
         }
 
         public bool HideExtension { get; set; }
@@ -50,67 +49,63 @@ namespace MP3Assistant
         public DirectoryItemAttribute Title
         {
             get { return _directoryItem.Title; }
-            //set { _directoryItem.Title = value; }
         }
 
         public DirectoryItemAttribute Performers
         {
             get { return _directoryItem.Performers; }
-            //set { _directoryItem.Performers = value; }
         }
 
         public DirectoryItemAttribute AlbumPerformers
         {
             get { return _directoryItem.AlbumPerformers; }
-            //set { _directoryItem.AlbumPerformers = value; }
         }
 
         public DirectoryItemAttribute Album
         {
             get { return _directoryItem.Album; }
-            //set { _directoryItem.Album = value; }
         }
 
         public DirectoryItemAttribute Year
         {
             get { return _directoryItem.Year; }
-            //set { _directoryItem.Year = value; }
         }
 
         public DirectoryItemAttribute TrackIndex
         {
             get { return _directoryItem.TrackIndex; }
-            //set { _directoryItem.TrackIndex = value; }
         }
 
         public DirectoryItemAttribute TrackCount
         {
             get { return _directoryItem.TrackCount; }
-            //set { _directoryItem.TrackCount = value; }
         }
 
         public DirectoryItemAttribute Genres
         {
             get { return _directoryItem.Genres; }
-            //set { _directoryItem.Genres = value; }
         }
 
-        public List<byte[]> Images
+        public ObservableCollection<byte[]> Images
         {
-            get { return _directoryItem.Images?.ToList(); }
-            set { _directoryItem.Images = value.ToArray(); }
+            get { return new ObservableCollection<byte[]>((_directoryItem.Images?.Value ?? new List<byte[]>()) as List<byte[]>); }
+            set { _directoryItem.Images.Value = new List<byte[]>(value); }
+        }
+        public int ImageCount { get { return Images.Count; } }
+        public int CurrentImageIndex { get; set; }
+        public byte[] CurrentImage
+        {
+            get { return ImageCount == 0 ? null : Images[CurrentImageIndex]; }
         }
 
         public long Length
         {
             get { return _directoryItem.Length; }
-            //set { _directoryItem.Length = value; }
         }
 
         public ushort Bitrate
         {
             get { return _directoryItem.Bitrate; }
-            //set { _directoryItem.Bitrate = value; }
         }
 
         public ObservableCollection<DirectoryItemAttribute> ModifiedAttributes
@@ -125,6 +120,8 @@ namespace MP3Assistant
         public DirectoryItemViewModel(string fullPath)
         {
             _directoryItem = DirectoryItem.GetOrCreate(fullPath);
+
+            CurrentImageIndex = 0;
         }
 
         #endregion

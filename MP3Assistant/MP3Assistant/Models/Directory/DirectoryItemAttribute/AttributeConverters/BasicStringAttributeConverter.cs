@@ -8,7 +8,7 @@ namespace MP3Assistant
 {
     public class BasicStringAttributeConverter : IAttributeConverter
     {
-        public string ForView(object passedValue)
+        public object ForView(object passedValue)
         {
             if (passedValue == null)
                 return string.Empty;
@@ -18,12 +18,12 @@ namespace MP3Assistant
             return text;
         }
 
-        public object FromView(string receivedValue)
+        public object FromView(object receivedValue)
         {
             if (receivedValue == null)
                 return string.Empty;
 
-            var text = receivedValue;
+            var text = (string)receivedValue;
 
             text = text.Trim();
 

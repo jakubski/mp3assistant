@@ -8,7 +8,7 @@ namespace MP3Assistant
 {
     public class BasicStringArrayAttributeConverter : IAttributeConverter
     {
-        public string ForView(object passedValue)
+        public object ForView(object passedValue)
         {
             if (passedValue == null)
                 return string.Empty;
@@ -24,12 +24,12 @@ namespace MP3Assistant
             return joinedArray;
         }
 
-        public object FromView(string receivedValue)
+        public object FromView(object receivedValue)
         {
             if (receivedValue == null)
                 return new string[] { };
 
-            var text = receivedValue;
+            var text = (string)receivedValue;
 
             if (text == string.Empty)
                 return new string[] { };

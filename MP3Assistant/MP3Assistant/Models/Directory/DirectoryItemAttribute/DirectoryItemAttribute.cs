@@ -17,7 +17,7 @@ namespace MP3Assistant
         public event DirectoryItemAttributeEventHandler ValueChanged;
         public event DirectoryItemAttributeEventHandler ValueReset;
 
-        public string Value
+        public object Value
         {
             get { return _converter.ForView(_currentValue); }
             set
@@ -29,7 +29,7 @@ namespace MP3Assistant
             }
         }
 
-        public string InitialValue
+        public object InitialValue
         {
             get { return _converter.ForView(_initialValue); }
         }
@@ -67,7 +67,7 @@ namespace MP3Assistant
 
         public override string ToString()
         {
-            return Value;
+            return Value.ToString();
         }
     }
 }

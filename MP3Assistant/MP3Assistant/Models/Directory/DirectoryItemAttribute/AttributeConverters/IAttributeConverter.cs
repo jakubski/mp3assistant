@@ -8,7 +8,7 @@ namespace MP3Assistant
 {
     public interface IAttributeConverter
     {
-        object FromView(string receivedValue);
-        string ForView(object passedValue);
+        object FromView(object receivedValue);
+        object ForView(object passedValue);
     }
 }

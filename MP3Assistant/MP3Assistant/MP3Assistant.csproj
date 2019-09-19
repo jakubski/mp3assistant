@@ -46,6 +46,7 @@
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
     <Reference Include="System.IO.Compression" />
     <Reference Include="System.Numerics" />
     <Reference Include="System.Runtime.Caching" />
@@ -74,6 +75,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Models\Directory\DirectoryItem.cs" />
+    <Compile Include="Models\Directory\DirectoryItemAttribute\AttributeConverters\BasicPictureArrayAttributeConverter.cs" />
     <Compile Include="Models\Directory\DirectoryItemAttribute\AttributeConverters\BasicStringArrayAttributeConverter.cs" />
     <Compile Include="Models\Directory\DirectoryItemAttribute\AttributeConverters\BasicStringAttributeConverter.cs" />
     <Compile Include="Models\Directory\DirectoryItemAttribute\AttributeConverters\BasicUintAttributeConverter.cs" />
@@ -83,6 +85,7 @@
     <Compile Include="Models\Directory\DirectoryItemAttribute\AttributeConverters\IAttributeConverter.cs" />
     <Compile Include="Models\Directory\DirectoryItemAttribute\ReversibleProperty.cs" />
     <Compile Include="Models\Directory\DirectoryItemAttribute\ReversiblePropertyChangedEventArgs.cs" />
+    <Compile Include="Models\Image\ImageHelpers.cs" />
     <Compile Include="ValueConverters\ByteArrayToImageConverter.cs" />
     <Compile Include="ValueConverters\ReversiblePropertyConverter.cs" />
     <Compile Include="ValueConverters\ReversiblePropertyOfStringArrayToStringConverter.cs" />

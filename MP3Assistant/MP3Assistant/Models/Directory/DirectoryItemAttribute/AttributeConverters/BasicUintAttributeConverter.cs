@@ -8,7 +8,7 @@ namespace MP3Assistant
 {
     public class BasicUintAttributeConverter : IAttributeConverter
     {
-        public string ForView(object passedValue)
+        public object ForView(object passedValue)
         {
             var number = (uint)passedValue;
 
@@ -18,9 +18,9 @@ namespace MP3Assistant
                 return number.ToString();
         }
 
-        public object FromView(string receivedValue)
+        public object FromView(object receivedValue)
         {
-            var text = receivedValue;
+            var text = (string)receivedValue;
             uint number;
 
             if (uint.TryParse(text, out number))

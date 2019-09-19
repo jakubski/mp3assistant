@@ -61,7 +61,8 @@ namespace MP3Assistant
         public DirectoryItemAttribute TrackIndex { get; private set; }
         public DirectoryItemAttribute TrackCount { get; private set; }
         public DirectoryItemAttribute Genres { get; private set; }
-        public byte[][] Images { get; set; }
+        public DirectoryItemAttribute Images { get; private set; }
+
         public long Length { get; private set; }
         public ushort Bitrate { get; private set; }
 
@@ -192,7 +193,7 @@ namespace MP3Assistant
             TrackIndex = new DirectoryItemAttribute("Nr ścieżki", tag.Track, new BasicUintAttributeConverter());
             TrackCount = new DirectoryItemAttribute("Liczba ścieżek", tag.TrackCount, new BasicUintAttributeConverter());
             Genres = new DirectoryItemAttribute("Gatunek", tag.Genres, new BasicStringArrayAttributeConverter());
-            Images = tag.Pictures.Select(image => image.Data.Data).ToArray();
+            Images = new DirectoryItemAttribute("Obrazy", tag.Pictures, new BasicPictureArrayAttributeConverter());
         }
 
         private void SubscribeToPropertyChanges()
@@ -202,19 +203,9 @@ namespace MP3Assistant
                 attr.ValueChanged += OnAttributeChanged;
                 attr.ValueReset += OnAttributeReset;
             }
-                
 
+            //Images.CollectionChanged += OnImagesChanged;
             ModifiedAttributes.CollectionChanged += OnModifiedAttributesChanged;
-
-            /*ShortName.ValueChanged += OnPropertyChanged;
-            Title.ValueChanged += OnPropertyChanged;
-            Performers.ValueChanged += OnPropertyChanged;
-            AlbumPerformers.ValueChanged += OnPropertyChanged;
-            Album.ValueChanged += OnPropertyChanged;
-            Year.ValueChanged += OnPropertyChanged;
-            TrackIndex.ValueChanged += OnPropertyChanged;
-            TrackCount.ValueChanged += OnPropertyChanged;
-            Genres.ValueChanged += OnPropertyChanged;*/
         }
 
         private void OnAttributeChanged(object sender, DirectoryItemAttributeEventArgs e)
@@ -256,6 +247,11 @@ namespace MP3Assistant
                 _tagFile.Tag.Genres = null;
                 _tagFile.Tag.Genres = (string[])e.NewValue;
             }
+            else if (attr.Name == "Obrazy")
+            {
+                _tagFile.Tag.Pictures = null;
+                _tagFile.Tag.Pictures = (Picture[])e.NewValue;
+            }
 
             if (ModifiedAttributes.Contains(attr))
             {
@@ -274,6 +270,20 @@ namespace MP3Assistant
             var attr = sender as DirectoryItemAttribute;
 
             ModifiedAttributes.Remove(attr);
+        }
+
+        private void OnImagesChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
+            var action = e.Action;
+
+            if (action == NotifyCollectionChangedAction.Add)
+            {
+                IPicture[] newArray = _tagFile.Tag.Pictures;
+                newArray.Concat(e.NewItems.Cast<byte[]>().Select(p => new Picture(new ByteVector(p))).ToArray());
+
+                _tagFile.Tag.Pictures = null;
+                _tagFile.Tag.Pictures = newArray;
+            }
         }
 
         private void OnModifiedAttributesChanged(object sender, NotifyCollectionChangedEventArgs e)

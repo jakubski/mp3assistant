@@ -1,7 +1,9 @@
-﻿using System;
+﻿using Microsoft.Win32;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -41,8 +43,7 @@ namespace MP3Assistant
 
         public bool HideHiddenContents { get; set; }
         public bool HideExtensions { get; set; }
-
-        //public ObservableCollection<string> SuggestedPaths { get; private set; }
+        
         public ObservableCollection<DirectoryItemViewModel> Contents
         {
             get
@@ -84,9 +85,20 @@ namespace MP3Assistant
 
         public event ColumnChangedEventHandler ColumnAdded = (sender, e) => { };
         public event ColumnChangedEventHandler ColumnRemoved = (sender, e) => { };
+        
+        public bool CanShowNextImage => SelectedDirectoryItem.ImageCount + 1 > SelectedDirectoryItem.CurrentImageIndex;
+        public bool CanShowPreviousImage => SelectedDirectoryItem.CurrentImageIndex > 0;
+        public bool CanAddNewImage => SelectedDirectoryItem.ImageCount < 6;
+        public bool CanReplaceImage => SelectedDirectoryItem.ImageCount > 0;
+        public bool CanDeleteImage => SelectedDirectoryItem.ImageCount > 0;
 
         public VoidRelayCommand BackButtonClickCommand { get; private set; }
         public VoidRelayCommand NextButtonClickCommand { get; private set; }
+        public VoidRelayCommand PreviousImageButtonClickCommand { get; private set; }
+        public VoidRelayCommand NextImageButtonClickCommand { get; private set; }
+        public VoidRelayCommand AddImageButtonClickCommand { get; private set; }
+        public VoidRelayCommand ReplaceImageButtonClickCommand { get; private set; }
+        public VoidRelayCommand DeleteImageButtonClickCommand { get; private set; }
         public VoidRelayCommand ModificationsButtonClickCommand { get; private set; }
         public VoidRelayCommand ConfirmModificationsButtonClickCommand { get; private set; }
         public RelayCommand<DirectoryItemViewModel> ItemDoubleClickCommand { get; private set; }
@@ -110,8 +122,6 @@ namespace MP3Assistant
                 ViewModel = this
             };
 
-            var revPropToStringConverter = new ReversiblePropertyOfStringArrayToStringConverter();
-            var emptyIntConverter = new ReversiblePropertyOfUintToStringConverter();
             _columns = new List<FileExplorerColumnViewModel>(new[]
             {
                 new FileExplorerColumnViewModel()
@@ -163,6 +173,11 @@ namespace MP3Assistant
 
             BackButtonClickCommand = new VoidRelayCommand(GoToPreviousLocation);
             NextButtonClickCommand = new VoidRelayCommand(GoToNextLocation);
+            PreviousImageButtonClickCommand = new VoidRelayCommand(ShowPreviousImage);
+            NextImageButtonClickCommand = new VoidRelayCommand(ShowNextImage);
+            AddImageButtonClickCommand = new VoidRelayCommand(AddImage);
+            ReplaceImageButtonClickCommand = new VoidRelayCommand(ReplaceImage);
+            DeleteImageButtonClickCommand = new VoidRelayCommand(DeleteImage);
             ModificationsButtonClickCommand = new VoidRelayCommand(OpenModificationsPage);
             ConfirmModificationsButtonClickCommand = new VoidRelayCommand(ConfirmModifications);
             ItemDoubleClickCommand = new RelayCommand<DirectoryItemViewModel>(Item_DoubleClick);
@@ -249,6 +264,8 @@ namespace MP3Assistant
 
         private void OpenSongEditor()
         {
+            SelectedDirectoryItem.CurrentImageIndex = 0;
+
             FileExplorerPage = new ApplicationPage()
             {
                 Type = ApplicationPageType.SongEditorPage,
@@ -307,6 +324,45 @@ namespace MP3Assistant
                     OpenSongEditor();
                     break;
             }
+        }
+
+        private void ShowPreviousImage()
+        {
+            SelectedDirectoryItem.CurrentImageIndex -= 1;
+        }
+
+        private void ShowNextImage()
+        {
+            SelectedDirectoryItem.CurrentImageIndex += 1;
+        }
+
+        private void AddImage()
+        {
+            string imagePath;
+            var dialog = new OpenFileDialog()
+            {
+                InitialDirectory = CurrentPath,
+                CheckPathExists = true,
+                Multiselect = false,
+                AddExtension = true,
+                Filter = "Pliki obrazów (JPG, PNG, GIF)|*.png;*.jpg;*.jpeg;*.gif"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                imagePath = dialog.FileName;
+                SelectedDirectoryItem.Images = new ObservableCollection<byte[]>(SelectedDirectoryItem.Images.Concat(new[] { ImageHelpers.FileToBytes(imagePath) }));
+            }
+        }
+
+        private void ReplaceImage()
+        {
+
+        }
+
+        private void DeleteImage()
+        {
+
         }
 
         private void ConfirmModifications()

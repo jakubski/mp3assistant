@@ -11,6 +11,7 @@ namespace MP3Assistant
     {
         private object _initialValue;
         private object _currentValue;
+        private Func<object, object, bool> _equalsFunc;
         private IAttributeConverter _converter;
 
         public delegate void DirectoryItemAttributeEventHandler(object sender, DirectoryItemAttributeEventArgs e);
@@ -38,14 +39,15 @@ namespace MP3Assistant
 
         public bool HasChanged
         {
-            get { return !(InitialValue == Value); }
+            get { return ! _equalsFunc(_currentValue, _initialValue); }
         }
 
-        public DirectoryItemAttribute(string name, object initialValue, IAttributeConverter converter)
+        public DirectoryItemAttribute(string name, object initialValue, IAttributeConverter converter, Func<object, object, bool> equalsFunc)
         {
             _initialValue = initialValue;
             _currentValue = initialValue;
             _converter = converter;
+            _equalsFunc = equalsFunc;
 
             Name = name;
         }
@@ -69,5 +71,7 @@ namespace MP3Assistant
         {
             return Value.ToString();
         }
+
+        
     }
 }

@@ -27,6 +27,14 @@ namespace MP3Assistant
         private static readonly double _expirationSeconds = 50d;
         private static readonly MemoryCache _cache = new MemoryCache("DirectoryItemCache");
         private static Dictionary<DirectoryItem, IList<object>> _registeredStorages = new Dictionary<DirectoryItem, IList<object>>();
+        private static IAttributeConverter _stringConverter = new BasicStringAttributeConverter();
+        private static IAttributeConverter _stringArrayConverter = new BasicStringArrayAttributeConverter();
+        private static IAttributeConverter _uintConverter = new BasicUintAttributeConverter();
+        private static IAttributeConverter _pictureArrayConverter = new BasicPictureArrayAttributeConverter();
+        private static Func<object, object, bool> _areEqualString = (s1, s2) => { return (string)s1 == (string)s2; };
+        private static Func<object, object, bool> _areEqualStringArray = (a1, a2) => { return (string[])a1 == (string[])a2; };
+        private static Func<object, object, bool> _areEqualUint = (u1, u2) => { return (uint)u1 == (uint)u2; };
+        private static Func<object, object, bool> _areEqualPictureArray = (a1, a2) => { return (IPicture[])a1 == (IPicture[])a2; };
 
         #endregion
 
@@ -89,11 +97,11 @@ namespace MP3Assistant
             FullPath = fullPath;
             if (Type == DirectoryType.File || Type == DirectoryType.MP3File)
             {
-                ShortName = new DirectoryItemAttribute("Nazwa", DirectoryHelpers.GetDirectoryName(FullPath, false), new BasicStringAttributeConverter());
+                ShortName = new DirectoryItemAttribute("Nazwa", DirectoryHelpers.GetDirectoryName(FullPath, false), _stringConverter, _areEqualString);
                 _extension = DirectoryHelpers.GetExtension(FullPath);
             }
             else
-                ShortName = new DirectoryItemAttribute("Nazwa", DirectoryHelpers.GetDirectoryName(FullPath), new BasicStringAttributeConverter());
+                ShortName = new DirectoryItemAttribute("Nazwa", DirectoryHelpers.GetDirectoryName(FullPath), _stringConverter, _areEqualString);
 
             // Determine if is a hidden directory (drives seem to be marked as hidden, so let's prevent that)
             Hidden = Type != DirectoryType.Drive && DirectoryHelpers.IsHidden(FullPath);
@@ -185,15 +193,15 @@ namespace MP3Assistant
 
             Tag tag = _tagFile.Tag;
 
-            Title = new DirectoryItemAttribute("Tytuł", tag.Title, new BasicStringAttributeConverter());
-            Performers = new DirectoryItemAttribute("Wykonawca", tag.Performers, new BasicStringArrayAttributeConverter());
-            AlbumPerformers = new DirectoryItemAttribute("Wykonawca albumu", tag.AlbumArtists, new BasicStringArrayAttributeConverter());
-            Album = new DirectoryItemAttribute("Album", tag.Album, new BasicStringAttributeConverter());
-            Year = new DirectoryItemAttribute("Rok", tag.Year, new BasicUintAttributeConverter());
-            TrackIndex = new DirectoryItemAttribute("Nr ścieżki", tag.Track, new BasicUintAttributeConverter());
-            TrackCount = new DirectoryItemAttribute("Liczba ścieżek", tag.TrackCount, new BasicUintAttributeConverter());
-            Genres = new DirectoryItemAttribute("Gatunek", tag.Genres, new BasicStringArrayAttributeConverter());
-            Images = new DirectoryItemAttribute("Obrazy", tag.Pictures, new BasicPictureArrayAttributeConverter());
+            Title = new DirectoryItemAttribute("Tytuł", tag.Title, _stringConverter, _areEqualString);
+            Performers = new DirectoryItemAttribute("Wykonawca", tag.Performers, _stringArrayConverter, _areEqualStringArray);
+            AlbumPerformers = new DirectoryItemAttribute("Wykonawca albumu", tag.AlbumArtists, _stringArrayConverter, _areEqualStringArray);
+            Album = new DirectoryItemAttribute("Album", tag.Album, _stringConverter, _areEqualString);
+            Year = new DirectoryItemAttribute("Rok", tag.Year, _uintConverter, _areEqualUint);
+            TrackIndex = new DirectoryItemAttribute("Nr ścieżki", tag.Track, _uintConverter, _areEqualUint);
+            TrackCount = new DirectoryItemAttribute("Liczba ścieżek", tag.TrackCount, _uintConverter, _areEqualUint);
+            Genres = new DirectoryItemAttribute("Gatunek", tag.Genres, _stringArrayConverter, _areEqualStringArray);
+            Images = new DirectoryItemAttribute("Obrazy", tag.Pictures, _pictureArrayConverter, _areEqualPictureArray);
         }
 
         private void SubscribeToPropertyChanges()

@@ -10,12 +10,12 @@
       KeepAlive="False">
 
     <!-- File name                       ___________
-             song title                     | Cover     |
-             performer                      |     art   |
-             album performer                |___________|
-             album title                     <  + / x   >
-             year, track number, track count
-             genre -->
+         song title                     | Cover     |
+         performer                      |     art   |
+         album performer                |___________|
+         album title                     <  + / x   >
+         year, track number, track count
+         genre -->
     <Grid Margin="10,10">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>    <!-- Tags -->
@@ -221,6 +221,7 @@
                         Width="30"
                         Margin="10,0,0,0"
                         Content="&lt;"
+                        IsEnabled="{Binding CanShowPreviousImage}"
                         Command="{Binding PreviousImageButtonClickCommand}"
                         HorizontalAlignment="Left"/>
 
@@ -229,6 +230,7 @@
                         Width="56"
                         Margin="0,0,1,0"
                         Content="Dodaj"
+                        IsEnabled="{Binding CanAddImage}"
                         Command="{Binding AddImageButtonClickCommand}"
                         HorizontalAlignment="Right"/>
 
@@ -237,6 +239,7 @@
                         Width="56"
                         Margin="1,0,1,0"
                         Content="Zamień"
+                        IsEnabled="{Binding CanReplaceImage}"
                         Command="{Binding ReplaceImageButtonClickCommand}"
                         HorizontalAlignment="Center"/>
 
@@ -245,6 +248,7 @@
                         Width="56"
                         Margin="1,0,0,0"
                         Content="Usuń"
+                        IsEnabled="{Binding CanDeleteImage}"
                         Command="{Binding DeleteImageButtonClickCommand}"
                         HorizontalAlignment="Left"/>
 
@@ -253,6 +257,7 @@
                         Width="30"
                         Margin="0,0,10,0"
                         Content="&gt;"
+                        IsEnabled="{Binding CanShowNextImage}"
                         Command="{Binding NextImageButtonClickCommand}"
                         HorizontalAlignment="Right"/>
             </Grid>

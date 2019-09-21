@@ -17,6 +17,7 @@ namespace MP3Assistant
         private List<FileExplorerColumnViewModel> _columns;
         private Stack<string> _backwardPathHistory;
         private Stack<string> _forwardPathHistory;
+        private DirectoryItemViewModel _selectedDirectoryItem;
 
         public string CurrentPath { get; set; }
 
@@ -68,7 +69,11 @@ namespace MP3Assistant
             get { return new ObservableCollection<FileExplorerColumnViewModel>(_columns.Where(column => column.IsVisible)); }
         }
 
-        public DirectoryItemViewModel SelectedDirectoryItem { get; set; }
+        public DirectoryItemViewModel SelectedDirectoryItem
+        {
+            get { return _selectedDirectoryItem; }
+            set { if (value != null) _selectedDirectoryItem = value; }
+        }
 
         public ObservableCollection<DirectoryItemViewModel> ModifiedItems
         {
@@ -86,7 +91,7 @@ namespace MP3Assistant
         public event ColumnChangedEventHandler ColumnAdded = (sender, e) => { };
         public event ColumnChangedEventHandler ColumnRemoved = (sender, e) => { };
         
-        public bool CanShowNextImage => SelectedDirectoryItem.ImageCount + 1 > SelectedDirectoryItem.CurrentImageIndex;
+        public bool CanShowNextImage => SelectedDirectoryItem.ImageCount > SelectedDirectoryItem.CurrentImageIndex + 1;
         public bool CanShowPreviousImage => SelectedDirectoryItem.CurrentImageIndex > 0;
         public bool CanAddNewImage => SelectedDirectoryItem.ImageCount < 6;
         public bool CanReplaceImage => SelectedDirectoryItem.ImageCount > 0;
@@ -338,7 +343,6 @@ namespace MP3Assistant
 
         private void AddImage()
         {
-            string imagePath;
             var dialog = new OpenFileDialog()
             {
                 InitialDirectory = CurrentPath,
@@ -350,14 +354,29 @@ namespace MP3Assistant
 
             if (dialog.ShowDialog() == true)
             {
-                imagePath = dialog.FileName;
+                var imagePath = dialog.FileName;
                 SelectedDirectoryItem.Images = new ObservableCollection<byte[]>(SelectedDirectoryItem.Images.Concat(new[] { ImageHelpers.FileToBytes(imagePath) }));
             }
         }
 
         private void ReplaceImage()
         {
+            var dialog = new OpenFileDialog()
+            {
+                InitialDirectory = CurrentPath,
+                CheckPathExists = true,
+                Multiselect = false,
+                AddExtension = true,
+                Filter = "Pliki obrazów (JPG, PNG, GIF)|*.png;*.jpg;*.jpeg;*.gif"
+            };
 
+            if (dialog.ShowDialog() == true)
+            {
+                var imagePath = dialog.FileName;
+                var images = new ObservableCollection<byte[]>(SelectedDirectoryItem.Images);
+                images[SelectedDirectoryItem.CurrentImageIndex] = ImageHelpers.FileToBytes(imagePath);
+                SelectedDirectoryItem.Images = images;
+            }
         }
 
         private void DeleteImage()

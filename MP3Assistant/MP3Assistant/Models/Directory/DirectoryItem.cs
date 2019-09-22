@@ -258,7 +258,7 @@ namespace MP3Assistant
             else if (attr.Name == "Obrazy")
             {
                 _tagFile.Tag.Pictures = null;
-                _tagFile.Tag.Pictures = (Picture[])e.NewValue;
+                _tagFile.Tag.Pictures = (IPicture[])e.NewValue;
             }
 
             if (ModifiedAttributes.Contains(attr))

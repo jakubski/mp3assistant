@@ -89,7 +89,7 @@ namespace MP3Assistant
         public ObservableCollection<byte[]> Images
         {
             get { return new ObservableCollection<byte[]>((_directoryItem.Images?.Value ?? new List<byte[]>()) as List<byte[]>); }
-            set { _directoryItem.Images.Value = new List<byte[]>(value); }
+            set { _directoryItem.Images.ValueForView = new List<byte[]>(value); }
         }
         public int ImageCount { get { return Images.Count; } }
         public int CurrentImageIndex { get; set; }

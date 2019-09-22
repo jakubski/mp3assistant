@@ -381,7 +381,9 @@ namespace MP3Assistant
 
         private void DeleteImage()
         {
-
+            var images = new ObservableCollection<byte[]>(SelectedDirectoryItem.Images);
+            images.RemoveAt(SelectedDirectoryItem.CurrentImageIndex);
+            SelectedDirectoryItem.Images = images;
         }
 
         private void ConfirmModifications()

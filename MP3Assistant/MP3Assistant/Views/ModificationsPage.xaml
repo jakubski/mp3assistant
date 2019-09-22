@@ -34,7 +34,7 @@
                                           ItemsSource="{Binding ModifiedAttributes}">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock FontWeight="Bold"
-                                   Text="{Binding ShortName.InitialValue}"/>
+                                   Text="{Binding ShortName.InitialValueForView}"/>
                         <TextBlock FontWeight="DemiBold" 
                                    Text=" ("/>
                         <TextBlock FontWeight="Heavy"
@@ -59,11 +59,11 @@
                                    Margin="4,1,1,1"/>
                         <TextBlock Text=":"
                                    Margin="0,1,1,1"/>
-                        <TextBlock Text="{Binding InitialValue}"
+                        <TextBlock Text="{Binding InitialValueForView}"
                                    Margin="2,1,1,1"/>
                         <TextBlock Text="—&gt;"
                                    Margin="1,1,2,1"/>
-                        <TextBlock Text="{Binding Value}"/>
+                        <TextBlock Text="{Binding ValueForView}"/>
                     </StackPanel>
                 </DataTemplate>
             </TreeView.Resources>

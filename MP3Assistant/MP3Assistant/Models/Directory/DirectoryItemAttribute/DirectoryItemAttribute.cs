@@ -18,7 +18,29 @@ namespace MP3Assistant
         public event DirectoryItemAttributeEventHandler ValueChanged;
         public event DirectoryItemAttributeEventHandler ValueReset;
 
+        public object InitialValue
+        {
+            get { return _initialValue; }
+        }
+
         public object Value
+        {
+            get { return _converter.ForView(_currentValue); }
+            set
+            {
+                _currentValue = value;
+
+                ValueChanged?.Invoke(this, new DirectoryItemAttributeEventArgs()
+                                           { NewValue = _currentValue });
+            }
+        }
+
+        public object InitialValueForView
+        {
+            get { return _converter.ForView(_initialValue); }
+        }
+
+        public object ValueForView
         {
             get { return _converter.ForView(_currentValue); }
             set
@@ -26,13 +48,8 @@ namespace MP3Assistant
                 _currentValue = _converter.FromView(value);
 
                 ValueChanged?.Invoke(this, new DirectoryItemAttributeEventArgs()
-                                           { NewValue = _currentValue });
+                { NewValue = _currentValue });
             }
-        }
-
-        public object InitialValue
-        {
-            get { return _converter.ForView(_initialValue); }
         }
 
         public string Name { get; private set; }
@@ -69,7 +86,7 @@ namespace MP3Assistant
 
         public override string ToString()
         {
-            return Value.ToString();
+            return ValueForView.ToString();
         }
 
         

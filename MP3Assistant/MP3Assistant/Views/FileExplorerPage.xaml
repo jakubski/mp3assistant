@@ -24,8 +24,8 @@
 
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" />
-                <ColumnDefinition Width="280" />
+                <ColumnDefinition Width="*" />   <!-- Files -->
+                <ColumnDefinition Width="280" /> <!-- Settings -->
             </Grid.ColumnDefinitions>
 
             <!-- File explorer -->
@@ -61,14 +61,16 @@
                 <Border Margin="8,8,8,4"
                         Padding="6">
                     <StackPanel>
-                        <!-- Hiding hidden directories -->
+                        <!-- Hiding hidden items -->
                         <CheckBox Margin="2,1,2,1" Content="ukryte elementy" 
-                                  IsChecked="{Binding HideHiddenContents, Mode=TwoWay}" />
+                                  IsChecked="{Binding HideHiddenContents, Mode=TwoWay}"/>
                         <!-- Hiding file extensions -->
                         <CheckBox Margin="2,1,2,1" Content="rozszerzenia plików"
                                   IsChecked="{Binding HideExtensions, Mode=TwoWay}"/>
                         <!-- Hiding non-MP3 files -->
-                        <CheckBox Margin="2,1,2,1" Content="inne niż MP3" />
+                        <CheckBox Margin="2,1,2,1" Content="inne niż MP3"
+                                  IsEnabled="{Binding CanHideNonMP3Items}"
+                                  IsChecked="{Binding HideNonMP3Items, Mode=TwoWay}"/>
                     </StackPanel>
                 </Border>
                 <Border Margin="8,4,8,4"

@@ -41,9 +41,6 @@ namespace MP3Assistant
 
         public ApplicationPage NavigationBarPage { get; set; }
         public ApplicationPage FileExplorerPage { get; set; }
-
-        public bool HideHiddenContents { get; set; }
-        public bool HideExtensions { get; set; }
         
         public ObservableCollection<DirectoryItemViewModel> Contents
         {
@@ -58,9 +55,12 @@ namespace MP3Assistant
                 // Remove file extensions if necessary
                 contents.ForEach(item => { item.HideExtension = HideExtensions; });
 
+                // Remove non-MP3 contents if necessary
+                if (HideNonMP3Items)
+                    contents = contents.Where(item => item.Type == DirectoryType.MP3File).ToList();
+
                 return new ObservableCollection<DirectoryItemViewModel>(contents);
             }
-
             set { _contents = value.ToList(); }
         }
 
@@ -90,7 +90,27 @@ namespace MP3Assistant
 
         public event ColumnChangedEventHandler ColumnAdded = (sender, e) => { };
         public event ColumnChangedEventHandler ColumnRemoved = (sender, e) => { };
-        
+
+        public bool HideHiddenContents { get; set; }
+        public bool HideExtensions { get; set; }
+        public bool HideNonMP3Items { get; set; }
+        public bool CanHideNonMP3Items
+        {
+            get
+            {
+                if (_contents.Where(item => item.Type == DirectoryType.MP3File).Count() > 0)
+                {
+                    return true;
+                }
+                else
+                {
+                    HideNonMP3Items = false;
+                    return false;
+                }
+                    
+            }
+        }
+
         public bool CanShowNextImage => SelectedDirectoryItem.ImageCount > SelectedDirectoryItem.CurrentImageIndex + 1;
         public bool CanShowPreviousImage => SelectedDirectoryItem.CurrentImageIndex > 0;
         public bool CanAddNewImage => SelectedDirectoryItem.ImageCount < 6;
@@ -175,6 +195,7 @@ namespace MP3Assistant
 
             HideHiddenContents = true;
             HideExtensions = true;
+            HideNonMP3Items = false;
 
             BackButtonClickCommand = new VoidRelayCommand(GoToPreviousLocation);
             NextButtonClickCommand = new VoidRelayCommand(GoToNextLocation);

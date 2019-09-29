@@ -5,7 +5,8 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MP3Assistant"
       mc:Ignorable="d" 
-      d:DesignHeight="80" d:DesignWidth="1280"
+      d:DesignHeight="64" d:DesignWidth="1280"
+      Background="{StaticResource BackgroundDarkBrush}"
       Title="MainPageNavigationBarPage">
 
     <Grid>
@@ -21,16 +22,14 @@
         <!-- Back button -->
         <Button Grid.Column="0"
                 Name="BackButton"
-                Content="Wstecz"
-                Command="{Binding BackButtonClickCommand}"
-                Background="Transparent"/>
+                Style="{StaticResource MajorBackButton}"
+                Command="{Binding BackButtonClickCommand}"/>
 
         <!-- Next button -->
         <Button Grid.Column="1"
                 Name="NextButton"
-                Content="Dalej"
-                Command="{Binding NextButtonClickCommand}"
-                Background="Transparent"/>
+                Style="{StaticResource MajorNextButton}"
+                Command="{Binding NextButtonClickCommand}"/>
 
         <!-- Label -->
         <TextBlock Grid.Column="2"
@@ -38,7 +37,8 @@
                    Text="{Binding NavigationLabelText}"
                    HorizontalAlignment="Center"
                    VerticalAlignment="Center"
-                   FontSize="32"
+                   FontSize="24"
+                   Foreground="{StaticResource ForegroundGoldenDarkBrush}"
                    Background="Transparent"/>
 
         <!-- Arrow -->

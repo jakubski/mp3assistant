@@ -1,0 +1,23 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:MP3Assistant">
+
+    <Color x:Key="BackgroundDark">#0d0b0b</Color>
+    <SolidColorBrush x:Key="BackgroundDarkBrush" Color="{StaticResource BackgroundDark}"/>
+
+    <Color x:Key="BackgroundGray">#30302d</Color>
+    <SolidColorBrush x:Key="BackgroundGrayBrush" Color="{StaticResource BackgroundGray}"/>
+
+    <Color x:Key="BackgroundGrayLight">#636362</Color>
+    <SolidColorBrush x:Key="BackgroundGrayLightBrush" Color="{StaticResource BackgroundGrayLight}"/>
+
+    <Color x:Key="ForegroundLight">#fdffe8</Color>
+    <SolidColorBrush x:Key="ForegroundLightBrush" Color="{StaticResource ForegroundLight}"/>
+
+    <Color x:Key="ForegroundGoldenDark">#a68805</Color>
+    <SolidColorBrush x:Key="ForegroundGoldenDarkBrush" Color="{StaticResource ForegroundGoldenDark}"/>
+
+    <Color x:Key="ForegroundGoldenLight">#f2b740</Color>
+    <SolidColorBrush x:Key="ForegroundGoldenLightBrush" Color="{StaticResource ForegroundGoldenLight}"/>
+    
+</ResourceDictionary>

@@ -5,7 +5,8 @@
       xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
       xmlns:local="clr-namespace:MP3Assistant"
       mc:Ignorable="d" 
-      d:DesignHeight="688" d:DesignWidth="1280"
+      d:DesignHeight="704" d:DesignWidth="1280"
+      Background="{StaticResource BackgroundDarkBrush}"
       Title="FileExplorerPage">
 
     <Page.Resources>
@@ -25,7 +26,7 @@
         <Grid Grid.Row="0">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*" />   <!-- Files -->
-                <ColumnDefinition Width="280" /> <!-- Settings -->
+                <ColumnDefinition Width="280" /> <!-- Options -->
             </Grid.ColumnDefinitions>
 
             <!-- File explorer -->
@@ -35,10 +36,11 @@
                       SelectedItem="{Binding SelectedDirectoryItem, Mode=OneWayToSource}"
                       Background="Transparent">
                 <ListView.View>
-                    <GridView AllowsColumnReorder="true">
+                    <GridView AllowsColumnReorder="true"
+                              ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
                         <!-- Column context menu -->
                         <GridView.ColumnHeaderContextMenu>
-                            <ContextMenu  ItemsSource="{Binding FileExplorerHeaderContextMenu}">
+                            <ContextMenu ItemsSource="{Binding FileExplorerHeaderContextMenu}">
                                 <ContextMenu.ItemContainerStyle>
                                     <Style TargetType="MenuItem">
                                         <Setter Property="Header" Value="{Binding Name}"/>

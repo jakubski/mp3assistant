@@ -220,7 +220,7 @@
                 <Button Grid.Column="0"
                         Width="30"
                         Margin="10,0,0,0"
-                        Content="&lt;"
+                        Style="{StaticResource MediumBackButton}"
                         IsEnabled="{Binding CanShowPreviousImage}"
                         Command="{Binding PreviousImageButtonClickCommand}"
                         HorizontalAlignment="Left"/>
@@ -256,7 +256,7 @@
                 <Button Grid.Column="4"
                         Width="30"
                         Margin="0,0,10,0"
-                        Content="&gt;"
+                        Style="{StaticResource MediumNextButton}"
                         IsEnabled="{Binding CanShowNextImage}"
                         Command="{Binding NextImageButtonClickCommand}"
                         HorizontalAlignment="Right"/>

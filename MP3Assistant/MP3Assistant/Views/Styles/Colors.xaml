@@ -19,5 +19,8 @@
 
     <Color x:Key="ForegroundGoldenLight">#f2b740</Color>
     <SolidColorBrush x:Key="ForegroundGoldenLightBrush" Color="{StaticResource ForegroundGoldenLight}"/>
-    
+
+    <Color x:Key="ForegroundGray">#757573</Color>
+    <SolidColorBrush x:Key="ForegroundGrayBrush" Color="{StaticResource ForegroundGray}"/>
+
 </ResourceDictionary>

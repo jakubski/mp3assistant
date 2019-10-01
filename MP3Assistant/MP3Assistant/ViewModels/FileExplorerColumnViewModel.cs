@@ -27,6 +27,10 @@ namespace MP3Assistant
         /// </summary>
         public IValueConverter Converter { get; set; }
         /// <summary>
+        /// Type of template to be applied to column
+        /// </summary>
+        public ColumnTemplate Template { get; set; }
+        /// <summary>
         /// If the column should be visible
         /// </summary>
         public bool IsVisible { get; set; }

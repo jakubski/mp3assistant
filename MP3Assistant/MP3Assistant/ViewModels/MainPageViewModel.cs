@@ -153,7 +153,7 @@ namespace MP3Assistant
                 {
                     Header = "Nazwa",
                     Width = 240,
-                    BoundProperty = nameof(DirectoryItemViewModel.Name),
+                    Template = ColumnTemplate.Filename,
                     IsVisible = true
                 },
                 new FileExplorerColumnViewModel()

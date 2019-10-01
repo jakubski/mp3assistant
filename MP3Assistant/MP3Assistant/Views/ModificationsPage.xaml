@@ -6,6 +6,7 @@
       xmlns:local="clr-namespace:MP3Assistant"
       mc:Ignorable="d" 
       d:DesignHeight="768" d:DesignWidth="1024"
+      Background="{StaticResource BackgroundDarkBrush}"
       Title="ModificationsPage"
       KeepAlive="False">
 
@@ -15,24 +16,34 @@
             <RowDefinition Height="*"/>  <!-- Tree view -->
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0"
+        <StackPanel HorizontalAlignment="Center" 
+                    Grid.Row="0"
                     Orientation="Horizontal">
-            <Button Margin="0,0,2,2" 
+            <Button Style="{StaticResource RoundedButton}"
+                    Margin="0,0,4,2" 
                     Width="100"
                     Content="Zatwierdź"
                     Command="{Binding ConfirmModificationsButtonClickCommand}"/>
-            <Button Margin="2,0,0,2"
+            <Button Style="{StaticResource RoundedButton}"
+                    Margin="4,0,0,2"
                     Width="100"
                     Content="Wyczyść"/>
         </StackPanel>
 
         <TreeView Grid.Row="1"
                   ItemsSource="{Binding ModifiedItems}"
-                  BorderThickness="0">
+                  BorderThickness="0"
+                  Background="Transparent">
             <TreeView.Resources>
                 <HierarchicalDataTemplate DataType="{x:Type local:DirectoryItemViewModel}"
                                           ItemsSource="{Binding ModifiedAttributes}">
                     <StackPanel Orientation="Horizontal">
+                        <StackPanel.Resources>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="FontSize" Value="14"/>
+                                <Setter Property="Foreground" Value="{StaticResource ForegroundGoldenLightBrush}"/>
+                            </Style>
+                        </StackPanel.Resources>
                         <TextBlock FontWeight="Bold"
                                    Text="{Binding ShortName.InitialValueForView}"/>
                         <TextBlock FontWeight="DemiBold" 
@@ -45,6 +56,12 @@
                 </HierarchicalDataTemplate>
                 <DataTemplate DataType="{x:Type local:DirectoryItemAttribute}">
                     <StackPanel Orientation="Horizontal">
+                        <StackPanel.Resources>
+                            <Style TargetType="{x:Type TextBlock}">
+                                <Setter Property="FontSize" Value="12"/>
+                                <Setter Property="Foreground" Value="{StaticResource ForegroundLightBrush}"/>
+                            </Style>
+                        </StackPanel.Resources>
                         <Button Content="X"
                                 Command="{Binding Path=DataContext.CancelModificationButtonClickCommand,
                                                   RelativeSource={RelativeSource Mode=FindAncestor,

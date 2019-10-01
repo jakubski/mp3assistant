@@ -43,15 +43,18 @@
 
         <!-- Arrow -->
         <Button Grid.Column="3"
+                Visibility="Hidden"
                 Name="NavigationOptionsButton"
                 Background="Transparent"/>
 
         <!-- More buttons!! -->
         <Button Grid.Column="4"
                 Name="ModificationsButton"
+                Style="{StaticResource RoundedButton}"
                 Content="ZMIANY"
                 Command="{Binding ModificationsButtonClickCommand}"
                 Width="120"
+                FontSize="17"
                 HorizontalAlignment="Center"/>
     </Grid>
 </Page>

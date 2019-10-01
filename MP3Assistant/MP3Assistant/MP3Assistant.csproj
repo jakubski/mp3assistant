@@ -87,6 +87,8 @@
     <Compile Include="Models\Directory\DirectoryItemAttribute\ReversiblePropertyChangedEventArgs.cs" />
     <Compile Include="Models\Image\ImageHelpers.cs" />
     <Compile Include="ValueConverters\ByteArrayToImageConverter.cs" />
+    <Compile Include="ValueConverters\ColumnTemplateToDataTemplateConverter.cs" />
+    <Compile Include="ValueConverters\DirectoryTypeToImagePathConverter.cs" />
     <Compile Include="ValueConverters\ReversiblePropertyConverter.cs" />
     <Compile Include="ValueConverters\ReversiblePropertyOfStringArrayToStringConverter.cs" />
     <Compile Include="ValueConverters\BoolToCharConverter.cs" />
@@ -97,6 +99,7 @@
     <Compile Include="ViewModels\ApplicationPageType.cs" />
     <Compile Include="ViewModels\Base\ViewModel.cs" />
     <Compile Include="ViewModels\ColumnChangedEventArgs.cs" />
+    <Compile Include="ViewModels\ColumnTemplate.cs" />
     <Compile Include="ViewModels\ContextAction.cs" />
     <Compile Include="ViewModels\FileExplorerColumnViewModel.cs" />
     <Compile Include="ViewModels\GlobalSettings.cs" />
@@ -172,6 +175,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Views\Styles\Texts.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs">
@@ -204,7 +211,15 @@
   <ItemGroup>
     <Resource Include="FodyWeavers.xml" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Views\Images\drive.png" />
+    <Resource Include="Views\Images\file.png" />
+    <Resource Include="Views\Images\folder.png" />
+    <Resource Include="Views\Images\mp3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Views\Images\nocover.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Import Project="..\packages\Fody.4.2.1\build\Fody.targets" Condition="Exists('..\packages\Fody.4.2.1\build\Fody.targets')" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

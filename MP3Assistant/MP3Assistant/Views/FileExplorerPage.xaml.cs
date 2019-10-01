@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -24,8 +25,7 @@ namespace MP3Assistant
         {
             InitializeComponent();
 
-            Loaded += (sender, e) => { SetUpColumns(); };
-            //SetUpColumns();
+            //Loaded += (sender, e) => { SetUpColumns(); };
         }
 
         public FileExplorerPage(ViewModel dataContext)
@@ -37,6 +37,7 @@ namespace MP3Assistant
         private void SetUpColumns()
         {
             var viewModel = DataContext as MainPageViewModel;
+            var columnTemplateConverter = new ColumnTemplateToDataTemplateConverter();
 
             GridView gridView = FileExplorerListView.View as GridView;
 
@@ -50,7 +51,8 @@ namespace MP3Assistant
                     {
                         Converter = columnViewModel.Converter,
                         Path = new PropertyPath(columnViewModel.BoundProperty)
-                    }
+                    },
+                    CellTemplate = columnTemplateConverter.Convert(columnViewModel.Template, typeof(DataTemplate), null, CultureInfo.CurrentCulture) as DataTemplate
                 });
             }
 
@@ -66,6 +68,7 @@ namespace MP3Assistant
         private void AddColumn(object sender, ColumnChangedEventArgs e)
         {
             GridView gridView = FileExplorerListView.View as GridView;
+            var columnTemplateConverter = new ColumnTemplateToDataTemplateConverter();
 
             gridView.Columns.Add(new GridViewColumn()
             {
@@ -75,7 +78,8 @@ namespace MP3Assistant
                 {
                     Converter = e.Column.Converter,
                     Path = new PropertyPath(e.Column.BoundProperty)
-                }
+                },
+                CellTemplate = columnTemplateConverter.Convert(e.Column.Template, typeof(DataTemplate), null, CultureInfo.CurrentCulture) as DataTemplate
             });
         }
 

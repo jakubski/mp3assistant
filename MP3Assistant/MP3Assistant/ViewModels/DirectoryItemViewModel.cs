@@ -88,14 +88,14 @@ namespace MP3Assistant
 
         public ObservableCollection<byte[]> Images
         {
-            get { return new ObservableCollection<byte[]>((_directoryItem.Images?.Value ?? new List<byte[]>()) as List<byte[]>); }
+            get { return new ObservableCollection<byte[]>((_directoryItem.Images?.ValueForView ?? new List<byte[]>()) as List<byte[]>); }
             set { _directoryItem.Images.ValueForView = new List<byte[]>(value); }
         }
         public int ImageCount { get { return Images.Count; } }
         public int CurrentImageIndex { get; set; }
         public byte[] CurrentImage
         {
-            get { return ImageCount == 0 ? null : Images[CurrentImageIndex]; }
+            get { return ImageCount == 0 ? DirectoryItem.BlankImage : Images[CurrentImageIndex]; }
         }
 
         public long Length

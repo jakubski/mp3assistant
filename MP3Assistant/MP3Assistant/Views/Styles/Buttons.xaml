@@ -72,5 +72,32 @@
     <Style x:Key="MediumNextButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseMediumNavigationButton}">
         <Setter Property="Content" Value="&#xf35a;"/>
     </Style>
+    
+    <!-- Just your typical next-door button -->
+    <Style x:Key="RoundedButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButton}">
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border x:Name="ButtonBorder" CornerRadius="10"
+                            BorderThickness="0" Background="{StaticResource BackgroundGoldenDarkBrush}">
+                        <ContentPresenter HorizontalAlignment="Center"
+                                          VerticalAlignment="Center"
+                                          TextElement.Foreground="{StaticResource ForegroundDarkBrush}"
+                                          TextElement.FontWeight="Bold"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Background"
+                                    TargetName="ButtonBorder"
+                                    Value="{StaticResource BackgroundGoldenLightBrush}"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
 
 </ResourceDictionary>

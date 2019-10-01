@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Runtime.Caching;
 using TagLib;
-
+using System.Windows;
 
 namespace MP3Assistant
 {
@@ -40,6 +40,7 @@ namespace MP3Assistant
 
         #region Public Properties
 
+        public static byte[] BlankImage { get; private set; }
         public static ObservableCollection<DirectoryItem> ModifiedItems { get; private set; }
 
         public ObservableCollection<DirectoryItemAttribute> ModifiedAttributes { get; private set; }
@@ -49,15 +50,8 @@ namespace MP3Assistant
         public DirectoryItemAttribute ShortName { get; private set; }
         public string Name
         {
-            get
-            {
-                return ShortName.Value + _extension;
-            }
-
-            set
-            {
-                ShortName.Value = DirectoryHelpers.GetTrimmedName(value);
-            }
+            get { return ShortName.Value + _extension; }
+            set { ShortName.Value = DirectoryHelpers.GetTrimmedName(value); }
         }
         public bool Hidden { get; private set; }
 
@@ -86,6 +80,7 @@ namespace MP3Assistant
 
         static DirectoryItem()
         {
+            BlankImage = new Picture(@"..\..\Views\Images\nocover.png").Data.Data;
             ModifiedItems = new ObservableCollection<DirectoryItem>();
         }
 

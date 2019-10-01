@@ -6,8 +6,15 @@
       xmlns:local="clr-namespace:MP3Assistant"
       mc:Ignorable="d" 
       d:DesignHeight="768" d:DesignWidth="1024"
+      Background="{StaticResource BackgroundDarkBrush}"
       Title="SongEditorPage"
       KeepAlive="False">
+
+    <Page.Resources>
+        <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseTextBlock}">
+            <Setter Property="TextAlignment" Value="Right"/>
+        </Style>
+    </Page.Resources>
 
     <!-- File name                       ___________
          song title                     | Cover     |
@@ -169,6 +176,7 @@
                 <!-- Track count -->
                 <TextBlock Grid.Column="5"
                            HorizontalAlignment="Stretch"
+                           TextAlignment="Center"
                            Text="/"/>
 
                 <TextBox Grid.Column="6"

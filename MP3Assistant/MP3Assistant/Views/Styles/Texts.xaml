@@ -1,0 +1,12 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:MP3Assistant">
+
+    <!-- Basic TextBlock -->
+    <Style x:Key="BaseTextBlock" TargetType="{x:Type TextBlock}">
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="{StaticResource ForegroundGoldenLightBrush}"/>
+        <Setter Property="FontSize" Value="11"/>
+    </Style>
+    
+</ResourceDictionary>

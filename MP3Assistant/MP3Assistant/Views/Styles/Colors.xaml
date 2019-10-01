@@ -2,25 +2,22 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:MP3Assistant">
 
-    <Color x:Key="BackgroundDark">#0d0b0b</Color>
-    <SolidColorBrush x:Key="BackgroundDarkBrush" Color="{StaticResource BackgroundDark}"/>
+    <Color x:Key="Dark">#0d0b0b</Color>
+    <Color x:Key="Gray">#30302d</Color>
+    <Color x:Key="GrayLight">#636362</Color>
+    <Color x:Key="GoldenDark">#a68805</Color>
+    <Color x:Key="GoldenLight">#f2b740</Color>
+    <Color x:Key="Light">#fdffe8</Color>
 
-    <Color x:Key="BackgroundGray">#30302d</Color>
-    <SolidColorBrush x:Key="BackgroundGrayBrush" Color="{StaticResource BackgroundGray}"/>
-
-    <Color x:Key="BackgroundGrayLight">#636362</Color>
-    <SolidColorBrush x:Key="BackgroundGrayLightBrush" Color="{StaticResource BackgroundGrayLight}"/>
-
-    <Color x:Key="ForegroundLight">#fdffe8</Color>
-    <SolidColorBrush x:Key="ForegroundLightBrush" Color="{StaticResource ForegroundLight}"/>
-
-    <Color x:Key="ForegroundGoldenDark">#a68805</Color>
-    <SolidColorBrush x:Key="ForegroundGoldenDarkBrush" Color="{StaticResource ForegroundGoldenDark}"/>
-
-    <Color x:Key="ForegroundGoldenLight">#f2b740</Color>
-    <SolidColorBrush x:Key="ForegroundGoldenLightBrush" Color="{StaticResource ForegroundGoldenLight}"/>
-
-    <Color x:Key="ForegroundGray">#757573</Color>
-    <SolidColorBrush x:Key="ForegroundGrayBrush" Color="{StaticResource ForegroundGray}"/>
+    <SolidColorBrush x:Key="BackgroundDarkBrush" Color="{StaticResource Dark}"/>
+    <SolidColorBrush x:Key="BackgroundGrayBrush" Color="{StaticResource Gray}"/>
+    <SolidColorBrush x:Key="BackgroundGrayLightBrush" Color="{StaticResource GrayLight}"/>
+    <SolidColorBrush x:Key="BackgroundGoldenDarkBrush" Color="{StaticResource GoldenDark}"/>
+    <SolidColorBrush x:Key="BackgroundGoldenLightBrush" Color="{StaticResource GoldenLight}"/>
+    <SolidColorBrush x:Key="ForegroundDarkBrush" Color="{StaticResource Dark}"/>
+    <SolidColorBrush x:Key="ForegroundLightBrush" Color="{StaticResource Light}"/>
+    <SolidColorBrush x:Key="ForegroundGoldenDarkBrush" Color="{StaticResource GoldenDark}"/>
+    <SolidColorBrush x:Key="ForegroundGoldenLightBrush" Color="{StaticResource GoldenLight}"/>
+    <SolidColorBrush x:Key="ForegroundGrayBrush" Color="{StaticResource Gray}"/>
 
 </ResourceDictionary>

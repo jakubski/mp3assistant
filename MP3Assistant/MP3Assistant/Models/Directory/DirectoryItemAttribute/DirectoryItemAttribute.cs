@@ -25,7 +25,7 @@ namespace MP3Assistant
 
         public object Value
         {
-            get { return _converter.ForView(_currentValue); }
+            get { return _currentValue; }
             set
             {
                 _currentValue = value;

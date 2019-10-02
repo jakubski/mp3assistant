@@ -32,9 +32,28 @@ namespace MP3Assistant
         private static IAttributeConverter _uintConverter = new BasicUintAttributeConverter();
         private static IAttributeConverter _pictureArrayConverter = new BasicPictureArrayAttributeConverter();
         private static Func<object, object, bool> _areEqualString = (s1, s2) => { return (string)s1 == (string)s2; };
-        private static Func<object, object, bool> _areEqualStringArray = (a1, a2) => { return (string[])a1 == (string[])a2; };
+        private static Func<object, object, bool> _areEqualStringArray = (a1, a2) => { return ((string[])a1).SequenceEqual((string[])a2); };
         private static Func<object, object, bool> _areEqualUint = (u1, u2) => { return (uint)u1 == (uint)u2; };
-        private static Func<object, object, bool> _areEqualPictureArray = (a1, a2) => { return (IPicture[])a1 == (IPicture[])a2; };
+        private static Func<object, object, bool> _areEqualPictureArray = (a1, a2) => 
+        {
+            var array1 = (IPicture[])a1;
+            var array2 = (IPicture[])a2;
+            var count = array1.Count();
+
+            if (count != array2.Count())
+                return false;
+
+            for (int i = 0; i < count; ++i)
+            {
+                var byteArray1 = array1[i].Data.Data;
+                var byteArray2 = array2[i].Data.Data;
+
+                if (!byteArray1.SequenceEqual(byteArray2))
+                    return false;
+            }
+
+            return true;
+        };
 
         #endregion
 

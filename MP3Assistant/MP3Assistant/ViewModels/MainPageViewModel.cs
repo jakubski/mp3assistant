@@ -402,8 +402,14 @@ namespace MP3Assistant
 
         private void DeleteImage()
         {
+            var currentIndex = SelectedDirectoryItem.CurrentImageIndex;
+
             var images = new ObservableCollection<byte[]>(SelectedDirectoryItem.Images);
-            images.RemoveAt(SelectedDirectoryItem.CurrentImageIndex);
+            images.RemoveAt(currentIndex);
+
+            if (currentIndex == SelectedDirectoryItem.ImageCount - 1)
+                SelectedDirectoryItem.CurrentImageIndex -= 1;
+
             SelectedDirectoryItem.Images = images;
         }
 

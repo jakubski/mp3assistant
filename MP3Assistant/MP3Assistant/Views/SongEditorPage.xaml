@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:MP3Assistant"
       mc:Ignorable="d" 
       d:DesignHeight="768" d:DesignWidth="1024"
-      Background="{StaticResource BackgroundDarkBrush}"
+      Background="{StaticResource DarkBrush}"
       Title="SongEditorPage"
       KeepAlive="False">
 

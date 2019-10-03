@@ -5,19 +5,15 @@
     <Color x:Key="Dark">#0d0b0b</Color>
     <Color x:Key="Gray">#30302d</Color>
     <Color x:Key="GrayLight">#636362</Color>
-    <Color x:Key="GoldenDark">#a68805</Color>
+    <Color x:Key="GoldenDark">#a57204</Color>
     <Color x:Key="GoldenLight">#f2b740</Color>
     <Color x:Key="Light">#fdffe8</Color>
 
-    <SolidColorBrush x:Key="BackgroundDarkBrush" Color="{StaticResource Dark}"/>
-    <SolidColorBrush x:Key="BackgroundGrayBrush" Color="{StaticResource Gray}"/>
-    <SolidColorBrush x:Key="BackgroundGrayLightBrush" Color="{StaticResource GrayLight}"/>
-    <SolidColorBrush x:Key="BackgroundGoldenDarkBrush" Color="{StaticResource GoldenDark}"/>
-    <SolidColorBrush x:Key="BackgroundGoldenLightBrush" Color="{StaticResource GoldenLight}"/>
-    <SolidColorBrush x:Key="ForegroundDarkBrush" Color="{StaticResource Dark}"/>
-    <SolidColorBrush x:Key="ForegroundLightBrush" Color="{StaticResource Light}"/>
-    <SolidColorBrush x:Key="ForegroundGoldenDarkBrush" Color="{StaticResource GoldenDark}"/>
-    <SolidColorBrush x:Key="ForegroundGoldenLightBrush" Color="{StaticResource GoldenLight}"/>
-    <SolidColorBrush x:Key="ForegroundGrayBrush" Color="{StaticResource Gray}"/>
+    <SolidColorBrush x:Key="DarkBrush" Color="{StaticResource Dark}"/>
+    <SolidColorBrush x:Key="GrayBrush" Color="{StaticResource Gray}"/>
+    <SolidColorBrush x:Key="GrayLightBrush" Color="{StaticResource GrayLight}"/>
+    <SolidColorBrush x:Key="GoldenDarkBrush" Color="{StaticResource GoldenDark}"/>
+    <SolidColorBrush x:Key="GoldenLightBrush" Color="{StaticResource GoldenLight}"/>
+    <SolidColorBrush x:Key="LightBrush" Color="{StaticResource Light}"/>
 
 </ResourceDictionary>

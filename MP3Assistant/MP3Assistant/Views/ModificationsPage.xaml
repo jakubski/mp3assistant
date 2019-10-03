@@ -6,7 +6,7 @@
       xmlns:local="clr-namespace:MP3Assistant"
       mc:Ignorable="d" 
       d:DesignHeight="768" d:DesignWidth="1024"
-      Background="{StaticResource BackgroundDarkBrush}"
+      Background="{StaticResource DarkBrush}"
       Title="ModificationsPage"
       KeepAlive="False">
 
@@ -41,7 +41,7 @@
                         <StackPanel.Resources>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="FontSize" Value="14"/>
-                                <Setter Property="Foreground" Value="{StaticResource ForegroundGoldenLightBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource GoldenLightBrush}"/>
                             </Style>
                         </StackPanel.Resources>
                         <TextBlock FontWeight="Bold"
@@ -59,7 +59,7 @@
                         <StackPanel.Resources>
                             <Style TargetType="{x:Type TextBlock}">
                                 <Setter Property="FontSize" Value="12"/>
-                                <Setter Property="Foreground" Value="{StaticResource ForegroundLightBrush}"/>
+                                <Setter Property="Foreground" Value="{StaticResource LightBrush}"/>
                             </Style>
                         </StackPanel.Resources>
                         <Button Content="X"

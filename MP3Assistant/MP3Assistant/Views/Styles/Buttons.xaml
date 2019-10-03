@@ -34,15 +34,15 @@
     <Style x:Key="BaseNavigationButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButton}">
         <Setter Property="Background" Value="Transparent"/>
         <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Foreground" Value="{StaticResource ForegroundGoldenDarkBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource GoldenDarkBrush}"/>
         <Setter Property="FontFamily" Value="{StaticResource FontAwesome}"/>
 
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Foreground" Value="{StaticResource ForegroundGoldenLightBrush}"/>
+                <Setter Property="Foreground" Value="{StaticResource GoldenLightBrush}"/>
             </Trigger>
             <Trigger Property="IsEnabled" Value="False">
-                <Setter Property="Foreground" Value="{StaticResource ForegroundGrayBrush}"/>
+                <Setter Property="Foreground" Value="{StaticResource GrayBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -82,17 +82,17 @@
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="ButtonBorder" CornerRadius="10"
-                            BorderThickness="0" Background="{StaticResource BackgroundGoldenDarkBrush}">
+                            BorderThickness="0" Background="{StaticResource GoldenDarkBrush}">
                         <ContentPresenter HorizontalAlignment="Center"
                                           VerticalAlignment="Center"
-                                          TextElement.Foreground="{StaticResource ForegroundDarkBrush}"
+                                          TextElement.Foreground="{StaticResource DarkBrush}"
                                           TextElement.FontWeight="Bold"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Background"
                                     TargetName="ButtonBorder"
-                                    Value="{StaticResource BackgroundGoldenLightBrush}"/>
+                                    Value="{StaticResource GoldenLightBrush}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

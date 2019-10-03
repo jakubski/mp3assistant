@@ -6,13 +6,13 @@
       xmlns:local="clr-namespace:MP3Assistant"
       mc:Ignorable="d" 
       d:DesignHeight="704" d:DesignWidth="1280"
-      Background="{StaticResource BackgroundDarkBrush}"
+      Background="{StaticResource DarkBrush}"
       Title="FileExplorerPage">
 
     <Page.Resources>
         <ResourceDictionary>
-            <Style TargetType="{x:Type ListViewItem}">
-                <Setter Property="Foreground" Value="{StaticResource ForegroundGoldenLightBrush}"/>
+            <Style TargetType="{x:Type ListViewItem}" BasedOn="{StaticResource DefaultListViewItem}">
+                <Setter Property="Foreground" Value="{StaticResource GoldenLightBrush}"/>
                 <Setter Property="FontSize" Value="12"/>
                 <EventSetter Event="MouseDoubleClick"
                              Handler="FileExplorerDirectoryItem_DoubleClick" />
@@ -36,7 +36,7 @@
                       Name="FileExplorerListView"
                       ItemsSource="{Binding Contents}"
                       SelectedItem="{Binding SelectedDirectoryItem, Mode=OneWayToSource}"
-                      Background="{StaticResource BackgroundGrayBrush}">
+                      Background="{StaticResource GrayBrush}">
                 <ListView.View>
                     <GridView AllowsColumnReorder="true"
                               ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">
@@ -88,7 +88,7 @@
             <StackPanel Grid.Column="1">
                 <StackPanel.Resources>
                     <Style TargetType="{x:Type CheckBox}">
-                        <Setter Property="Foreground" Value="{StaticResource ForegroundGoldenLightBrush}"/>
+                        <Setter Property="Foreground" Value="{StaticResource GoldenLightBrush}"/>
                     </Style>
                 </StackPanel.Resources>
                 <TextBlock Style="{StaticResource BaseTextBlock}"
@@ -97,7 +97,7 @@
                            Margin="12,16,6,1"/>
                 <Border Margin="10,8,10,4"
                         Padding="12,8,12,8"
-                        Background="{StaticResource BackgroundGrayBrush}"
+                        Background="{StaticResource GrayBrush}"
                         CornerRadius="5">
                     <StackPanel>
                         <!-- Hiding hidden items -->

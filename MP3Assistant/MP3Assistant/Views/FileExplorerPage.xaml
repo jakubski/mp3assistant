@@ -36,7 +36,8 @@
                       Name="FileExplorerListView"
                       ItemsSource="{Binding Contents}"
                       SelectedItem="{Binding SelectedDirectoryItem, Mode=OneWayToSource}"
-                      Background="{StaticResource GrayBrush}">
+                      Background="{StaticResource GrayBrush}"
+                      BorderBrush="{StaticResource GoldenDarkBrush}">
                 <ListView.View>
                     <GridView AllowsColumnReorder="true"
                               ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">

@@ -49,6 +49,7 @@
 
         <!-- More buttons!! -->
         <Button Grid.Column="4"
+                Margin="4,12"
                 Name="ModificationsButton"
                 Style="{StaticResource RoundedButton}"
                 Content="ZMIANY"
@@ -56,5 +57,10 @@
                 Width="120"
                 FontSize="17"
                 HorizontalAlignment="Center"/>
+
+        <Button Grid.Column="5"
+                Margin="4,8"
+                Name="SettingsButton"
+                Style="{StaticResource SettingsButton}"/>
     </Grid>
 </Page>

@@ -73,7 +73,7 @@
         <Setter Property="Content" Value="&#xf35a;"/>
     </Style>
     
-    <!-- Just your typical next-door button -->
+    <!-- Text on rounded background button -->
     <Style x:Key="RoundedButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButton}">
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
         <Setter Property="VerticalContentAlignment" Value="Center"/>
@@ -81,7 +81,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="ButtonBorder" CornerRadius="10"
+                    <Border x:Name="ButtonBorder" CornerRadius="16"
                             BorderThickness="0" Background="{StaticResource GoldenDarkBrush}">
                         <ContentPresenter HorizontalAlignment="Center"
                                           VerticalAlignment="Center"
@@ -90,6 +90,7 @@
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Cursor" Value="Hand"/>
                             <Setter Property="Background"
                                     TargetName="ButtonBorder"
                                     Value="{StaticResource GoldenLightBrush}"/>
@@ -98,6 +99,26 @@
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
+    </Style>
+    
+    <!-- Text on transparent background button -->
+    <Style x:Key="TransparentButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButton}">
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Foreground" Value="{StaticResource GoldenDarkBrush}"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Foreground" Value="{StaticResource GoldenLightBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Settings button -->
+    <Style x:Key="SettingsButton" TargetType="{x:Type Button}" BasedOn="{StaticResource TransparentButton}">
+        <Setter Property="FontFamily" Value="{StaticResource FontAwesome}"/>
+        <Setter Property="FontSize" Value="32"/>
+        <Setter Property="Content" Value="&#xf013;"/>
     </Style>
 
 </ResourceDictionary>

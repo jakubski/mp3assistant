@@ -11,26 +11,29 @@
       KeepAlive="False">
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="50"/> <!-- Buttons -->
-            <RowDefinition Height="*"/>  <!-- Tree view -->
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="150"/> <!-- Buttons -->
+            <ColumnDefinition Width="*"/>  <!-- Tree view -->
+        </Grid.ColumnDefinitions>
 
-        <StackPanel HorizontalAlignment="Center" 
-                    Grid.Row="0"
-                    Orientation="Horizontal">
-            <Button Style="{StaticResource RoundedButton}"
-                    Margin="0,0,4,2" 
+        <StackPanel Grid.Column="0"
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    Orientation="Vertical">
+            <Button Style="{StaticResource RedRoundedButton}"
+                    Margin="0,8"
                     Width="100"
-                    Content="Zatwierdź"
+                    Height="40"
+                    Content="WYCZYŚĆ"/>
+            <Button Style="{StaticResource GreenRoundedButton}"
+                    Margin="0,8" 
+                    Width="100"
+                    Height="40"
+                    Content="ZATWIERDŹ"
                     Command="{Binding ConfirmModificationsButtonClickCommand}"/>
-            <Button Style="{StaticResource RoundedButton}"
-                    Margin="4,0,0,2"
-                    Width="100"
-                    Content="Wyczyść"/>
         </StackPanel>
 
-        <TreeView Grid.Row="1"
+        <TreeView Grid.Column="1"
                   ItemsSource="{Binding ModifiedItems}"
                   BorderThickness="0"
                   Background="Transparent">

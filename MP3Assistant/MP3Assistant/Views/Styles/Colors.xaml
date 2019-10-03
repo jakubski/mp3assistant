@@ -8,6 +8,10 @@
     <Color x:Key="GoldenDark">#a57204</Color>
     <Color x:Key="GoldenLight">#f2b740</Color>
     <Color x:Key="Light">#fdffe8</Color>
+    <Color x:Key="RedDark">#850a06</Color>
+    <Color x:Key="RedLight">#ca100a</Color>
+    <Color x:Key="GreenDark">#066408</Color>
+    <Color x:Key="GreenLight">#0aac0e</Color>
 
     <SolidColorBrush x:Key="DarkBrush" Color="{StaticResource Dark}"/>
     <SolidColorBrush x:Key="GrayBrush" Color="{StaticResource Gray}"/>
@@ -15,5 +19,9 @@
     <SolidColorBrush x:Key="GoldenDarkBrush" Color="{StaticResource GoldenDark}"/>
     <SolidColorBrush x:Key="GoldenLightBrush" Color="{StaticResource GoldenLight}"/>
     <SolidColorBrush x:Key="LightBrush" Color="{StaticResource Light}"/>
+    <SolidColorBrush x:Key="RedDarkBrush" Color="{StaticResource RedDark}"/>
+    <SolidColorBrush x:Key="RedLightBrush" Color="{StaticResource RedLight}"/>
+    <SolidColorBrush x:Key="GreenDarkBrush" Color="{StaticResource GreenDark}"/>
+    <SolidColorBrush x:Key="GreenLightBrush" Color="{StaticResource GreenLight}"/>
 
 </ResourceDictionary>

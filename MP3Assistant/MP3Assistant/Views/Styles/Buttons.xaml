@@ -81,26 +81,56 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
-                    <Border x:Name="ButtonBorder" CornerRadius="16"
-                            BorderThickness="0" Background="{StaticResource GoldenDarkBrush}">
+                    <Border x:Name="ButtonBorder"
+                            CornerRadius="16"
+                            BorderThickness="0"
+                            Background="{Binding Path=Background,
+                                                 RelativeSource={RelativeSource Mode=TemplatedParent}}">
                         <ContentPresenter HorizontalAlignment="Center"
                                           VerticalAlignment="Center"
-                                          TextElement.Foreground="{StaticResource DarkBrush}"
+                                          TextElement.Foreground="{Binding Path=Foreground,
+                                                                           RelativeSource={RelativeSource Mode=TemplatedParent},
+                                                                           FallbackValue={StaticResource LightBrush}}"
                                           TextElement.FontWeight="Bold"/>
                     </Border>
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Cursor" Value="Hand"/>
-                            <Setter Property="Background"
-                                    TargetName="ButtonBorder"
-                                    Value="{StaticResource GoldenLightBrush}"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
     
+    <!-- Standard button -->
+    <Style x:Key="GoldenRoundedButton" TargetType="{x:Type Button}" BasedOn="{StaticResource RoundedButton}">
+        <Setter Property="Foreground" Value="{StaticResource DarkBrush}"/>
+        <Setter Property="Background" Value="{StaticResource GoldenDarkBrush}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource GoldenLightBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Confirm button -->
+    <Style x:Key="GreenRoundedButton" TargetType="{x:Type Button}" BasedOn="{StaticResource RoundedButton}">
+        <Setter Property="Foreground" Value="{StaticResource LightBrush}"/>
+        <Setter Property="Background" Value="{StaticResource GreenDarkBrush}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource GreenLightBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Cancel button -->
+    <Style x:Key="RedRoundedButton" TargetType="{x:Type Button}" BasedOn="{StaticResource RoundedButton}">
+        <Setter Property="Foreground" Value="{StaticResource LightBrush}"/>
+        <Setter Property="Background" Value="{StaticResource RedDarkBrush}"/>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background" Value="{StaticResource RedLightBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
     <!-- Text on transparent background button -->
     <Style x:Key="TransparentButton" TargetType="{x:Type Button}" BasedOn="{StaticResource BaseButton}">
         <Setter Property="HorizontalContentAlignment" Value="Center"/>

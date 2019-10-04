@@ -90,5 +90,11 @@ namespace MP3Assistant
 
             gridView.Columns.Remove(columnToBeDeleted);
         }
+
+        private void FileExplorerListView_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            if (FileExplorerListView.SelectedItems.Count > 0)
+                FileExplorerListView.SelectedItems.Clear();
+        }
     }
 }

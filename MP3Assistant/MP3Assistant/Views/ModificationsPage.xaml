@@ -13,7 +13,7 @@
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="150"/> <!-- Buttons -->
-            <ColumnDefinition Width="*"/>  <!-- Tree view -->
+            <ColumnDefinition Width="*"/>   <!-- Tree view -->
         </Grid.ColumnDefinitions>
 
         <StackPanel Grid.Column="0"

@@ -14,13 +14,67 @@
         <Style TargetType="{x:Type TextBlock}" BasedOn="{StaticResource BaseTextBlock}">
             <Setter Property="TextAlignment" Value="Right"/>
         </Style>
+
+        <Style x:Key="BottomLayerTextBlockStyle"
+               TargetType="{x:Type TextBlock}">
+            <Setter Property="Background" Value="{StaticResource LightBrush}"/>
+            <Setter Property="Foreground" Value="{StaticResource GrayBrush}"/>
+            <Setter Property="Text">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource BackgroundTextBlockTextConverter}">
+                        <Binding Path="Tag.AreValuesDifferent"
+                                 RelativeSource="{RelativeSource TemplatedParent}"/>
+                        <Binding Path="Text"
+                                 ElementName="TopLayerTextBox"
+                                 UpdateSourceTrigger="PropertyChanged"/>
+                        <Binding Path="Tag.AggregatedValue"
+                                 RelativeSource="{RelativeSource TemplatedParent}"/>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="TopLayerTextBoxStyle"
+               TargetType="{x:Type TextBox}">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Text">
+                <Setter.Value>
+                    <MultiBinding Converter="{StaticResource ForegroundTextBoxTextConverter}"
+                                  Mode="TwoWay">
+                        <Binding Path="Tag.AreValuesDifferent"
+                                 RelativeSource="{RelativeSource TemplatedParent}"
+                                 Mode="OneWay"/>
+                        <Binding Path="Tag.ValueForView"
+                                 RelativeSource="{RelativeSource TemplatedParent}"/>
+                    </MultiBinding>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="{x:Type TextBox}">
+            <Setter Property="OverridesDefaultStyle" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Grid>
+                            <!-- Bottom layer TextBlock for signaling different values -->
+                            <TextBlock Name="BottomLayerTextBlock"
+                                       Style="{StaticResource BottomLayerTextBlockStyle}"/>
+                            <!-- Top layer TextBox for entering new values -->
+                            <TextBox Name="TopLayerTextBox" 
+                                     Style="{StaticResource TopLayerTextBoxStyle}"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Page.Resources>
 
-    <!-- File name                       ___________
-         song title                     | Cover     |
-         performer                      |     art   |
-         album performer                |___________|
-         album title                     <  + / x   >
+    <!-- File name                       __________
+         song title                     | Cover    |
+         performer                      |     art  |
+         album performer                |__________|
+         album title                     <  + / x  >
          year, track number, track count
          genre -->
     <Grid Margin="10,10">
@@ -59,12 +113,11 @@
                            HorizontalAlignment="Right"/>
 
                 <TextBox Grid.Column="1"
-                         Text="{Binding SelectedDirectoryItem.ShortName.ValueForView,
-                                        Mode=TwoWay}"
+                         Tag="{Binding SelectedDirectoryItems.ShortName}"
                          Margin="6,1,0,1"
                          HorizontalAlignment="Stretch"/>
             </Grid>
-            
+
             <!-- Title -->
             <Grid Grid.Row="1">
                 <Grid.ColumnDefinitions>
@@ -77,8 +130,7 @@
                            HorizontalAlignment="Right"/>
 
                 <TextBox Grid.Column="1"
-                         Text="{Binding SelectedDirectoryItem.Title.ValueForView,
-                                        Mode=TwoWay}"
+                         Tag="{Binding SelectedDirectoryItems.Title}"
                          Margin="6,1,0,1"
                          HorizontalAlignment="Stretch"/>
             </Grid>
@@ -95,8 +147,7 @@
                            Text="Wykonawca"/>
 
                 <TextBox Grid.Column="1"
-                         Text="{Binding SelectedDirectoryItem.Performers.ValueForView,
-                                        Mode=TwoWay}"
+                         Tag="{Binding SelectedDirectoryItems.Performers}"
                          Margin="6,1,0,1"
                          HorizontalAlignment="Stretch"/>
 
@@ -114,8 +165,7 @@
                            Text="Wykonawca albumu"/>
 
                 <TextBox Grid.Column="1"
-                         Text="{Binding SelectedDirectoryItem.AlbumPerformers.ValueForView, 
-                                        Mode=TwoWay}"
+                         Tag="{Binding SelectedDirectoryItems.AlbumPerformers}"
                          Margin="6,1,0,1"
                          HorizontalAlignment="Stretch"/>
             </Grid>
@@ -132,8 +182,7 @@
                            Text="Album"/>
 
                 <TextBox Grid.Column="1"
-                         Text="{Binding SelectedDirectoryItem.Album.ValueForView,
-                                        Mode=TwoWay}"
+                         Tag="{Binding SelectedDirectoryItems.Album}"
                          Margin="6,1,0,1"
                          HorizontalAlignment="Stretch"/>
             </Grid>
@@ -156,8 +205,7 @@
                            Text="Rok"/>
 
                 <TextBox Grid.Column="1"
-                         Text="{Binding SelectedDirectoryItem.Year.ValueForView,
-                                        Mode=TwoWay}"
+                         Tag="{Binding SelectedDirectoryItems.Year}"
                          Margin="6,1,0,1"
                          HorizontalAlignment="Stretch"/>
 
@@ -168,8 +216,7 @@
                            Text="Nr ścieżki"/>
 
                 <TextBox Grid.Column="4"
-                         Text="{Binding SelectedDirectoryItem.TrackIndex.ValueForView,
-                                        Mode=TwoWay}"
+                         Tag="{Binding SelectedDirectoryItems.TrackIndex}"
                          Margin="0,1,0,1"
                          HorizontalAlignment="Stretch"/>
 
@@ -180,8 +227,7 @@
                            Text="/"/>
 
                 <TextBox Grid.Column="6"
-                         Text="{Binding SelectedDirectoryItem.TrackCount.ValueForView,
-                                        Mode=TwoWay}"
+                         Tag="{Binding SelectedDirectoryItems.TrackCount}"
                          Margin="0,1,0,1"
                          HorizontalAlignment="Stretch"/>
             </Grid>
@@ -198,8 +244,7 @@
                            Text="Gatunek"/>
 
                 <TextBox Grid.Column="1"
-                         Text="{Binding SelectedDirectoryItem.Genres.ValueForView, 
-                                        Mode=TwoWay}"
+                         Tag="{Binding SelectedDirectoryItems.Genres}"
                          Margin="6,1,0,1"
                          HorizontalAlignment="Stretch"/>
             </Grid>
@@ -209,7 +254,7 @@
         <StackPanel Grid.Column="1"
                     Orientation="Vertical">
             <!-- Image -->
-            <Image Source="{Binding SelectedDirectoryItem.CurrentImage,
+            <Image Source="{Binding SelectedDirectoryItems.CurrentImage,
                                     Converter={StaticResource AlbumArtConverter},
                                     ConverterParameter=300}"
                    Margin="10,8,10,2"
@@ -265,7 +310,7 @@
                         Width="30"
                         Margin="0,0,10,0"
                         Style="{StaticResource MediumNextButton}"
-                        IsEnabled="{Binding CanShowNextImage}"
+                        IsEnabled="{Binding CanShowNextImage, UpdateSourceTrigger=PropertyChanged}"
                         Command="{Binding NextImageButtonClickCommand}"
                         HorizontalAlignment="Right"/>
             </Grid>

@@ -60,11 +60,6 @@ namespace MP3Assistant
             viewModel.ColumnRemoved += RemoveColumn;
         }
 
-        private void FileExplorerDirectoryItem_DoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            ((MainPageViewModel)DataContext).ItemDoubleClickCommand.Execute(((ListViewItem)sender).DataContext);
-        }
-
         private void AddColumn(object sender, ColumnChangedEventArgs e)
         {
             GridView gridView = FileExplorerListView.View as GridView;
@@ -95,6 +90,37 @@ namespace MP3Assistant
         {
             if (FileExplorerListView.SelectedItems.Count > 0)
                 FileExplorerListView.SelectedItems.Clear();
+        }
+
+        private void FileExplorerListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var viewModel = (MainPageViewModel)DataContext;
+            var selecteditems = FileExplorerListView.SelectedItems;
+
+            if (selecteditems.Count > 0)
+                viewModel.SelectedDirectoryItems = new AggregatedDirectoryItemViewModel(selecteditems.Cast<DirectoryItemViewModel>());
+        }
+
+        private void SignalItemSelection(object[] items)
+        {
+            ((MainPageViewModel)DataContext).ItemsOpenedCommand.Execute(items.Cast<DirectoryItemViewModel>().ToArray());
+        }
+
+        private void FileExplorerDirectoryItem_DoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            SignalItemSelection(new[] { (sender as ListViewItem).DataContext });
+            //((MainPageViewModel)DataContext).ItemDoubleClickCommand.Execute(((ListViewItem)sender).DataContext);
+        }
+
+        private void FileExplorerListView_KeyUp(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                var selectedItems = FileExplorerListView.SelectedItems;
+
+                if (selectedItems.Count > 0)
+                    SignalItemSelection(selectedItems.Cast<object>().ToArray());
+            }
         }
     }
 }

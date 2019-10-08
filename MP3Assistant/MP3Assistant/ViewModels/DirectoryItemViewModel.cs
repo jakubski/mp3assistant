@@ -86,16 +86,20 @@ namespace MP3Assistant
             get { return _directoryItem.Genres; }
         }
 
-        public ObservableCollection<byte[]> Images
+        public DirectoryItemAttribute Images
         {
-            get { return new ObservableCollection<byte[]>((_directoryItem.Images?.ValueForView ?? new List<byte[]>()) as List<byte[]>); }
-            set { _directoryItem.Images.ValueForView = new List<byte[]>(value); }
+            get { return _directoryItem.Images; }
         }
-        public int ImageCount { get { return Images.Count; } }
+        public ObservableCollection<byte[]> ImageCollection
+        {
+            get { return new ObservableCollection<byte[]>((Images?.ValueForView ?? new List<byte[]>()) as List<byte[]>); }
+            set { Images.ValueForView = new List<byte[]>(value); }
+        }
+        public int ImageCount { get { return ImageCollection.Count; } }
         public int CurrentImageIndex { get; set; }
         public byte[] CurrentImage
         {
-            get { return ImageCount == 0 ? DirectoryItem.BlankImage : Images[CurrentImageIndex]; }
+            get { return ImageCount == 0 ? DirectoryItem.BlankImagePlaceholder : ImageCollection[CurrentImageIndex]; }
         }
 
         public long Length

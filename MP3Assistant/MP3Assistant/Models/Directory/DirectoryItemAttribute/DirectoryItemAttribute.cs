@@ -89,6 +89,24 @@ namespace MP3Assistant
             return ValueForView.ToString();
         }
 
-        
+        public override int GetHashCode()
+        {
+            return Value.GetHashCode();
+        }
+
+        public override bool Equals(object obj)
+        {
+            return _equalsFunc(this.Value, ((DirectoryItemAttribute)obj).Value);
+        }
+
+        public static bool operator ==(DirectoryItemAttribute obj1, DirectoryItemAttribute obj2)
+        {
+            return object.Equals(obj1, obj2);
+        }
+
+        public static bool operator !=(DirectoryItemAttribute obj1, DirectoryItemAttribute obj2)
+        {
+            return !object.Equals(obj1, obj2);
+        }
     }
 }

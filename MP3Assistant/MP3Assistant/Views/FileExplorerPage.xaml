@@ -15,7 +15,7 @@
                 <Setter Property="Foreground" Value="{StaticResource GoldenLightBrush}"/>
                 <Setter Property="FontSize" Value="12"/>
                 <EventSetter Event="MouseDoubleClick"
-                             Handler="FileExplorerDirectoryItem_DoubleClick" />
+                             Handler="FileExplorerDirectoryItem_DoubleClick"/>
             </Style>
         </ResourceDictionary>
     </Page.Resources>
@@ -35,10 +35,11 @@
             <ListView Grid.Column="0"
                       Name="FileExplorerListView"
                       ItemsSource="{Binding Contents}"
-                      SelectedItem="{Binding SelectedDirectoryItem, Mode=OneWayToSource}"
                       Background="{StaticResource GrayBrush}"
                       BorderBrush="{StaticResource GoldenDarkBrush}"
-                      MouseLeftButtonDown="FileExplorerListView_MouseLeftButtonDown">
+                      SelectionChanged="FileExplorerListView_SelectionChanged"
+                      MouseLeftButtonDown="FileExplorerListView_MouseLeftButtonDown"
+                      KeyUp="FileExplorerListView_KeyUp">
                 <ListView.View>
                     <GridView AllowsColumnReorder="true"
                               ColumnHeaderContainerStyle="{StaticResource GridViewColumnHeaderStyle}">

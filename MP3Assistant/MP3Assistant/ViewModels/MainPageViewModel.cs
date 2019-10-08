@@ -17,7 +17,7 @@ namespace MP3Assistant
         private List<FileExplorerColumnViewModel> _columns;
         private Stack<string> _backwardPathHistory;
         private Stack<string> _forwardPathHistory;
-        private DirectoryItemViewModel _selectedDirectoryItem;
+        private AggregatedDirectoryItemViewModel _selectedDirectoryItems;
 
         public string CurrentPath { get; set; }
 
@@ -30,7 +30,14 @@ namespace MP3Assistant
                     case ApplicationPageType.FileExplorerPage:
                         return CurrentPath;
                     case ApplicationPageType.SongEditorPage:
-                        return SelectedDirectoryItem.FullPath;
+                        {
+                            var itemCount = SelectedDirectoryItems.ItemCount;
+                            if (itemCount == 1)
+                                return CurrentPath;
+                            else
+                                return $"{itemCount} plików";
+                        }
+                        
                     case ApplicationPageType.ModificationsPage:
                         return "zmian: " + ModifiedItems.Sum(item => item.ModifiedAttributes.Count).ToString();
                     default:
@@ -69,10 +76,10 @@ namespace MP3Assistant
             get { return new ObservableCollection<FileExplorerColumnViewModel>(_columns.Where(column => column.IsVisible)); }
         }
 
-        public DirectoryItemViewModel SelectedDirectoryItem
+        public AggregatedDirectoryItemViewModel SelectedDirectoryItems
         {
-            get { return _selectedDirectoryItem; }
-            set { if (value != null) _selectedDirectoryItem = value; }
+            get { return _selectedDirectoryItems; }
+            set { if (value != null) _selectedDirectoryItems = value; }
         }
 
         public ObservableCollection<DirectoryItemViewModel> ModifiedItems
@@ -99,9 +106,7 @@ namespace MP3Assistant
             get
             {
                 if (_contents.Where(item => item.Type == DirectoryType.MP3File).Count() > 0)
-                {
                     return true;
-                }
                 else
                 {
                     HideNonMP3Items = false;
@@ -111,11 +116,12 @@ namespace MP3Assistant
             }
         }
 
-        public bool CanShowNextImage => SelectedDirectoryItem.ImageCount > SelectedDirectoryItem.CurrentImageIndex + 1;
-        public bool CanShowPreviousImage => SelectedDirectoryItem.CurrentImageIndex > 0;
-        public bool CanAddNewImage => SelectedDirectoryItem.ImageCount < 6;
-        public bool CanReplaceImage => SelectedDirectoryItem.ImageCount > 0;
-        public bool CanDeleteImage => SelectedDirectoryItem.ImageCount > 0;
+        public bool CanShowNextImage => !SelectedDirectoryItems.Images.AreValuesDifferent && 
+                                        (SelectedDirectoryItems.ImageCount > SelectedDirectoryItems.CurrentImageIndex + 1);
+        public bool CanShowPreviousImage => SelectedDirectoryItems.CurrentImageIndex > 0;
+        public bool CanAddNewImage => SelectedDirectoryItems.ImageCount < 6;
+        public bool CanReplaceImage => SelectedDirectoryItems.ImageCount > 0;
+        public bool CanDeleteImage => SelectedDirectoryItems.ImageCount > 0;
 
         public VoidRelayCommand BackButtonClickCommand { get; private set; }
         public VoidRelayCommand NextButtonClickCommand { get; private set; }
@@ -126,7 +132,7 @@ namespace MP3Assistant
         public VoidRelayCommand DeleteImageButtonClickCommand { get; private set; }
         public VoidRelayCommand ModificationsButtonClickCommand { get; private set; }
         public VoidRelayCommand ConfirmModificationsButtonClickCommand { get; private set; }
-        public RelayCommand<DirectoryItemViewModel> ItemDoubleClickCommand { get; private set; }
+        public RelayCommand<DirectoryItemViewModel[]> ItemsOpenedCommand { get; private set; }
         public RelayCommand<FileExplorerColumnViewModel> AddRemoveColumnCommand { get; private set; }
         public RelayCommand<DirectoryItemAttribute> CancelModificationButtonClickCommand { get; private set; }
 
@@ -206,7 +212,7 @@ namespace MP3Assistant
             DeleteImageButtonClickCommand = new VoidRelayCommand(DeleteImage);
             ModificationsButtonClickCommand = new VoidRelayCommand(OpenModificationsPage);
             ConfirmModificationsButtonClickCommand = new VoidRelayCommand(ConfirmModifications);
-            ItemDoubleClickCommand = new RelayCommand<DirectoryItemViewModel>(Item_DoubleClick);
+            ItemsOpenedCommand = new RelayCommand<DirectoryItemViewModel[]>(OpenItems);
             AddRemoveColumnCommand = new RelayCommand<FileExplorerColumnViewModel>(AddRemoveColumn);
             CancelModificationButtonClickCommand = new RelayCommand<DirectoryItemAttribute>(CancelModification);
 
@@ -290,7 +296,7 @@ namespace MP3Assistant
 
         private void OpenSongEditor()
         {
-            SelectedDirectoryItem.CurrentImageIndex = 0;
+            SelectedDirectoryItems.CurrentImageIndex = 0;
 
             FileExplorerPage = new ApplicationPage()
             {
@@ -331,35 +337,32 @@ namespace MP3Assistant
                 ColumnRemoved?.Invoke(this, e);
         }
         
-        private void Item_DoubleClick(DirectoryItemViewModel item)
+        private void OpenItems(DirectoryItemViewModel[] items)
         {
-            var type = item.Type;
+            var itemCount = items.Count();
 
-            switch (type)
+            if (itemCount < 1)
+                return;
+
+            if (items.All(item => item.Type == DirectoryType.MP3File))
             {
-                // If double clicked on a folder or a drive..
-                case DirectoryType.Drive:
-                case DirectoryType.Folder:
-                    // ...Enter the directory
-                    GoToNewLocation(item.FullPath);
-                    break;
-                // If double clicked on a file
-                case DirectoryType.File:
-                    return;
-                case DirectoryType.MP3File:
-                    OpenSongEditor();
-                    break;
+                OpenSongEditor();
+            }
+            else if (itemCount == 1 &&
+                     (items[0].Type == DirectoryType.Drive || items[0].Type == DirectoryType.Folder))
+            {
+                GoToNewLocation(items[0].FullPath);
             }
         }
 
         private void ShowPreviousImage()
         {
-            SelectedDirectoryItem.CurrentImageIndex -= 1;
+            SelectedDirectoryItems.CurrentImageIndex -= 1;
         }
 
         private void ShowNextImage()
         {
-            SelectedDirectoryItem.CurrentImageIndex += 1;
+            SelectedDirectoryItems.CurrentImageIndex += 1;
         }
 
         private void AddImage()
@@ -376,7 +379,8 @@ namespace MP3Assistant
             if (dialog.ShowDialog() == true)
             {
                 var imagePath = dialog.FileName;
-                SelectedDirectoryItem.Images = new ObservableCollection<byte[]>(SelectedDirectoryItem.Images.Concat(new[] { ImageHelpers.FileToBytes(imagePath) }));
+                var currentImages = (List<byte[]>)SelectedDirectoryItems.Images.ValueForView;
+                SelectedDirectoryItems.Images.ValueForView = new[] { currentImages.Concat(new[] { ImageHelpers.FileToBytes(imagePath) }).ToList() };
             }
         }
 
@@ -394,23 +398,23 @@ namespace MP3Assistant
             if (dialog.ShowDialog() == true)
             {
                 var imagePath = dialog.FileName;
-                var images = new ObservableCollection<byte[]>(SelectedDirectoryItem.Images);
-                images[SelectedDirectoryItem.CurrentImageIndex] = ImageHelpers.FileToBytes(imagePath);
-                SelectedDirectoryItem.Images = images;
+                var images = (List<byte[]>)SelectedDirectoryItems.Images.ValueForView;
+                images[SelectedDirectoryItems.CurrentImageIndex] = ImageHelpers.FileToBytes(imagePath);
+                SelectedDirectoryItems.Images.ValueForView = images;
             }
         }
 
         private void DeleteImage()
         {
-            var currentIndex = SelectedDirectoryItem.CurrentImageIndex;
+            var currentIndex = SelectedDirectoryItems.CurrentImageIndex;
 
-            var images = new ObservableCollection<byte[]>(SelectedDirectoryItem.Images);
+            var images = (List<byte[]>)SelectedDirectoryItems.Images.ValueForView;
             images.RemoveAt(currentIndex);
 
-            if (currentIndex == SelectedDirectoryItem.ImageCount - 1)
-                SelectedDirectoryItem.CurrentImageIndex -= 1;
+            if (currentIndex == SelectedDirectoryItems.ImageCount - 1)
+                SelectedDirectoryItems.CurrentImageIndex -= 1;
 
-            SelectedDirectoryItem.Images = images;
+            SelectedDirectoryItems.Images.ValueForView = images;
         }
 
         private void ConfirmModifications()

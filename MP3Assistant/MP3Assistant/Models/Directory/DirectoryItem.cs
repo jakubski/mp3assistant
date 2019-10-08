@@ -32,7 +32,23 @@ namespace MP3Assistant
         private static IAttributeConverter _uintConverter = new BasicUintAttributeConverter();
         private static IAttributeConverter _pictureArrayConverter = new BasicPictureArrayAttributeConverter();
         private static Func<object, object, bool> _areEqualString = (s1, s2) => { return (string)s1 == (string)s2; };
-        private static Func<object, object, bool> _areEqualStringArray = (a1, a2) => { return ((string[])a1).SequenceEqual((string[])a2); };
+        private static Func<object, object, bool> _areEqualStringArray = (a1, a2) => 
+        {
+            var array1 = (string[])a1;
+            var array2 = (string[])a2;
+            var count = array1.Count();
+
+            if (count != array2.Count())
+                return false;
+
+            for (int i = 0; i < count; ++i)
+            {
+                if (array1[i] != array2[i])
+                    return false;
+            }
+
+            return true;
+        };
         private static Func<object, object, bool> _areEqualUint = (u1, u2) => { return (uint)u1 == (uint)u2; };
         private static Func<object, object, bool> _areEqualPictureArray = (a1, a2) => 
         {
@@ -59,7 +75,8 @@ namespace MP3Assistant
 
         #region Public Properties
 
-        public static byte[] BlankImage { get; private set; }
+        public static byte[] BlankImagePlaceholder { get; private set; }
+        public static byte[] MultipleImagesPlaceholder { get; private set; }
         public static ObservableCollection<DirectoryItem> ModifiedItems { get; private set; }
 
         public ObservableCollection<DirectoryItemAttribute> ModifiedAttributes { get; private set; }
@@ -99,7 +116,8 @@ namespace MP3Assistant
 
         static DirectoryItem()
         {
-            BlankImage = new Picture(@"..\..\Views\Images\nocover.png").Data.Data;
+            BlankImagePlaceholder = new Picture(@"..\..\Views\Images\nocover.png").Data.Data;
+            MultipleImagesPlaceholder = new Picture(@"..\..\Views\Images\nonuniformcovers.png").Data.Data;
             ModifiedItems = new ObservableCollection<DirectoryItem>();
         }
 
